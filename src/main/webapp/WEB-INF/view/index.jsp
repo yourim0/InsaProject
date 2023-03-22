@@ -41,10 +41,10 @@
 	  <header class="mb-auto">
 	    <div>
 	      <h3 class="float-md-start mb-0">Soft</h3>
-	      <nav class="nav nav-masthead justify-content-center float-md-end">
-	        <a class="nav-link active" aria-current="page" href="#">Home</a>
-	        <a class="nav-link" href="#">Input</a>
-	        <a class="nav-link" href="#">Search</a>
+	      <nav class="nav nav-masthead justify-content-center float-md-end"">
+	        <a class="nav-link active" aria-current="page" href="#" style="color:#FFFFFF">Home</a>
+	        <a class="nav-link" href="#" style="color:#FFFFFF">Input</a>
+	        <a class="nav-link" href="#" style="color:#FFFFFF">Search</a>
 	      </nav>
 	    </div>
 	  </header>

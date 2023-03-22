@@ -53,9 +53,9 @@
 		</header>
 
 		<div class="inputBtn">
-			<button type="button" class="btn btn-dark btn-sm">수정</button>
-			<button type="button" class="btn btn-dark btn-sm">삭제</button>
-			<button type="button" class="btn btn-dark btn-sm">이전</button>
+			<button type="button" class="btn btn-dark btn-sm" style="float: right">수정</button>
+			<button type="button" class="btn btn-dark btn-sm" style="float: right">삭제</button>
+			<button type="button" class="btn btn-dark btn-sm" style="float: right">이전</button>
 		</div>
 
 		<main>

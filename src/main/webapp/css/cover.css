@@ -34,7 +34,8 @@ body {
 
 .nav-masthead .nav-link:hover,
 .nav-masthead .nav-link:focus {
-  border-bottom-color: rgba(255, 255, 255, .25);
+  border-bottom-color: rgba(0,0,0,0);
+  
 }
 
 .nav-masthead .nav-link + .nav-link {
@@ -45,12 +46,12 @@ p {
 	font-size:12px;
 }
 
-div.inputbtn{
-	margin-bottom:20px;
-	margin-right:4px;
-	float:left;
+#submit_Form > main > div{
+	margin-top : 50px;
 }
-
+.btn{
+	margin-right:4px;
+}
 
 img{
 	width: 60%;
@@ -62,7 +63,24 @@ input, select {
   height:20px;
 }
 
-
 .right{
 	text-align:right;
+}
+
+#submit > main > div{
+	margin-top:50px;
+}
+
+
+/*파일 업로드 버튼*/
+.btn-upload{
+	padding: 4px 20px;
+ 	background-color:#333;
+	border-radius: 4px;
+	color: white;
+}
+
+#file {
+  display: none;
+  
 }

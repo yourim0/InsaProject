@@ -6,4 +6,8 @@
 		SELECT NAME FROM TEST_TABLE
 	]]>
 	</select>
+
+	<insert id="insertTest">
+		INSERT INTO INSA (sabun,name,id,pwd,hp,re_no,email,join_date) VALUES (insa_seq.NEXTVAL,#{id}, #{name}, #{pwd},#{hp},#{reg_no},#{email},#{join_day});
+	</insert>
 </mapper>

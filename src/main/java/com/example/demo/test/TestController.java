@@ -3,6 +3,7 @@ package com.example.demo.test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class TestController {
@@ -24,6 +25,14 @@ public class TestController {
 	
 	@RequestMapping("/insaInputForm.do")
 	public String input() {
+		System.out.println("inputget");
+		return "insaInputForm";
+	}
+	
+	@RequestMapping(value = "/insaInputForm.do", method=RequestMethod.POST)
+	public String inputPost(TestVO vo) {
+		System.out.println("inputpost");
+		testService.insertTest();
 		return "insaInputForm";
 	}
 	

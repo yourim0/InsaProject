@@ -20,4 +20,10 @@ public class TestServiceImpl implements TestService {
 		return null;
 	}
 
+	@Override
+	public List<TestVO> insertTest() {
+		List<TestVO> testList = testDAO.insertTest();
+		return null;
+	}
+
 }
