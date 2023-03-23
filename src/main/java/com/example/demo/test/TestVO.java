@@ -1,6 +1,6 @@
 package com.example.demo.test;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +17,7 @@ public class TestVO {
 	private String pwd_chk;
 	private String phone;
 	private String hp;
+	private String grade;
 	private String reg_no;
 	private int years;
 	private String sex;
@@ -38,7 +39,7 @@ public class TestVO {
 	private Date mil_enddate;
 	private String kosa_reg_yn;
 	private String kosa_class_code;
-	private Date join_day;
+	private Date join_date;
 	private Date retire_date;
 	private String crm_name;
 	private String cmp_reg_no;
@@ -48,8 +49,8 @@ public class TestVO {
 	private String profile_image;
 	private String carrier_image;
 	
-	
-	
-	
+	private String gubun;
+	private String code;
+	private String note;
 	
 }

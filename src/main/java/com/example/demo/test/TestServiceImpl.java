@@ -21,9 +21,18 @@ public class TestServiceImpl implements TestService {
 	}
 
 	@Override
-	public List<TestVO> insertTest() {
-		List<TestVO> testList = testDAO.insertTest();
-		return null;
+	public void insertTest(TestVO vo) {
+		 testDAO.insertTest(vo);
 	}
+
+	@Override
+	public List<TestVO> selectCommon() {
+		System.out.println("selectCommon");
+		List<TestVO> commonList = testDAO.selectCommon();
+		System.out.println("selectCommon" + commonList);
+		return commonList;
+
+	}
+	
 
 }

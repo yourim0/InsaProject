@@ -9,7 +9,10 @@ import org.apache.ibatis.annotations.Mapper;
 public interface TestDAO {
 	public List<TestVO> selectTest();
 	
-	public List<TestVO> insertTest(); 
+	public void insertTest(TestVO vo);
+	
+	public List<TestVO> selectCommon();
+
 	
 	
 	

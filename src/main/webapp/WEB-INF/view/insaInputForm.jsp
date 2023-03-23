@@ -1,5 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-	pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
 <!DOCTYPE html>
 <html lang="en" class="h-100">
 <head>
@@ -14,16 +17,19 @@
 	rel="stylesheet"
 	integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
 	crossorigin="anonymous">
-<title>ÀÎ»ç½Ã½ºÅÛ</title>
-<link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/cover/">
+<title>ì¸ì‚¬ì‹œìŠ¤í…œ</title>
+<link rel="canonical"
+	href="https://getbootstrap.com/docs/5.1/examples/cover/">
 <script type="text/javascript"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet"
+	href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
- 
+
 <style>
 .bd-placeholder-img {
 	font-size: 1.125rem;
@@ -63,12 +69,12 @@
 
 		<form id="submit_Form" method="post">
 			<div class="inputBtn">
-				<button type="button"
-					class="btn btn-dark btn-sm" id="submitBtn" style="float: right">µî·Ï</button>
+				<button type="button" class="btn btn-dark btn-sm" id="submitBtn"
+					style="float: right" onclick="submit_check()">ë“±ë¡</button>
 				<button type="button" class="btn btn-dark btn-sm"
-					style="float: right" onClick="location.href='/index'">ÀüÈ­¸é</button>
+					style="float: right" onClick="location.href='/index'">ì „í™”ë©´</button>
 				<button type="button" class="btn btn-dark btn-sm"
-					style="float: right">ÃÊ±âÈ­</button>
+					style="float: right">ì´ˆê¸°í™”</button>
 			</div>
 
 
@@ -77,34 +83,34 @@
 					<div class="row">
 						<div class="col" style="margin: auto; display: blcok;">
 							<img src="resources/user.png" /><br /> <label
-								class="btn-upload" for="file"> »çÁø¿Ã¸®±â </label> <input type="file"
+								class="btn-upload" for="file"> ì‚¬ì§„ì˜¬ë¦¬ê¸° </label> <input type="file"
 								name="file" id="file">
 						</div>
 						<div class="col">
 							<div class="right">
 								<p>
-									*»ç¹ø <input type="text" name="sabun" placeholder="ÀÚµ¿»ı¼º" readonly></input>
+									*ì‚¬ë²ˆ <input type="text" id="sabun" name="sabun" placeholder="ìë™ìƒì„±"></input>
 								</p>
 								<p>
-									*¾ÆÀÌµğ <input id="id" name="id" type="text"></input>
+									*ì•„ì´ë”” <input id="id" name="id" type="text"></input>
 								</p>
 								<p>
-									ÀüÈ­¹øÈ£ <input type="text"></input>
+									ì „í™”ë²ˆí˜¸ <input type="text"></input>
 								</p>
 								<p>
-									*ÀÌ¸ŞÀÏ <input type="text" style="width: 130px;"></input> @ <select
-										name="email" style="width: 60px;">
-										<option value="">¼±ÅÃ</option>
+									*ì´ë©”ì¼ <input type="text" style="width: 130px;"></input> @ <select
+										name="email" id="id" style="width: 60px;">
+										<option value="1">ì„ íƒ</option>
 									</select>
 								</p>
 								<p>
-									ÁÖ¼Ò <input type="text" placeholder="¿ìÆí¹øÈ£" style="width: 130px;">
-									<button type="button">ÁÖ¼Ò°Ë»ö</button>
+									ì£¼ì†Œ <input type="text" placeholder="ìš°í¸ë²ˆí˜¸" style="width: 130px;">
+									<button type="button">ì£¼ì†Œê²€ìƒ‰</button>
 									</input>
 								</p>
 								<p>
-									Á÷À§ <select name="">
-										<option value="">¼±ÅÃ</option>
+									ì§ìœ„ <select name="pos_gbn_code">
+										<option value="">ì„ íƒ</option>
 									</select>
 								</p>
 							</div>
@@ -112,25 +118,31 @@
 						<div class="col">
 							<div class="right">
 								<p>
-									*»ç¿ø¸í <input type="text" name="name"></input>
+									*ì‚¬ì›ëª… <input type="text" name="name" id="name" korOnly></input>
 								</p>
 								<p>
-									*ºñ¹Ğ¹øÈ£ <input type="text" name="pwd"></input>
+									*ë¹„ë°€ë²ˆí˜¸ <input type="text" name="pwd" id="pwd"></input>
 								</p>
 								<p>
-									*ÈŞ´ëÆù¹øÈ£ <input type="text" name="ph"></input>
+									*íœ´ëŒ€í°ë²ˆí˜¸ <input type="text" name="hp" id="hp"></input>
 								</p>
 								<p>
-									Á÷Á¾ <select name="">
-										<option value="">¼±ÅÃ</option>
+									ì§ì¢… <select name="job_type">
+										<option value="">ì„ íƒ</option>
+										<c:forEach items="${result }" var="result">
+											<option value="${result.name}"
+												<c:if test="${(job_type) == (result.name)}"> selected </c:if>>
+											${result.name}
+											</option>
+										</c:forEach>
 									</select>
 								</p>
 								<p>
-									<input type="text" placeholder="ÁÖ¼Ò" style="width: 100%;"></input>
+									<input type="text" placeholder="ì£¼ì†Œ" style="width: 100%;"></input>
 								</p>
 								<p>
-									ºÎ¼­ <select name="">
-										<option value="">¼±ÅÃ</option>
+									ë¶€ì„œ <select name="">
+										<option value="">ì„ íƒ</option>
 									</select>
 								</p>
 							</div>
@@ -138,25 +150,25 @@
 						<div class="col">
 							<div class="right">
 								<p>
-									¿µ¹®ÀÌ¸§ <input type="text"></input>
+									ì˜ë¬¸ì´ë¦„ <input type="text" id="eng_name" name="eng_name" engOnly></input>
 								</p>
 								<p>
-									*ºñ¹Ğ¹øÈ£ È®ÀÎ <input type="text" name="pwd_chk"></input>
+									*ë¹„ë°€ë²ˆí˜¸ í™•ì¸ <input type="text" id="pwd_chk" name="pwd_chk"></input>
 								</p>
 								<p>
-									*ÁÖ¹Î¹øÈ£ <input type="text" name="reg_no"></input>
+									*ì£¼ë¯¼ë²ˆí˜¸ <input type="text" id="reg_no" name="reg_no"></input>
 								</p>
 								<p>
-									¿¬·É <input type="text" style="width: 80px"></input> ¼ºº° <select
+									ì—°ë ¹ <input type="text" style="width: 80px"></input> ì„±ë³„ <select
 										name="" style="width: 80px">
-										<option value="">¼±ÅÃ</option>
+										<option value="">ì„ íƒ</option>
 									</select>
 								</p>
 								<p>
-									<input type="text" placeholder="¼¼ºÎÁÖ¼Ò" style="width: 100%;"></input>
+									<input type="text" placeholder="ì„¸ë¶€ì£¼ì†Œ" style="width: 100%;"></input>
 								</p>
 								<p>
-									¿¬ºÀ <input type="text" placeholder="(¸¸¿ø)"
+									ì—°ë´‰ <input type="text" placeholder="(ë§Œì›)"
 										style="text-align: right"></input>
 								</p>
 							</div>
@@ -167,25 +179,25 @@
 						<div class="col">
 							<div class="right">
 								<p>
-									ÀÔ»ç±¸ºĞ <select name="">
-										<option value="">¼±ÅÃ</option>
+									ì…ì‚¬êµ¬ë¶„ <select name="join_gbn_code">
+										<option value="">ì„ íƒ</option>
 									</select>
 								</p>
 								<p>
-									±ºº° <select name="">
-										<option value="">¼±ÅÃ</option>
+									êµ°ë³„ <select name="mil_type">
+										<option value="">ì„ íƒ</option>
 									</select>
 								</p>
 								<p>
-									KOSAµî·Ï <select name="">
-										<option value="">¼±ÅÃ</option>
+									KOSAë“±ë¡ <select name="kosa_reg_yn">
+										<option value="">ì„ íƒ</option>
 									</select>
 								</p>
 								<p>
-									»ç¾÷ÀÚ¹øÈ£ <input type="text"></input>
+									ì‚¬ì—…ìë²ˆí˜¸ <input type="text"></input>
 								</p>
 								<p>
-									ÀÚ±â¼Ò°³ <input type="text" placeholder="100ÀÚ ³»¿Ü·Î ÀûÀ¸½Ã¿À"
+									ìê¸°ì†Œê°œ <input type="text" placeholder="100ì ë‚´ì™¸ë¡œ ì ìœ¼ì‹œì˜¤"
 										style="width: 100%; height: 50px;"></input>
 								</p>
 							</div>
@@ -194,67 +206,67 @@
 						<div class="col">
 							<div class="right">
 								<p>
-									µî±Ş <select name="">
-										<option value="">¼±ÅÃ</option>
+									ë“±ê¸‰ <select name="grade">
+										<option value="">ì„ íƒ</option>
 									</select>
 								</p>
 								<p>
-									°è±Ş <select name="">
-										<option value="">¼±ÅÃ</option>
+									ê³„ê¸‰ <select name="mil_level">
+										<option value="">ì„ íƒ</option>
 									</select>
 								</p>
 								<p>
-									KOSAµî±Ş <select name="">
-										<option value="">¼±ÅÃ</option>
+									KOSAë“±ê¸‰ <select name="kosa_class_code">
+										<option value="">ì„ íƒ</option>
 									</select>
 								</p>
 								<p>
-									»ç¾÷Ã¼¸í <input type="text"></input>
+									ì‚¬ì—…ì²´ëª… <input type="text"></input>
 								</p>
 							</div>
 						</div>
 						<div class="col">
 							<div class="right">
 								<p>
-									ÅõÀÔ¿©ºÎ <select name="">
-										<option value="">¼±ÅÃ</option>
+									íˆ¬ì…ì—¬ë¶€ <select name="put_yn">
+										<option value="">ì„ íƒ</option>
 									</select>
 								</p>
 								<p>
-									ÀÔ¿µÀÏ <input type="text" id="dapi1"></input>
+									ì…ì˜ì¼ <input type="text" id="dapi1"></input>
 								</p>
 								<p>
-									*ÀÔ»çÀÏ <input type="text" id="dapi2" name="join_day"></input>
+									*ì…ì‚¬ì¼ <input type="text" id="join_date" name="join_date"></input>
 								</p>
 								<p>
-									»ç¾÷ÀÚµî·ÏÁõ <input type="text"></input>
+									ì‚¬ì—…ìë“±ë¡ì¦ <input type="text"></input>
 								</p>
 								<p>
-									ÀÌ·Â¼­ <input type="text"></input>
+									ì´ë ¥ì„œ <input type="text"></input>
 								</p>
 							</div>
 						</div>
 						<div class="col">
 							<div class="right">
 								<p>
-									±ºÇÊ¿©ºÎ <select name="">
-										<option value="">¼±ÅÃ</option>
+									êµ°í•„ì—¬ë¶€ <select name="mil_yn">
+										<option value="">ì„ íƒ</option>
 									</select>
 								</p>
 								<p>
-									Àü¿ªÀÏ <input type="text" id="dapi3"></input>
+									ì „ì—­ì¼ <input type="text" id="dapi3"></input>
 								</p>
 								<p>
-									Åğ»çÀÏ <input type="text" id="dapi4"></input>
+									í‡´ì‚¬ì¼ <input type="text" id="dapi4"></input>
 								</p>
 								<p>
-									<button type="button">¹Ì¸®º¸±â</button>
-									<label class="btn-upload" for="file"> µî·Ï </label> <input
+									<button type="button">ë¯¸ë¦¬ë³´ê¸°</button>
+									<label class="btn-upload" for="file"> ë“±ë¡ </label> <input
 										type="file" name="file" id="file">
 								</p>
 								<p>
-									<button type="button">¹Ì¸®º¸±â</button>
-									<label class="btn-upload" for="file"> ÆÄÀÏ ¾÷·Îµå </label> <input
+									<button type="button">ë¯¸ë¦¬ë³´ê¸°</button>
+									<label class="btn-upload" for="file"> íŒŒì¼ ì—…ë¡œë“œ </label> <input
 										type="file" name="file" id="file">
 								</p>
 							</div>
@@ -267,18 +279,118 @@
 
 	<script>
 	
-	  $(function() {
-		    $( "#dapi1,#dapi2,#dapi3,#dapi4").datepicker();
-		  });
+	/*ì…ë ¥ì œí•œ ìœ íš¨ì„± ê²€ì¦*/	
 	
-	  
-	  $('#submitBtn').click(function(){
-		  	var form = document.getElementById("submit_Form");
-			
-			alert("aaaa");
-			form.submit();
-		});
+	$(document).on("keyup", "input[korOnly]", function() {
+		$(this).val( $(this).val().replace(/[a-zA-Z]/,"") 
+			);
+	});
+	
+	$(document).on("keyup", "input[engOnly]", function() {
+		$(this).val( $(this).val().replace(/[ã„±-ã…|ã…-ã…£|ê°€-í£]/,"") 
+			);
+	});
+	
+	/*ê³µë°± ìœ íš¨ì„± ê²€ì¦*/
+	function submit_check() {
+		var form = document.getElementById("submit_Form");
+		var sabun = document.getElementById("sabun");
+		var name = document.getElementById("name");
+		var id = document.getElementById("id");
+		var pwd = document.getElementById("pwd");
+		var pwd_chk = document.getElementById("pwd_chk");
+		var hp = document.getElementById("hp");
+		var email = document.getElementById("email");
+		var reg_no = document.getElementById("reg_no");
+		var join_date = document.getElementById("join_date");
 		
+		var engName = /[a-zA-Z]/;
+		var korName = /[ã„±-ã…|ã…-ã…£|ê°€-í£]/;
+		var RegExp = /^[a-zA-Z0-9]{4,12}$/; //idì™€ ìœ íš¨ì„± ê²€ì‚¬ ì •ê·œì‹
+		var RegExpPw = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,16}$/;//password ìœ íš¨ì„± ê²€ì‚¬ ì •ê·œì‹
+		var RegExpTest = /^[0-9]{4}$/; //ì „í™”ë²ˆí˜¸ ìœ íš¨ì„±ê²€ì‚¬
+		var tel_1 = $("#tel_1").val();
+		var tel_2 = $("#tel_2").val();
+		var tel_3 = $("#tel_3").val();
+		var phoneNum = "";
+		phoneNum = tel_1 + "-" + tel_2 + "-" + tel_3;
+		//console.log("phonenum : " + phoneNum);
+		$("#phoneNum").val(phoneNum);
+		
+		if (sabun.value == "") {
+			alert("ì‚¬ë²ˆì„ ì…ë ¥í•˜ì„¸ìš”.");
+			return false;
+		} 
+		if (pwd.value == "") {
+			alert("íŒ¨ìŠ¤ì›Œë“œë¥¼ ì…ë ¥í•˜ì„¸ìš”.");
+			return false;
+		}
+		if (pwck_input.value == "") {
+			alert("íŒ¨ìŠ¤ì›Œë“œ í™•ì¸ì„ ì…ë ¥í•˜ì„¸ìš”.");
+			return false;
+		}
+		if (!tel_1) {
+			alert("ì˜¬ë°”ë¥¸ íœ´ëŒ€ì „í™”ë¥¼ ì…ë ¥í•˜ì„¸ìš”.");
+			return false;
+		}
+		if (!tel_2) {
+			alert("ì˜¬ë°”ë¥¸ íœ´ëŒ€ì „í™”ë¥¼ ì…ë ¥í•˜ì„¸ìš”.");
+			return false;
+		}
+		if (!tel_3) {
+			alert("ì˜¬ë°”ë¥¸ íœ´ëŒ€ì „í™”ë¥¼ ì…ë ¥í•˜ì„¸ìš”.");
+			return false;
+		}
+		//ì•„ì´ë”” ì¤‘ë³µì²´í¬ ì—¬ë¶€
+		if ($("input[name='checked_id']").val() == '') {
+			alert('ì•„ì´ë”” ì¤‘ë³µì²´í¬ë¥¼ í•´ì£¼ì„¸ìš”.');
+			$("input[name='checked_id']").eq(0).focus();
+			return false;
+		}
+		
+		//ì˜ë¬¸ëª… í˜•ì‹ê²€ì‚¬
+		if (!engName.test(engName.value)) {
+			alert("ì˜ë¬¸ë§Œ ì…ë ¥í•´ì£¼ì„¸ìš”.");
+			return false;
+		}
+		
+		//í•œê¸€ëª… í˜•ì‹ê²€ì‚¬
+		if (!korName.test(name.value)) {
+		alert("í•œê¸€ë§Œ ì…ë ¥í•´ì£¼ì„¸ìš”.");
+		return false;
+		}
+		
+		//ë¹„ë°€ë²ˆí˜¸ í™•ì¸ ì¼ì¹˜ ì—¬ë¶€
+		if (pw.value != pwck.value) {
+			alert('ì˜¬ë°”ë¥¸ ë¹„ë°€ë²ˆí˜¸ë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”.');
+			return false;
+		}
+		//íŒ¨ìŠ¤ì›Œë“œ í˜•ì‹ê²€ì‚¬
+		if (!RegExpPw.test(pwck.value)) {
+			alert("ë¹„ë°€ë²ˆí˜¸ëŠ” ë¬¸ì, ìˆ«ì, íŠ¹ìˆ˜ë¬¸ìê°€ ê°ê° ìµœì†Œ 1ê°œ ì´ìƒ í¬í•¨, ìµœì†Œ 8ìë¦¬ë¡œ ì…ë ¥í•˜ì—¬ ì£¼ì„¸ìš”.");
+			return false;
+		}
+		//íœ´ëŒ€í° ë²ˆí˜¸ ê²€ì‚¬
+		if (!RegExpTest.test(tel_2)) {
+			alert('ìˆ«ì 4ìë¦¬ë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”.');
+			return false;
+		}
+		if (!RegExpTest.test(tel_3)) {
+			alert('ìˆ«ì 4ìë¦¬ë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”.');
+			return false;
+		}
+		form.submit();
+	
+		//ë‹¬ë ¥ 
+		$.datepicker.setDefaults({
+			dateFormat : 'yy-mm-dd',
+		});
+
+		$(function() {
+			$("#dapi1,#join_date,#dapi3,#dapi4").datepicker();
+		});
+
+	};
 	</script>
 
 
