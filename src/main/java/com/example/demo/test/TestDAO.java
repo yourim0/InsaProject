@@ -13,8 +13,8 @@ public interface TestDAO {
 	
 	public List<TestVO> selectCommon();
 
-	
-	
+	//아이디 중복체크
+	public int idCheck(String memberId);
 	
 	
 }

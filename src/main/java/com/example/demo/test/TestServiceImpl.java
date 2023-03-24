@@ -21,18 +21,24 @@ public class TestServiceImpl implements TestService {
 	}
 
 	@Override
-	public void insertTest(TestVO vo) {
+	public void insertTest(TestVO vo) throws Exception{
 		 testDAO.insertTest(vo);
 	}
 
 	@Override
-	public List<TestVO> selectCommon() {
+	public List<TestVO> selectCommon() throws Exception{
 		System.out.println("selectCommon");
 		List<TestVO> commonList = testDAO.selectCommon();
 		System.out.println("selectCommon" + commonList);
 		return commonList;
 
 	}
-	
+
+	@Override
+	public int idCheck(String memberId) throws Exception{
+		System.out.println("idCheck" + testDAO.idCheck(memberId));
+		return testDAO.idCheck(memberId);
+	}
+
 
 }

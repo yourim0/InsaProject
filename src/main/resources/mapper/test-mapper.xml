@@ -8,12 +8,16 @@
 	</select>
 
 	<insert id="insertTest">
-		INSERT INTO INSA (sabun, name, id, pwd, hp, reg_no, email, join_date, job_type ) VALUES (insa_seq.nextval, #{name}, #{id}, #{pwd}, #{hp}, #{reg_no}, #{email}, #{join_date}, #{job_type})
+		INSERT INTO INSA (sabun, name, id, pwd, hp, reg_no, email, join_date, job_type,mil_yn) VALUES (insa_seq.nextval, #{name}, #{id}, #{pwd}, #{hp}, #{reg_no}, #{email}, #{join_date}, #{job_type},#{mil_yn})
 	</insert>
 	
+	
+	
 	<select id="selectCommon" resultType="com.example.demo.test.TestVO">
-		SELECT * FROM INSA_COM WHERE GUBUN = 'A04'
-		
-		
+		SELECT * FROM INSA_COM
+	</select>
+	
+	<select id="idCheck" resultType="int">
+		SELECT count(*) FROM INSA WHERE id = #{memberId}
 	</select>
 </mapper>
