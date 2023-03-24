@@ -188,7 +188,7 @@
 									<input type="hidden" id="reg_no" name="reg_no"></input>
 								</p>
 								<p>
-									연령 <input type="text" style="width: 80px"></input> 성별 <select
+									연령 <input type="text" style="width: 80px" onkeyup="genderChk(this)"></input> 성별 <select
 										name="gender" style="width: 80px">
 										<option value="">선택</option>
 										<c:forEach items="${result }" var="result">
@@ -559,7 +559,6 @@
 		    domainInput.disabled = false
 		  }
 		});
-	
 		
 		//연봉 천단위 콤마 
 		document.getElementById("salary").addEventListener("keyup", function (e) {
@@ -568,10 +567,12 @@
 					
 		//주민번호 성별체크
 		function genderChk(){
-			var reg_no = $('reg_no').val();
-			
+			var reg_no = $('#reg_no').val();
+			console.log(reg_no);
+			var reg_sp = reg_no.split('-');
+			var reg1 = reg_sp[1].CharAt(0);
+			console.log(reg1);
 		}
 	</script>
-
 </body>
 </html>
