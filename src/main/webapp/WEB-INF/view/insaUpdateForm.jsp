@@ -1,5 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-	pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
+<!DOCTYPE html>
 <html lang="en" class="h-100">
 <head>
 <meta charset="utf-8">
@@ -13,7 +17,7 @@
 	rel="stylesheet"
 	integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
 	crossorigin="anonymous">
-<title>ÀÎ»ç½Ã½ºÅÛ</title>
+<title>ì¸ì‚¬ì‹œìŠ¤í…œ</title>
 
 <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/cover/">
 
@@ -52,43 +56,63 @@
 
 		</header>
 
+		<!-- form -->
+		<form id="submit_Form" method="post">
 		<div class="inputBtn">
-			<button type="button" class="btn btn-dark btn-sm" style="float: right">¼öÁ¤</button>
-			<button type="button" class="btn btn-dark btn-sm" style="float: right">»èÁ¦</button>
-			<button type="button" class="btn btn-dark btn-sm" style="float: right">ÀÌÀü</button>
+			<button type="button" class="btn btn-dark btn-sm" style="float: right">ìˆ˜ì •</button>
+			<button type="button" class="btn btn-dark btn-sm" style="float: right">ì‚­ì œ</button>
+			<button type="button" class="btn btn-dark btn-sm" style="float: right">ì´ì „</button>
 		</div>
 
-		<main>
-			<div class="container">
-				<form class="form-inline" style="width: 100%">
+			<main>
+				<div class="container">
 					<div class="row">
 						<div class="col" style="margin: auto; display: blcok;">
-							<img src="resources/user.png" /><br />
-							<button type="button">»çÁø¿Ã¸®±â</button>
+							<img src="resources/user.png" /><br /> <label
+								class="btn-upload" for="file"> ì‚¬ì§„ì˜¬ë¦¬ê¸° </label> <input type="file"
+								name="file" id="file">
 						</div>
 						<div class="col">
 							<div class="right">
 								<p>
-									»ç¹ø <input type="text" placeholder="ÀÚµ¿»ý¼º"></input>
+									*ì‚¬ë²ˆ <input type="text" id="sabun" name="sabun" value="${info.sabun }" readonly></input>
 								</p>
 								<p>
-									¾ÆÀÌµð <input type="text"></input>
+									*ì•„ì´ë”” <input id="id" name="id" type="text"></input>
+									<button type="button" class="id_chk_button">ì¤‘ë³µí™•ì¸</button> <input
+										type="hidden" name="checked_id" value="">
 								</p>
 								<p>
-									ÀüÈ­¹øÈ£ <input type="text"></input>
+									ì „í™”ë²ˆí˜¸ <input type="text" id="phone" name="phone" maxlength="12" phoneHp></input>
 								</p>
 								<p>
-									ÀÌ¸ÞÀÏ <input type="text" style="width:130px;"></input> @
-									<select name="" style="width:60px;">
-										<option value="">¼±ÅÃ</option>
+									*ì´ë©”ì¼ <input type="text" id="email1" style="width: 130px;" ekOnly></input>
+									<input type="hidden" id="email" name="email"></input> @
+									<input type="text" id="domain-txt" style="width: 70px;" ekOnly />
+									<select class="box" id="domain-list" style="width: 70px;">
+										<option value="">ì„ íƒ</option>
+										<option value="type">ì§ì ‘ìž…ë ¥</option>
+										<option value="naver.com">naver.com</option>
+										<option value="google.com">google.com</option>
+										<option value="hanmail.net">hanmail.net</option>
+										<option value="nate.com">nate.com</option>
+										<option value="kakao.com">kakao.com</option>
 									</select>
 								</p>
 								<p>
-									ÁÖ¼Ò <input type="text" placeholder="¿ìÆí¹øÈ£" style="width:130px;"><button type="button">ÁÖ¼Ò°Ë»ö</button></input>
+									ì£¼ì†Œ <input type="number" placeholder="ìš°íŽ¸ë²ˆí˜¸" name="zip" id="zip" style="width: 130px;" readonly>
+									<button type="button" onclick="execPostCode()">ì£¼ì†Œê²€ìƒ‰</button>
+									</input>
 								</p>
 								<p>
-									Á÷À§ <select name="">
-										<option value="">¼±ÅÃ</option>
+									ì§ìœ„ <select name="pos_gbn_code">
+										<option value="">ì„ íƒ</option>
+										<c:forEach items="${result }" var="result">
+											<c:if test="${result.gubun eq 'A04'}">
+												<option value="${result.gubun}${result.code}">
+													${result.name}</option>
+											</c:if>
+										</c:forEach>
 									</select>
 								</p>
 							</div>
@@ -96,25 +120,38 @@
 						<div class="col">
 							<div class="right">
 								<p>
-									»ç¿ø¸í <input type="text"></input>
+									*ì‚¬ì›ëª… <input type="text" name="name" id="name" value="${info.name }" korOnly></input>
 								</p>
 								<p>
-									ºñ¹Ð¹øÈ£ <input type="text"></input>
+									*ë¹„ë°€ë²ˆí˜¸ <input type="text" name="pwd1" id="pwd1"></input>
+									<input type="hidden" name="pwd" id="pwd"></input>
 								</p>
 								<p>
-									ÈÞ´ëÆù¹øÈ£ <input type="text"></input>
+									*íœ´ëŒ€í°ë²ˆí˜¸ <input type="text" name="hp" id="hp" maxlength="13" hpHyphen></input>
 								</p>
 								<p>
-									Á÷Á¾ <select name="">
-										<option value="">¼±ÅÃ</option>
+									ì§ì¢… <select name="job_type">
+										<option value="">ì„ íƒ</option>
+										<c:forEach items="${result }" var="result">
+											<c:if test="${result.gubun eq 'A03'}">
+												<option value="${result.gubun}${result.code}">
+													${result.name}</option>
+											</c:if>
+										</c:forEach>
 									</select>
 								</p>
 								<p>
-									<input type="text" placeholder="ÁÖ¼Ò" style="width:100%;"></input>
+									<input type="text" placeholder="ì£¼ì†Œ" name="addr1" id="addr1" style="width: 100%;" readyonly></input>
 								</p>
 								<p>
-									ºÎ¼­ <select name="">
-										<option value="">¼±ÅÃ</option>
+									ë¶€ì„œ <select name="dept_code">
+										<option value="">ì„ íƒ</option>
+										<c:forEach items="${result }" var="result">
+											<c:if test="${result.gubun eq 'A05'}">
+												<option value="${result.gubun}${result.code}">
+													${result.name}</option>
+											</c:if>
+										</c:forEach>
 									</select>
 								</p>
 							</div>
@@ -122,24 +159,35 @@
 						<div class="col">
 							<div class="right">
 								<p>
-									¿µ¹®ÀÌ¸§ <input type="text"></input>
+									ì˜ë¬¸ì´ë¦„ <input type="text" id="eng_name" name="eng_name" engOnly></input>
 								</p>
 								<p>
-									ºñ¹Ð¹øÈ£ È®ÀÎ <input type="text"></input>
+									*ë¹„ë°€ë²ˆí˜¸ í™•ì¸ <input type="text" id="pwd_chk1" name="pwd_chk1"></input>
+									<input type="hidden" id="pwd_chk" name="pwd_chk"></input>
 								</p>
 								<p>
-									ÁÖ¹Î¹øÈ£ <input type="text"></input>
+									*ì£¼ë¯¼ë²ˆí˜¸ <input type="text" id="reg_no1" name="reg_no1" maxlength="14" masking></input>
+									<input type="hidden" id="reg_no" name="reg_no"></input>
 								</p>
 								<p>
-									¿¬·É <input type="text" style="width:80px"></input> ¼ºº° <select name="" style="width:80px">
-										<option value="">¼±ÅÃ</option>
+									ì—°ë ¹ <input type="text" id="years" name="years" style="width: 80px" readonly>
+									</input> ì„±ë³„ <select id="sex" name="sex" style="width: 80px" disabled>
+										<option value="">ì„ íƒ</option>
+										<c:forEach items="${result }" var="result">
+											<c:if test="${result.gubun eq 'A02'}">
+												<option value="${result.name}">
+													${result.name}</option>
+											</c:if>
+										</c:forEach>
 									</select>
 								</p>
 								<p>
-								<input type="text" placeholder="¼¼ºÎÁÖ¼Ò" style="width:100%;"></input>
+									<input type="text" placeholder="ì„¸ë¶€ì£¼ì†Œ" name="addr2" id="addr2" style="width: 100%;" readyonly></input>
 								</p>
 								<p>
-									¿¬ºÀ <input type="text" placeholder="(¸¸¿ø)" style="text-align:right"></input>
+									ì—°ë´‰ <input type="text" id="salary1" name="salary1" placeholder="(ë§Œì›)"
+										style="text-align: right" onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');"></input>
+										<input type="hidden" id="salary" name="salary"></input>
 								</p>
 							</div>
 						</div>
@@ -149,25 +197,44 @@
 						<div class="col">
 							<div class="right">
 								<p>
-									ÀÔ»ç±¸ºÐ <select name="">
-										<option value="">¼±ÅÃ</option>
+									ìž…ì‚¬êµ¬ë¶„ <select name="join_gbn_code">
+										<option value="">ì„ íƒ</option>
+										<c:forEach items="${result }" var="result">
+											<c:if test="${result.gubun eq 'A01'}">
+												<option value="${result.gubun}${result.code}" >
+													${result.name}</option>
+											</c:if>
+										</c:forEach>
 									</select>
 								</p>
 								<p>
-									±ºº° <select name="">
-										<option value="">¼±ÅÃ</option>
+									êµ°ë³„ <select id="mil_type" name="mil_type">
+										<option value="">ì„ íƒ</option>
+										<c:forEach items="${result }" var="result">
+											<c:if test="${result.gubun eq 'A09'}">
+												<option value="${result.gubun}${result.code}">
+													${result.name}</option>
+											</c:if>
+										</c:forEach>
 									</select>
 								</p>
 								<p>
-									KOSAµî·Ï <select name="">
-										<option value="">¼±ÅÃ</option>
+									KOSAë“±ë¡ <select name="kosa_reg_yn">
+										<option value="">ì„ íƒ</option>
+										<c:forEach items="${result }" var="result">
+											<c:if test="${result.gubun eq 'A11'}">
+												<option value="${result.gubun}${result.code}">
+													${result.name}</option>
+											</c:if>
+										</c:forEach>
 									</select>
 								</p>
 								<p>
-									»ç¾÷ÀÚ¹øÈ£ <input type="text"></input>
+									ì‚¬ì—…ìžë²ˆí˜¸ <input type="text" name="com_reg_no" id="com_reg_no" maxlength="12" comHyphen></input>
 								</p>
 								<p>
-									ÀÚ±â¼Ò°³ <input type="text" placeholder="100ÀÚ ³»¿Ü·Î ÀûÀ¸½Ã¿À" style="width:100%; height:50px;" ></input>
+									ìžê¸°ì†Œê°œ <input type="text" placeholder="100ìž ë‚´ì™¸ë¡œ ì ìœ¼ì‹œì˜¤"
+										style="width: 100%; height: 50px;"></input>
 								</p>
 							</div>
 						</div>
@@ -175,75 +242,105 @@
 						<div class="col">
 							<div class="right">
 								<p>
-									ÃÖÁ¾ÇÐ·Â <select name="">
-										<option value="">¼±ÅÃ</option>
+									ìµœì¢…í•™ë ¥ <select name="gart_level">
+										<option value="">ì„ íƒ</option>
+										<c:forEach items="${result }" var="result">
+											<c:if test="${result.gubun eq 'A06'}">
+												<option value="${result.gubun}${result.code}">
+													${result.name}</option>
+											</c:if>
+										</c:forEach>
 									</select>
 								</p>
 								<p>
-									°è±Þ <select name="">
-										<option value="">¼±ÅÃ</option>
+									ê³„ê¸‰ <select id="mil_level" name="mil_level">
+										<option value="">ì„ íƒ</option>
+										<c:forEach items="${result }" var="result">
+											<c:if test="${result.gubun eq 'A10'}">
+												<option value="${result.gubun}${result.code}">
+													${result.name}</option>
+											</c:if>
+										</c:forEach>
 									</select>
 								</p>
 								<p>
-									KOSAµî±Þ <select name="">
-										<option value="">¼±ÅÃ</option>
+									KOSAë“±ê¸‰ <select name="kosa_class_code">
+										<option value="">ì„ íƒ</option>
+										<c:forEach items="${result }" var="result">
+											<c:if test="${result.gubun eq 'A12'}">
+												<option value="${result.gubun}${result.code}">
+													${result.name}</option>
+											</c:if>
+										</c:forEach>
 									</select>
 								</p>
 								<p>
-									»ç¾÷Ã¼¸í <input type="text"></input>
+									ì‚¬ì—…ì²´ëª… <input type="text"></input>
 								</p>
 							</div>
 						</div>
 						<div class="col">
 							<div class="right">
 								<p>
-									ÅõÀÔ¿©ºÎ <select name="">
-										<option value="">¼±ÅÃ</option>
+									íˆ¬ìž…ì—¬ë¶€ <select name="put_yn">
+										<option value="">ì„ íƒ</option>
+										<c:forEach items="${result }" var="result">
+											<c:if test="${result.gubun eq 'A07'}">
+												<option value="${result.gubun}${result.code}">
+													${result.name}</option>
+											</c:if>
+										</c:forEach>
 									</select>
 								</p>
 								<p>
-									ÀÔ¿µÀÏ <input type="text"></input>
+									ìž…ì˜ì¼ <input type="date" id="mil_startdate" name="mil_startdate"></input>
 								</p>
 								<p>
-									ÀÔ»çÀÏ <input type="text"></input>
+									*ìž…ì‚¬ì¼ <input type="date" id="join_date" name="join_date"></input>
 								</p>
 								<p>
-									»ç¾÷ÀÚµî·ÏÁõ <input type="text"></input>
+									ì‚¬ì—…ìžë“±ë¡ì¦ <input type="text"></input>
 								</p>
 								<p>
-									ÀÌ·Â¼­ <input type="text"></input>
+									ì´ë ¥ì„œ <input type="text"></input>
 								</p>
 							</div>
 						</div>
 						<div class="col">
 							<div class="right">
 								<p>
-									±ºÇÊ¿©ºÎ <select name="">
-										<option value="">¼±ÅÃ</option>
+									êµ°í•„ì—¬ë¶€ <select id="mil_yn" name="mil_yn">
+										<option value="">ì„ íƒ</option>
+										<c:forEach items="${result }" var="result">
+											<c:if test="${result.gubun eq 'A08'}">
+												<option value="${result.name}">
+													${result.name}</option>
+											</c:if>
+										</c:forEach>
 									</select>
 								</p>
 								<p>
-									Àü¿ªÀÏ <input type="text"></input>
+									ì „ì—­ì¼ <input type="date" id="mil_enddate" name="mil_enddate"></input>
 								</p>
 								<p>
-									Åð»çÀÏ <input type="text"></input>
+									í‡´ì‚¬ì¼ <input type="date" id="retire_date" name="retire_date"></input>
 								</p>
 								<p>
-									<button type="button">¹Ì¸®º¸±â</button>
-									<button type="button">µî·Ï</button>
+									<button type="button">ë¯¸ë¦¬ë³´ê¸°</button>
+									<label class="btn-upload" for="file"> ë“±ë¡ </label> <input
+										type="file" name="file" id="file">
 								</p>
 								<p>
-									<button type="button">´Ù¿î</button>
-									<button type="button">ÆÄÀÏ ¾÷·Îµå</button>
+									<button type="button">ë¯¸ë¦¬ë³´ê¸°</button>
+									<label class="btn-upload" for="file"> íŒŒì¼ ì—…ë¡œë“œ </label> <input
+										type="file" name="file" id="file">
 								</p>
 							</div>
 						</div>
 					</div>
-				</form>
-			</div>
-
-		</main>
-
+				</div>
+			</main>
+		</form>
 	</div>
 
 </body>

@@ -1,5 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-	pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
+<!DOCTYPE html>
 <html lang="en" class="h-100">
 <head>
 <meta charset="utf-8">
@@ -13,10 +17,17 @@
 	rel="stylesheet"
 	integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
 	crossorigin="anonymous">
-<title>ÀÎ»ç½Ã½ºÅÛ</title>
+<title>ì¸ì‚¬ì‹œìŠ¤í…œ</title>
 
 <link rel="canonical"
 	href="https://getbootstrap.com/docs/5.1/examples/cover/">
+
+<link rel="stylesheet"
+	href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link href="css/cover.css" rel="stylesheet">
+
 
 <style>
 .bd-placeholder-img {
@@ -54,68 +65,223 @@
 		</header>
 
 
-
-
+		<!-- form -->
 		<main>
-			<div class="container">
-				<form class="form-inline" style="width: 100%">
+			<form id="search_Form" method="post">
+				<div class="container">
 					<div class="row">
 						<div class="col">
 							<div class="right">
 								<p>
-									»ç¹ø <input type="text"></input>
+									ì‚¬ë²ˆ <input type="text" id="sabun" name="sabun" value=""></input>
 								</p>
 								<p>
-									Á÷À§ <input type="text"></input>
+									ì§ìœ„ <select name="pos_gbn_code">
+											<option value="">ì„ íƒ</option>
+											<c:forEach items="${result }" var="result">
+												<c:if test="${result.gubun eq 'A04'}">
+													<option value="${result.gubun}${result.code}">
+														${result.name}</option>
+												</c:if>
+											</c:forEach>
+										</select>
 								</p>
 							</div>
 						</div>
 						<div class="col">
 							<div class="right">
 								<p>
-									»ç¿ø¸í <input type="text"></input>
+									ì‚¬ì›ëª… <input type="text" name="name" id="name" value="${info.name }" korOnly></input>
 								</p>
 								<p>
-									ÀÔ»çÀÏ <input type="text"></input>
+									ì…ì‚¬ì¼ <input type="date" id="join_date" name="join_date"></input>
 								</p>
 							</div>
 						</div>
 						<div class="col">
 							<div class="right">
 								<p>
-									ÀÔ»ç±¸ºĞ <input type="text" placeholder="ÀÚµ¿»ı¼º"></input>
+									ì…ì‚¬êµ¬ë¶„ <select name="join_gbn_code">
+										<option value="">ì„ íƒ</option>
+										<c:forEach items="${result }" var="result">
+											<c:if test="${result.gubun eq 'A01'}">
+												<option value="${result.gubun}${result.code}">
+													${result.name}</option>
+											</c:if>
+										</c:forEach>
+									</select>
 								</p>
 								<p>
-									Åğ»çÀÏ <input type="text"></input>
+									í‡´ì‚¬ì¼ <input type="date" id="retire_date" name="retire_date"></input>
 								</p>
 							</div>
 						</div>
 						<div class="col">
 							<div class="right">
 								<p>
-									ÅõÀÔ¿©ºÎ <input type="text" placeholder="ÀÚµ¿»ı¼º"></input>
+									íˆ¬ì…ì—¬ë¶€ <select name="put_yn">
+										<option value="">ì„ íƒ</option>
+										<c:forEach items="${result }" var="result">
+											<c:if test="${result.gubun eq 'A07'}">
+												<option value="${result.gubun}${result.code}">
+													${result.name}</option>
+											</c:if>
+										</c:forEach>
+									</select>
 								</p>
 								<p>
-									Á÷Á¾ <input type="text"></input>
+									ì§ì¢… <select name="job_type">
+										<option value="">ì„ íƒ</option>
+										<c:forEach items="${result }" var="result">
+											<c:if test="${result.gubun eq 'A03'}">
+												<option value="${result.gubun}${result.code}">
+													${result.name}</option>
+											</c:if>
+										</c:forEach>
+									</select>
 								</p>
-								
+
 								<div class="inputBtn">
-									<button type="button" class="btn btn-dark btn-sm">°Ë»ö</button>
-									<button type="button" class="btn btn-dark btn-sm">»èÁ¦</button>
-									<button type="button" class="btn btn-dark btn-sm">ÃÊ±âÈ­</button>			
-									<button type="button" class="btn btn-dark btn-sm">ÀÌÀü</button>
+									<button type="button" class="btn btn-dark btn-sm"
+										onclick="submit_search();">ê²€ìƒ‰</button>
+									<button type="reset" class="btn btn-dark btn-sm">ì´ˆê¸°í™”</button>
+									<button type="button" class="btn btn-dark btn-sm"
+										onClick="location.href='/index'">ì´ì „</button>
 								</div>
 							</div>
 						</div>
 					</div>
-
-				</form>
-			</div>
-
+				</div>
+			</form>
 		</main>
-
+		<div class="table" style="margin-top: 30px;">
+			<table border='1' style="width: 100%;">
+			<thead>
+				<tr>
+					<th>ì‚¬ë²ˆ</th>
+					<th>ì„±ëª…</th>
+					<th>ì£¼ë¯¼ë²ˆí˜¸</th>
+					<th>í•¸ë“œí° ë²ˆí˜¸</th>
+					<th>ì§ìœ„</th>
+					<th>ì…ì‚¬ì¼ì</th>
+					<th>í‡´ì‚¬ì¼ì</th>
+					<th>íˆ¬ì…ì—¬ë¶€</th>
+					<th>ì—°ë´‰</th>
+				</tr>
+			</thead>
+			<tbody id="dynamicTbody">	
+				<c:if test="${empty value}">
+					<td colspan="9">ê²€ìƒ‰ëœ ë°ì´í„°ê°€ ì—†ìŠµë‹ˆë‹¤</td>
+				</c:if>
+				<c:if test="${!empty value}">
+					<c:forEach items="${value}" var="value">
+						<tr>
+							<td class="align-middle align-middle" onclick="location.href='/sabun=?'">
+								<c:out value="${value.sabun}" />
+							</td>
+							<td class="align-middle align-middle">
+								<c:out value="${value.name}" />
+							</td>
+							<td class="align-middle align-middle">
+								<c:out value="${value.reg_no}" />
+							</td>
+							<td class="align-middle align-middle">
+								<c:out value="${value.hp}" />
+							</td>
+							<td class="align-middle align-middle">
+								<c:out value="${value.pos_gbn_code}" />
+							</td>
+							<td class="align-middle align-middle">
+								<fmt:formatDate value="${value.join_date}" pattern="yyyy-MM-dd" />
+							</td>
+							<td class="align-middle align-middle">
+								<fmt:formatDate value="${value.retire_date}" pattern="yyyy-MM-dd" />
+							</td>
+							<td class="align-middle align-middle">
+								<c:out value="${value.put_yn}" />
+							</td>
+							<td class="align-middle align-middle">
+								<c:out value="${value.salary}" />
+							</td>
+						</tr>
+						</c:forEach>
+					</c:if>
+				</tbody>
+			</table>
+		</div>
 	</div>
 
-</body>
+	<script>
+		//ì…ì‚¬ì¼,í‡´ì‚¬ì¼
+		$.datepicker.setDefaults({
+			dateFormat : 'yy-mm-dd'
+		});
 
+		$("#join_date,#retire_date").datepicker();
+		//ì…ì‚¬ì¼, í‡´ì‚¬ì¼ ë¹„êµ
+		$(document).ready(
+				function() {
+					$('#retire_date').datepicker(
+							"option",
+							"onClose",
+							function(selectedDate) {
+								if (selectedDate.length == 10)
+									$("#join_date").datepicker("option",
+											"maxDate", selectedDate);
+								else
+									$("#join_date").datepicker("option",
+											"maxDate", max);
+							});
+					$('#join_date').datepicker(
+							"option",
+							"onClose",
+							function(selectedDate) {
+								if (selectedDate.length == 10)
+									$("#retire_date").datepicker("option",
+											"minDate", selectedDate);
+								else
+									$("#retire_date").datepicker("option",
+											"minDate", min);
+							});
+				});
+
+		//ê²€ìƒ‰
+		function submit_search() {
+			$.ajax({
+					type : "POST",
+					url : "/insaListForm.do",
+					data : $("#search_Form").serialize(),
+					contentType : "application/x-www-form-urlencoded; charset=utf-8",
+					dataType : "json",
+					success : function(data) {
+						var list = JSON.stringify(data);
+						console.log(list);
+						console.log(data[0].sabun);
+						if(data != null){
+							var html = '';	
+							
+							for(key in data){
+							html += '<tr>';
+							html += '<td>'+data[key].sabun+'</td>';
+							html += '<td>'+data[key].name+'</td>';
+							html += '<td>'+data[key].reg_no+'</td>';
+							html += '<td>'+data[key].hp+'</td>';
+							html += '<td>'+data[key].hp+'</td>';
+							html += '<td>'+data[key].hp+'</td>';
+							html += '<td>'+data[key].hp+'</td>';
+							html += '<td>'+data[key].hp+'</td>';
+							html += '<td>'+data[key].hp+'</td>';
+							html += '</tr>';	
+							}
+							$("#dynamicTbody").empty();
+							$("#dynamicTbody").append(html);
+						}
+					},
+					error : function(request, status, error) {
+						alert("code:" + request.status + "\n" + "error:"+ error);
+					}
+				});
+		}
+	</script>
+</body>
 </html>

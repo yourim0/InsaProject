@@ -82,5 +82,11 @@ input, select {
 
 #file {
   display: none;
-  
 }
+
+table, td, th {
+	text-align:center;
+	font-size : small;
+	border : 1px solid black;
+ 	border-collapse : collapse;
+};

@@ -6,12 +6,17 @@
 		SELECT NAME FROM TEST_TABLE
 	]]>
 	</select>
-
+	
+	<select id="selectSequence" resultType="Integer">
+		SELECT insa_seq.NEXTVAL FROM DUAL
+	</select>
+	
 	<insert id="insertTest">
-		INSERT INTO INSA (sabun, name, id, pwd, hp, reg_no, email, join_date, job_type,mil_yn) VALUES (insa_seq.nextval, #{name}, #{id}, #{pwd}, #{hp}, #{reg_no}, #{email}, #{join_date}, #{job_type},#{mil_yn})
+		INSERT INTO INSA VALUES (#{sabun}, #{name}, #{eng_name}, #{id}, #{pwd}, #{phone}, #{hp}, #{reg_no}, #{years}, #{sex}, #{email}, #{zip,jdbcType=INTEGER}, #{addr1}, #{addr2},
+		#{job_type}, #{pos_gbn_code},#{dept_code},#{salary, jdbcType=INTEGER},#{join_gbn_code},#{gart_level},#{put_yn},#{mil_yn},#{mil_type,jdbcType=VARCHAR},#{mil_level,jdbcType=VARCHAR},#{mil_startdate,jdbcType=DATE},#{mil_enddate,jdbcType=DATE},
+		#{kosa_reg_yn,jdbcType=VARCHAR},#{kosa_class_code,jdbcType=VARCHAR},#{join_date},#{retire_date,jdbcType=DATE},#{crm_name,jdbcType=VARCHAR},#{cmp_reg_no,jdbcType=VARCHAR},#{cmp_reg_img,jdbcType=VARCHAR},#{carrier,jdbcType=VARCHAR},#{profile,jdbcType=VARCHAR},#{self_intro,jdbcType=VARCHAR},#{profile_image,jdbcType=VARCHAR},#{carrier_image,jdbcType=VARCHAR})
 	</insert>
-	
-	
+
 	
 	<select id="selectCommon" resultType="com.example.demo.test.TestVO">
 		SELECT * FROM INSA_COM
@@ -19,5 +24,38 @@
 	
 	<select id="idCheck" resultType="int">
 		SELECT count(*) FROM INSA WHERE id = #{memberId}
+	</select>
+	
+	<select id="getInfo" resultType="com.example.demo.test.TestVO">
+		SELECT * FROM INSA WHERE sabun = #{sabun}
+	</select>
+	
+	<select id="searchList" resultType="com.example.demo.test.TestVO">
+		SELECT sabun,name,reg_no,hp,pos_gbn_code,join_date,retire_date,put_yn,salary FROM INSA WHERE 1=1
+		<if test="sabun != null and sabun != ''">
+			AND SABUN LIKE '%' || #{sabun} || '%'
+		</if>
+		<if test="name != null and name != ''">
+			AND NAME LIKE '%' || #{name} || '%'
+		</if>
+		<if test="join_gbn_code != null and join_gbn_code != ''">
+			AND join_gbn_code = #{join_gbn_code}
+		</if>
+		<if test="put_yn != null and put_yn !=''">
+			AND put_yn = #{put_yn}
+		</if>
+		<if test="pos_gbn_code != null and pos_gbn_code != ''">
+			AND pos_gbn_code = #{pos_gbn_code}
+		</if>
+		<if test="join_date != null">
+			AND join_date = #{join_date}
+		</if>
+		<if test="retire_date != null and retire_date != ''">
+			AND retire_date = #{retire_date}
+		</if>
+		<if test="job_type != null and job_type != ''">
+			AND job_type = #{job_type}
+		</if>
+
 	</select>
 </mapper>

@@ -22,7 +22,9 @@ public class TestServiceImpl implements TestService {
 
 	@Override
 	public void insertTest(TestVO vo) throws Exception{
-		 testDAO.insertTest(vo);
+		System.out.println(vo.getMil_startdate()); 
+		testDAO.insertTest(vo);
+		 
 	}
 
 	@Override
@@ -31,13 +33,33 @@ public class TestServiceImpl implements TestService {
 		List<TestVO> commonList = testDAO.selectCommon();
 		System.out.println("selectCommon" + commonList);
 		return commonList;
-
 	}
 
 	@Override
 	public int idCheck(String memberId) throws Exception{
 		System.out.println("idCheck" + testDAO.idCheck(memberId));
 		return testDAO.idCheck(memberId);
+	}
+
+	@Override
+	public List<TestVO> getInfo(int sabun) {
+		List<TestVO> getInfo = testDAO.getInfo(sabun);
+		System.out.println(getInfo);
+		return null;
+	}
+
+	@Override
+	public int selectSequence() {
+		System.out.println("sequence");
+		int seq = testDAO.selectSequence();
+		return seq;
+	}
+
+	@Override
+	public List<TestVO> searchList(TestVO vo) {
+		System.out.println("searchList");
+		List<TestVO> searchList = testDAO.searchList(vo);
+		return searchList;
 	}
 
 
