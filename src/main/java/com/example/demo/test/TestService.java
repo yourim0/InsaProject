@@ -17,8 +17,16 @@ public interface TestService {
 	public int idCheck(String memberId) throws Exception;
 	
 	//등록한 회원정보수정정보
-	public List<TestVO> getInfo(int sabun);
+	public List<TestVO> getInfo(int sabun) throws Exception;
 	
 	//검색조건리스트
-	public List<TestVO> searchList(TestVO vo);
+	public List<TestVO> searchList(TestVO vo) throws Exception;
+	
+	//페이지 카운트
+	public int pageCnt(TestVO vo) throws Exception; 
+	
+	//페이징리스트
+	public List<TestVO> getListWithPaging(TestVO vo,int num, int postNum) throws Exception; 
+	
+	
 }

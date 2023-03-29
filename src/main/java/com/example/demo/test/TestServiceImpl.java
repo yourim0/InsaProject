@@ -1,5 +1,6 @@
 package com.example.demo.test;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,11 +57,35 @@ public class TestServiceImpl implements TestService {
 	}
 
 	@Override
-	public List<TestVO> searchList(TestVO vo) {
+	public List<TestVO> searchList(TestVO vo) throws Exception {
 		System.out.println("searchList");
 		List<TestVO> searchList = testDAO.searchList(vo);
 		return searchList;
 	}
+
+	//게시물 수
+	@Override
+	public int pageCnt(TestVO vo) throws Exception {
+		int cnt = testDAO.pageCnt(vo);
+		return cnt;
+	}
+	
+	//페이징리스트
+	@Override
+	public List<TestVO> getListWithPaging(TestVO vo, int num, int postNum) {
+		System.out.println("service"+ vo) ;
+		System.out.println("service"+ num) ;
+		System.out.println("service"+ postNum) ;
+		HashMap data = new HashMap();
+		data.put("num", num);
+		data.put("postNum", postNum);
+		data.put("vo", vo);
+		List<TestVO> getListWithPaging = testDAO.getListWithPaging(data);
+		System.out.println("service"+getListWithPaging);
+		return getListWithPaging;
+	}
+	
+	
 
 
 }

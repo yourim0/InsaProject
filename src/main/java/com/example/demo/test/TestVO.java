@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 @Data
@@ -38,8 +40,10 @@ public class TestVO {
 	private Date mil_enddate;
 	private String kosa_reg_yn;
 	private String kosa_class_code;
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private java.util.Date join_date;
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private java.util.Date retire_date;
 	private String crm_name;
@@ -51,8 +55,14 @@ public class TestVO {
 	private String self_intro;
 	private String carrier_image;
 	
+	//공통
 	private String gubun;
 	private String code;
 	private String note;
 	
+	//페이징
+	//private int count; //현재페이지 번호
+	private int num; //페이지당 출력할 데이터 개수
+	private int pageNum; //하단 페이징 번호
+
 }

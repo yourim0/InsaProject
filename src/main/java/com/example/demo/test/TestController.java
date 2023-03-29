@@ -1,7 +1,9 @@
 package com.example.demo.test;
 
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +13,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -87,18 +90,42 @@ public class TestController {
 		return "insaListForm";
 	}
 	
+	
+	//게시물 목록
 	@ResponseBody
-	@RequestMapping(value="/insaListForm.do", method= RequestMethod.POST)
-	public List<TestVO> get(TestVO vo, Model model) {
+	@RequestMapping(value="/insaListForm_Search.do", method= RequestMethod.POST)
+	public List<TestVO> get(TestVO vo, Model model) throws Exception {
 		System.out.println("Listget");
 		System.out.println("Controller, seacrchList" + vo);
 		List<TestVO> value = testService.searchList(vo);
 		System.out.println("검색리스트 : "+ value);
-		//model.addAttribute("value",value);
 		
 		return value;
 	}
 	
+	//페이징
+	@ResponseBody
+	@RequestMapping(value="/getListWithPaging", method= RequestMethod.GET)
+	public Map<String, Object> paging(TestVO vo, @RequestParam("num") int num) throws Exception{
+		System.out.println("getListWithPaging : " + vo );
+		
+		Map<String, Object> map = new HashMap<String,Object>();
+		int count = testService.pageCnt(vo); //게시물 총 개수 
+		System.out.println("count:"+count);
+		int postNum = 10; //한 페이지에서 출력할 게시물 수
+		int pageNum = (int)Math.ceil((double)count/postNum);//하단페이징번호(게시물총수/한페이지출력수 올림)
+		//int displayPost = (num - 1) * postNum; //매개변수 num은 현재페이지 //출력할게시물
+		
+		
+		List list = testService.getListWithPaging(vo,num,postNum); //목록출력
+		
+		System.out.println(list);
+		
+		map.put("list", list);
+		map.put("pageNum", pageNum);
+		
+		return map;
+	}
 	
 	
 	@RequestMapping("/insaUpdateForm.do")

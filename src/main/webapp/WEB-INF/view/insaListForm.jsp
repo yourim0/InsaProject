@@ -94,7 +94,7 @@
 									사원명 <input type="text" name="name" id="name" value="${info.name }" korOnly></input>
 								</p>
 								<p>
-									입사일 <input type="date" id="join_date" name="join_date"></input>
+									입사일 <input type="text" id="join_date" name="join_date"></input>
 								</p>
 							</div>
 						</div>
@@ -112,7 +112,7 @@
 									</select>
 								</p>
 								<p>
-									퇴사일 <input type="date" id="retire_date" name="retire_date"></input>
+									퇴사일 <input type="text" id="retire_date" name="retire_date"></input>
 								</p>
 							</div>
 						</div>
@@ -144,7 +144,7 @@
 								<div class="inputBtn">
 									<button type="button" class="btn btn-dark btn-sm"
 										onclick="submit_search();">검색</button>
-									<button type="reset" class="btn btn-dark btn-sm">초기화</button>
+									<button type="reset" class="btn btn-dark btn-sm" onclick="resetTable();">초기화</button>
 									<button type="button" class="btn btn-dark btn-sm"
 										onClick="location.href='/index'">이전</button>
 								</div>
@@ -156,59 +156,28 @@
 		</main>
 		<div class="table" style="margin-top: 30px;">
 			<table border='1' style="width: 100%;">
-			<thead>
-				<tr>
-					<th>사번</th>
-					<th>성명</th>
-					<th>주민번호</th>
-					<th>핸드폰 번호</th>
-					<th>직위</th>
-					<th>입사일자</th>
-					<th>퇴사일자</th>
-					<th>투입여부</th>
-					<th>연봉</th>
-				</tr>
-			</thead>
-			<tbody id="dynamicTbody">	
-				<c:if test="${empty value}">
+				<thead>
+					<tr>
+						<th>사번</th>
+						<th>성명</th>
+						<th>주민번호</th>
+						<th>핸드폰 번호</th>
+						<th>직위</th>
+						<th>입사일자</th>
+						<th>퇴사일자</th>
+						<th>투입여부</th>
+						<th>연봉</th>
+					</tr>
+				</thead>
+				<tbody id="dynamicTbody">	
 					<td colspan="9">검색된 데이터가 없습니다</td>
-				</c:if>
-				<c:if test="${!empty value}">
-					<c:forEach items="${value}" var="value">
-						<tr>
-							<td class="align-middle align-middle" onclick="location.href='/sabun=?'">
-								<c:out value="${value.sabun}" />
-							</td>
-							<td class="align-middle align-middle">
-								<c:out value="${value.name}" />
-							</td>
-							<td class="align-middle align-middle">
-								<c:out value="${value.reg_no}" />
-							</td>
-							<td class="align-middle align-middle">
-								<c:out value="${value.hp}" />
-							</td>
-							<td class="align-middle align-middle">
-								<c:out value="${value.pos_gbn_code}" />
-							</td>
-							<td class="align-middle align-middle">
-								<fmt:formatDate value="${value.join_date}" pattern="yyyy-MM-dd" />
-							</td>
-							<td class="align-middle align-middle">
-								<fmt:formatDate value="${value.retire_date}" pattern="yyyy-MM-dd" />
-							</td>
-							<td class="align-middle align-middle">
-								<c:out value="${value.put_yn}" />
-							</td>
-							<td class="align-middle align-middle">
-								<c:out value="${value.salary}" />
-							</td>
-						</tr>
-						</c:forEach>
-					</c:if>
 				</tbody>
 			</table>
+			<div id="paging">
+			
+			</div>
 		</div>
+		<button type="button" id="test">a</button>
 	</div>
 
 	<script>
@@ -244,35 +213,60 @@
 											"minDate", min);
 							});
 				});
+		
+		//초기화 버튼
+		function resetTable(){
+			var html = '<td colspan="9">검색된 데이터가 없습니다</td>';
+			$("#dynamicTbody").empty();
+			$("#dynamicTbody").append(html);
+		}
 
-		//검색
+		//검색 원래 select는 GET
 		function submit_search() {
 			$.ajax({
-					type : "POST",
-					url : "/insaListForm.do",
+					type : "POST", 
+					url : "/insaListForm_Search.do",
 					data : $("#search_Form").serialize(),
 					contentType : "application/x-www-form-urlencoded; charset=utf-8",
 					dataType : "json",
 					success : function(data) {
 						var list = JSON.stringify(data);
 						console.log(list);
-						console.log(data[0].sabun);
-						if(data != null){
-							var html = '';	
-							
+						if(data.length === 0){
+							var html = '';
+							html = '<td colspan="9">검색된 데이터가 없습니다</td>';
+							$("#dynamicTbody").empty();
+							$("#dynamicTbody").append(html);
+						}else{
+							var html = ``;	
 							for(key in data){
-							html += '<tr>';
-							html += '<td>'+data[key].sabun+'</td>';
-							html += '<td>'+data[key].name+'</td>';
-							html += '<td>'+data[key].reg_no+'</td>';
-							html += '<td>'+data[key].hp+'</td>';
-							html += '<td>'+data[key].hp+'</td>';
-							html += '<td>'+data[key].hp+'</td>';
-							html += '<td>'+data[key].hp+'</td>';
-							html += '<td>'+data[key].hp+'</td>';
-							html += '<td>'+data[key].hp+'</td>';
-							html += '</tr>';	
+								if(data[key].pos_gbn_code === null){
+									data[key].pos_gbn_code = '';
+								}
+								if(data[key].retire_date === null){
+									data[key].retire_date = '';
+								}
+								if(data[key].put_yn === null){
+									data[key].put_yn = '';
+								}
+								if(data[key].salary === null){
+									data[key].salary = '';
+								}
+							html += `<tr>`;
+							//html += `<td onClick="location.href='/insaUpdateForm.do?sabun=${'${data[key].sabun}'}'"> ${'${data[key].sabun}'}</td>`; 링크제거
+							html += `<td><a href="/insaUpdateForm.do?sabun=${'${data[key].sabun}'}"> ${'${data[key].sabun}'} </a></td>`;
+							html += `<td>${'${data[key].name}'}</td>`;
+							html += `<td>${'${data[key].reg_no}'}</td>`;
+							html += `<td>${'${data[key].hp}'}</td>`;
+							html += `<td>${'${data[key].pos_gbn_code}'}</td>`;
+							html += `<td>${'${data[key].join_date}'}</td>`;
+							html += `<td>${'${data[key].retire_date}'}</td>`;
+							html += `<td>${'${data[key].put_yn}'}</td>`;
+							html += `<td>${'${data[key].salary}'}</td>`;
+							html += `</tr>`;	
+							console.log(html);
 							}
+							
 							$("#dynamicTbody").empty();
 							$("#dynamicTbody").append(html);
 						}
@@ -282,6 +276,78 @@
 					}
 				});
 		}
+		
+		//페이징처리
+		function getPaging(){
+			$.ajax({
+				url:'/getListWithPaging?num=1',
+				type:'GET',
+				data :$("#search_Form").serialize(),
+				contentType : "application/x-www-form-urlencoded; charset=utf-8",
+				dataType : "json",
+				success : function(data) {
+					//var list = JSON.stringify(data);
+					var list = data.list;
+					console.log(data.pageNum);
+					//console.log(`${'${data.pageNum}'}`);
+					if(data.length === 0){
+						var html = '';
+						html = '<td colspan="9">검색된 데이터가 없습니다</td>';
+						$("#dynamicTbody").empty();
+						$("#dynamicTbody").append(html);
+					}else{
+						var html = ``;	
+						for(key in list){
+							
+							if(list[key].pos_gbn_code === null){
+								list[key].pos_gbn_code = '';
+							}
+							if(list[key].retire_date === null){
+								list[key].retire_date = '';
+							}
+							if(list[key].put_yn === null){
+								list[key].put_yn = '';
+							}
+							if(list[key].salary === null){
+								list[key].salary = '';
+							}
+						html += `<tr>`;
+						//html += `<td onClick="location.href='/insaUpdateForm.do?sabun=${'${data[key].sabun}'}'"> ${'${data[key].sabun}'}</td>`; 링크제거
+						html += `<td><a href="/insaUpdateForm.do?sabun=${'${list[key].sabun}'}"> ${'${list[key].sabun}'} </a></td>`;
+						html += `<td>${'${list[key].name}'}</td>`;
+						html += `<td>${'${list[key].reg_no}'}</td>`;
+						html += `<td>${'${list[key].hp}'}</td>`;
+						html += `<td>${'${list[key].pos_gbn_code}'}</td>`;
+						html += `<td>${'${list[key].join_date}'}</td>`;
+						html += `<td>${'${list[key].retire_date}'}</td>`;
+						html += `<td>${'${list[key].put_yn}'}</td>`;
+						html += `<td>${'${list[key].salary}'}</td>`;
+						html += `</tr>`;	
+						}
+						var a = "";	
+						//for(num in `${'${data.pageNum}'}`){
+							
+						for(var i = 1; i <= data.pageNum; i++){
+							a += `<span><a href=/getListWithPaging?num=\${i}>\${i}</a></span>`;
+							//이스케이프 문자->문자열로 보지 않게함)
+							 //a += `${i}`;
+							 //console.log(`${'${i}'}`);
+						}
+						$("#paging").empty();
+						$("#paging").append(a);
+						$("#dynamicTbody").empty();
+						$("#dynamicTbody").append(html);
+					}
+				},
+				error : function(request, status, error) {
+					alert("code:" + request.status + "\n" + "error:"+ error);
+				}
+			});
+		}
+		
+		$("#test").click(function(){
+			getPaging();
+		});
 	</script>
 </body>
 </html>

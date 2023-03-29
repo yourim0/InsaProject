@@ -1,5 +1,6 @@
 package com.example.demo.test;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,5 +26,11 @@ public interface TestDAO {
 	
 	//검색조건리스트
 	public List<TestVO> searchList(TestVO vo);
+	
+	//페이징리스트
+	public List<TestVO> getListWithPaging(HashMap data);
+	
+	//페이지 카운트
+	public int pageCnt(TestVO vo); 
 }
  

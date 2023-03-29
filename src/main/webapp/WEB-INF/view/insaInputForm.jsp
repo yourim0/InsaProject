@@ -74,7 +74,7 @@
 					style="float: right" onclick="submit_check()">등록</button>
 				<button type="button" class="btn btn-dark btn-sm"
 					style="float: right" onClick="location.href='/index'">전화면</button>
-				<button type="button" class="btn btn-dark btn-sm"
+				<button type="reset" class="btn btn-dark btn-sm"
 					style="float: right">초기화</button>
 			</div>
 
