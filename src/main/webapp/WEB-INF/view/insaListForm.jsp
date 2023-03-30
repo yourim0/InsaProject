@@ -142,8 +142,7 @@
 								</p>
 
 								<div class="inputBtn">
-									<button type="button" class="btn btn-dark btn-sm"
-										onclick="submit_search();">검색</button>
+									<button type="button" id="search" class="btn btn-dark btn-sm">검색</button>
 									<button type="reset" class="btn btn-dark btn-sm" onclick="resetTable();">초기화</button>
 									<button type="button" class="btn btn-dark btn-sm"
 										onClick="location.href='/index'">이전</button>
@@ -170,14 +169,50 @@
 					</tr>
 				</thead>
 				<tbody id="dynamicTbody">	
+				<c:if test="${empty value}">
 					<td colspan="9">검색된 데이터가 없습니다</td>
+				</c:if>
+				<c:if test="${!empty value}">
+					<c:forEach items="${value}" var="value">
+						<tr>
+							<td class="align-middle align-middle" onclick="location.href='/sabun=?'">
+								<c:out value="${value.sabun}" />
+							</td>
+							<td class="align-middle align-middle">
+								<c:out value="${value.name}" />
+							</td>
+							<td class="align-middle align-middle">
+								<c:out value="${value.reg_no}" />
+							</td>
+							<td class="align-middle align-middle">
+								<c:out value="${value.hp}" />
+							</td>
+							<td class="align-middle align-middle">
+								<c:out value="${value.pos_gbn_code}" />
+							</td>
+							<td class="align-middle align-middle">
+								<fmt:formatDate value="${value.join_date}" pattern="yyyy-MM-dd" />
+							</td>
+							<td class="align-middle align-middle">
+								<fmt:formatDate value="${value.retire_date}" pattern="yyyy-MM-dd" />
+							</td>
+							<td class="align-middle align-middle">
+								<c:out value="${value.put_yn}" />
+							</td>
+							<td class="align-middle align-middle">
+								<c:out value="${value.salary}" />
+							</td>
+						</tr>
+						</c:forEach>
+					</c:if>
 				</tbody>
 			</table>
 			<div id="paging">
 			
 			</div>
+			<span id="si""></span>
 		</div>
-		<button type="button" id="test">a</button>
+	<!-- 	<button type="button" id="test">test bnt</button>  -->
 	</div>
 
 	<script>
@@ -186,7 +221,8 @@
 			dateFormat : 'yy-mm-dd'
 		});
 
-		$("#join_date,#retire_date").datepicker();
+		$("#retire_date").datepicker();
+		$("#join_date").datepicker();
 		//입사일, 퇴사일 비교
 		$(document).ready(
 				function() {
@@ -224,7 +260,7 @@
 		//검색 원래 select는 GET
 		function submit_search() {
 			$.ajax({
-					type : "POST", 
+					type : "POST",
 					url : "/insaListForm_Search.do",
 					data : $("#search_Form").serialize(),
 					contentType : "application/x-www-form-urlencoded; charset=utf-8",
@@ -235,10 +271,12 @@
 						if(data.length === 0){
 							var html = '';
 							html = '<td colspan="9">검색된 데이터가 없습니다</td>';
+							
 							$("#dynamicTbody").empty();
 							$("#dynamicTbody").append(html);
 						}else{
 							var html = ``;	
+							alert("ddd");
 							for(key in data){
 								if(data[key].pos_gbn_code === null){
 									data[key].pos_gbn_code = '';
@@ -275,12 +313,23 @@
 						alert("code:" + request.status + "\n" + "error:"+ error);
 					}
 				});
+			alert("zzzz");
 		}
 		
+		$("#search").click(function(){
+			getPaging(1);
+		});
+		
+		function si(num){
+			console.log("getPaging si");
+			console.log(num);
+			getPaging(num);
+		};
+
 		//페이징처리
-		function getPaging(){
+		function getPaging(num){
 			$.ajax({
-				url:'/getListWithPaging?num=1',
+				url:`/getListWithPaging?num=${'${num}'}`,
 				type:'GET',
 				data :$("#search_Form").serialize(),
 				contentType : "application/x-www-form-urlencoded; charset=utf-8",
@@ -288,17 +337,23 @@
 				success : function(data) {
 					//var list = JSON.stringify(data);
 					var list = data.list;
-					console.log(data.pageNum);
+					var prev = data.prev;
+					var next = data.next;
+					var startPageNum = data.startPageNum;
+					var endPageNum = data.endPageNum;
+					var select = data.select;
+					console.log(select);
+
 					//console.log(`${'${data.pageNum}'}`);
-					if(data.length === 0){
+					if(list.length < 1){ //자바단에서 9999면 else로 비교 list 있으면 0000 (js에서는 보여주기만) 처리하는게 좋다
 						var html = '';
 						html = '<td colspan="9">검색된 데이터가 없습니다</td>';
 						$("#dynamicTbody").empty();
 						$("#dynamicTbody").append(html);
 					}else{
 						var html = ``;	
+						
 						for(key in list){
-							
 							if(list[key].pos_gbn_code === null){
 								list[key].pos_gbn_code = '';
 							}
@@ -325,14 +380,30 @@
 						html += `</tr>`;	
 						}
 						var a = "";	
+						
 						//for(num in `${'${data.pageNum}'}`){
 							
-						for(var i = 1; i <= data.pageNum; i++){
-							a += `<span><a href=/getListWithPaging?num=\${i}>\${i}</a></span>`;
+						if(prev){
+							a += `<span id="si" onclick="si(${'${startPageNum - 1}'})"> [ 이전 ]</span>&nbsp;&nbsp;`;
+						}
+						
+						
+						for(var i = data.startPageNum; i <= data.endPageNum; i++){
+							if(select != i){
+								a += `<span id="si" value=${'${i}'} onclick="si(${'${i}'})">${'${i}'}</span>&nbsp;&nbsp;`;
+							}else if(select == i){
+								a += `<span id="si" value=${'${i}'} style="color:blue;">${'${i}'}</span>&nbsp;&nbsp;`;
+							}
+							
+							//a += `<span><a href=/getListWithPaging?num=\${i}>\${i}</a></span>`;
+							 
 							//이스케이프 문자->문자열로 보지 않게함)
 							 //a += `${i}`;
 							 //console.log(`${'${i}'}`);
 						}
+						if(next){
+							a += `<span id="si" onclick="si(${'${endPageNum + 1}'})"> [ 다음 ]</span>&nbsp;&nbsp;`;
+							}
 						$("#paging").empty();
 						$("#paging").append(a);
 						$("#dynamicTbody").empty();
@@ -345,9 +416,9 @@
 			});
 		}
 		
-		$("#test").click(function(){
-			getPaging();
-		});
+
+
+		
 	</script>
 </body>
 </html>

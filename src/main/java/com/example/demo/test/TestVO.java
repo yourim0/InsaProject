@@ -40,12 +40,14 @@ public class TestVO {
 	private Date mil_enddate;
 	private String kosa_reg_yn;
 	private String kosa_class_code;
-	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private java.util.Date join_date;
-	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private java.util.Date retire_date;
+	private String join_date;
+	private String retire_date;
+//	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+//	@DateTimeFormat(pattern = "yyyy-MM-dd")
+//	private java.util.Date join_date;
+//	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+//	@DateTimeFormat(pattern = "yyyy-MM-dd")
+//	private java.util.Date retire_date;
 	private String crm_name;
 	private String cmp_reg_no;
 	private String cmp_reg_img;

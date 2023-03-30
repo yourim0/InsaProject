@@ -46,7 +46,7 @@ public class TestServiceImpl implements TestService {
 	public List<TestVO> getInfo(int sabun) {
 		List<TestVO> getInfo = testDAO.getInfo(sabun);
 		System.out.println(getInfo);
-		return null;
+		return getInfo;
 	}
 
 	@Override

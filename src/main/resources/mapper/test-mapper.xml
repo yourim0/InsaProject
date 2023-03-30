@@ -15,8 +15,8 @@
 	<!-- 등록 -->
 	<insert id="insertTest">
 		INSERT INTO INSA VALUES (#{sabun}, #{name}, #{eng_name}, #{id}, #{pwd}, #{phone}, #{hp}, #{reg_no}, #{years}, #{sex}, #{email}, #{zip,jdbcType=INTEGER}, #{addr1}, #{addr2},
-		#{job_type}, #{pos_gbn_code},#{dept_code},#{salary, jdbcType=INTEGER},#{join_gbn_code},#{gart_level},#{put_yn},#{mil_yn},#{mil_type,jdbcType=VARCHAR},#{mil_level,jdbcType=VARCHAR},#{mil_startdate,jdbcType=DATE},#{mil_enddate,jdbcType=DATE},
-		#{kosa_reg_yn,jdbcType=VARCHAR},#{kosa_class_code,jdbcType=VARCHAR},#{join_date},#{retire_date,jdbcType=DATE},#{crm_name,jdbcType=VARCHAR},#{cmp_reg_no,jdbcType=VARCHAR},#{cmp_reg_img,jdbcType=VARCHAR},#{carrier,jdbcType=VARCHAR},#{profile,jdbcType=VARCHAR},#{self_intro,jdbcType=VARCHAR},#{profile_image,jdbcType=VARCHAR},#{carrier_image,jdbcType=VARCHAR})
+		#{job_type}, #{pos_gbn_code},#{dept_code},#{salary, jdbcType=INTEGER},#{join_gbn_code},#{gart_level},#{put_yn},#{mil_yn},#{mil_type,jdbcType=VARCHAR},#{mil_level,jdbcType=VARCHAR},#{mil_startdate,jdbcType=VARCHAR},#{mil_enddate,jdbcType=VARCHAR},
+		#{kosa_reg_yn,jdbcType=VARCHAR},#{kosa_class_code,jdbcType=VARCHAR},#{join_date},#{retire_date,jdbcType=VARCHAR},#{crm_name,jdbcType=VARCHAR},#{cmp_reg_no,jdbcType=VARCHAR},#{cmp_reg_img,jdbcType=VARCHAR},#{carrier,jdbcType=VARCHAR},#{profile,jdbcType=VARCHAR},#{self_intro,jdbcType=VARCHAR},#{profile_image,jdbcType=VARCHAR},#{carrier_image,jdbcType=VARCHAR})
 	</insert>
 
 	<!-- 공통코드 -->
@@ -33,104 +33,82 @@
 	<select id="getInfo" resultType="com.example.demo.test.TestVO">
 		SELECT * FROM INSA WHERE sabun = #{sabun}
 	</select>
-	
-	<!-- 리스트 검색 -->
-	<select id="searchList" resultType="com.example.demo.test.TestVO">
-		SELECT sabun,name,reg_no,hp,pos_gbn_code,join_date,retire_date,put_yn,salary FROM INSA WHERE 1=1
-		<if test="sabun != null and sabun != ''">
-			AND SABUN LIKE '%' || #{sabun} || '%'
-		</if>
-		<if test="name != null and name != ''">
-			AND NAME LIKE '%' || #{name} || '%'
-		</if>
-		<if test="join_gbn_code != null and join_gbn_code != ''">
-			AND join_gbn_code = #{join_gbn_code}
-		</if>
-		<if test="put_yn != null and put_yn !=''">
-			AND put_yn = #{put_yn}
-		</if>
-		<if test="pos_gbn_code != null and pos_gbn_code != ''">
-			AND pos_gbn_code = #{pos_gbn_code}
-		</if>
-		<if test="join_date != null">
-			AND join_date = #{join_date}
-		</if>
-		<if test="retire_date != null and retire_date != ''">
-			AND retire_date = #{retire_date}
-		</if>
-		<if test="job_type != null and job_type != ''">
-			AND job_type = #{job_type}
-		</if>
-	
-	</select>
-		<!-- 리스트 페이징 -->
+		
+	<!-- 리스트 페이징 -->
 	<select id="getListWithPaging" parameterType="hashMap" resultType="com.example.demo.test.TestVO">
-	 <![CDATA[
-		SELECT sabun,name,reg_no,hp,pos_gbn_code,join_date,retire_date,put_yn,salary FROM
-		(
-			select /*+ INDEX_DESC(insa SYS_C007006) */
-	        rownum rn, sabun,name,reg_no,hp,pos_gbn_code,join_date,retire_date,put_yn,salary
-		    from INSA
-		    where rownum<= #{num} * #{postNum}
-		) 
+
+		select sabun,name,reg_no,hp,pos_gbn_code,join_date,retire_date,put_yn,salary 
+		from (select rownum numrow, A.* from 
+		(select sabun,name,reg_no,hp,pos_gbn_code,join_date,retire_date,put_yn,salary from INSA 
 		WHERE 1=1
 
-		 ]]>
-		 
-		<if test="sabun != null and sabun != ''">
-			AND SABUN LIKE '%' || #{sabun} || '%'
+		<if test="vo.sabun != null and vo.sabun != ''">
+			AND SABUN LIKE '%' || #{vo.sabun} || '%'
 		</if>
-		<if test="name != null and name != ''">
-			AND NAME LIKE '%' || #{name} || '%'
+		<if test="vo.name != null and vo.name != ''">
+			AND NAME LIKE '%' || #{vo.name} || '%'
 		</if>
-		<if test="join_gbn_code != null and join_gbn_code != ''">
-			AND join_gbn_code = #{join_gbn_code}
+		<if test="vo.join_gbn_code != null and vo.join_gbn_code != ''">
+			AND join_gbn_code = #{vo.join_gbn_code}
 		</if>
-		<if test="put_yn != null and put_yn !=''">
-			AND put_yn = #{put_yn}
+		<if test="vo.put_yn != null and vo.put_yn !=''">
+			AND put_yn = #{vo.put_yn}
 		</if>
-		<if test="pos_gbn_code != null and pos_gbn_code != ''">
-			AND pos_gbn_code = #{pos_gbn_code}
+		<if test="vo.pos_gbn_code != null and vo.pos_gbn_code != ''">
+			AND pos_gbn_code = #{vo.pos_gbn_code}
 		</if>
-		<if test="join_date != null">
-			AND join_date = #{join_date}
+		<if test="vo.join_date != null">
+			AND join_date = #{vo.join_date}
 		</if>
-		<if test="retire_date != null and retire_date != ''">
-			AND retire_date = #{retire_date}
+		<if test="vo.retire_date != null and vo.retire_date != ''">
+			AND retire_date = #{vo.retire_date}
 		</if>
-		<if test="job_type != null and job_type != ''">
-			AND job_type = #{job_type}
+		<if test="vo.job_type != null and vo.job_type != ''">
+			AND job_type = #{vo.job_type}
 		</if>
-		WHERE rn > (#{num} -1) * #{postNum}
+		order by sabun DESC
+		)A
+		) where numrow > (#{num}-1) * #{postNum}
+		<![CDATA[ and numrow <= #{num} * #{postNum}]]>
+	
 	</select>
 	
 	<!-- 게시물 총 개수 -->
 	<select id="pageCnt" resultType="int">
-		SELECT COUNT(*) FROM INSA
+		SELECT COUNT(*) FROM INSA WHERE 1=1
 		
 		<if test="sabun != null and sabun != ''">
-			WHERE SABUN LIKE '%' || #{sabun} || '%'
+			AND SABUN LIKE '%' || #{sabun} || '%'
 		</if>
 		<if test="name != null and name != ''">
-			WHERE NAME LIKE '%' || #{name} || '%'
+			AND NAME LIKE '%' || #{name} || '%'
 		</if>
 		<if test="join_gbn_code != null and join_gbn_code != ''">
-			WHERE join_gbn_code = #{join_gbn_code}
+			AND join_gbn_code = #{join_gbn_code}
 		</if>
 		<if test="put_yn != null and put_yn !=''">
-			WHERE put_yn = #{put_yn}
+			AND put_yn = #{put_yn}
 		</if>
 		<if test="pos_gbn_code != null and pos_gbn_code != ''">
-			WHERE pos_gbn_code = #{pos_gbn_code}
+			AND pos_gbn_code = #{pos_gbn_code}
 		</if>
 		<if test="join_date != null">
-			WHERE join_date = #{join_date}
+			AND join_date = #{join_date}
 		</if>
 		<if test="retire_date != null and retire_date != ''">
-			WHERE retire_date = #{retire_date}
+			AND retire_date = #{retire_date}
 		</if>
 		<if test="job_type != null and job_type != ''">
-			WHERE job_type = #{job_type}
+			AND job_type = #{job_type}
 		</if>
 	</select>
+	
+	<!-- 수정 -->
+	
+	
+	<!-- 삭제 -->
+	
+	
+	
+	
 </mapper>
