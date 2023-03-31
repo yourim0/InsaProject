@@ -14,9 +14,14 @@
 	
 	<!-- 등록 -->
 	<insert id="insertTest">
-		INSERT INTO INSA VALUES (#{sabun}, #{name}, #{eng_name}, #{id}, #{pwd}, #{phone}, #{hp}, #{reg_no}, #{years}, #{sex}, #{email}, #{zip,jdbcType=INTEGER}, #{addr1}, #{addr2},
-		#{job_type}, #{pos_gbn_code},#{dept_code},#{salary, jdbcType=INTEGER},#{join_gbn_code},#{gart_level},#{put_yn},#{mil_yn},#{mil_type,jdbcType=VARCHAR},#{mil_level,jdbcType=VARCHAR},#{mil_startdate,jdbcType=VARCHAR},#{mil_enddate,jdbcType=VARCHAR},
-		#{kosa_reg_yn,jdbcType=VARCHAR},#{kosa_class_code,jdbcType=VARCHAR},#{join_date},#{retire_date,jdbcType=VARCHAR},#{crm_name,jdbcType=VARCHAR},#{cmp_reg_no,jdbcType=VARCHAR},#{cmp_reg_img,jdbcType=VARCHAR},#{carrier,jdbcType=VARCHAR},#{profile,jdbcType=VARCHAR},#{self_intro,jdbcType=VARCHAR},#{profile_image,jdbcType=VARCHAR},#{carrier_image,jdbcType=VARCHAR})
+		INSERT INTO INSA 
+		VALUES (
+		#{sabun}, #{name}, #{eng_name}, #{id}, #{pwd}, #{phone}, #{hp}, #{reg_no}, #{years}, #{sex}, #{email}, #{zip,jdbcType=INTEGER}, #{addr1}, #{addr2},
+		#{job_type}, #{pos_gbn_code},#{dept_code},#{salary, jdbcType=INTEGER},#{join_gbn_code},#{gart_level},#{put_yn},#{mil_yn},#{mil_type,jdbcType=VARCHAR},
+		#{mil_level,jdbcType=VARCHAR},#{mil_startdate,jdbcType=VARCHAR},#{mil_enddate,jdbcType=VARCHAR},
+		#{kosa_reg_yn,jdbcType=VARCHAR},#{kosa_class_code,jdbcType=VARCHAR},#{join_date},#{retire_date,jdbcType=VARCHAR},#{crm_name,jdbcType=VARCHAR},
+		#{cmp_reg_no,jdbcType=VARCHAR},#{cmp_reg_img,jdbcType=VARCHAR},#{carrier,jdbcType=VARCHAR},#{profile,jdbcType=VARCHAR},#{self_intro,jdbcType=VARCHAR},
+		#{profile_image,jdbcType=VARCHAR},#{carrier_image,jdbcType=VARCHAR})
 	</insert>
 
 	<!-- 공통코드 -->
@@ -57,7 +62,7 @@
 		<if test="vo.pos_gbn_code != null and vo.pos_gbn_code != ''">
 			AND pos_gbn_code = #{vo.pos_gbn_code}
 		</if>
-		<if test="vo.join_date != null">
+		<if test="vo.join_date != null and vo.join_date != ''">
 			AND join_date = #{vo.join_date}
 		</if>
 		<if test="vo.retire_date != null and vo.retire_date != ''">
@@ -92,7 +97,7 @@
 		<if test="pos_gbn_code != null and pos_gbn_code != ''">
 			AND pos_gbn_code = #{pos_gbn_code}
 		</if>
-		<if test="join_date != null">
+		<if test="join_date != null and pos_gbn_code != '' ">
 			AND join_date = #{join_date}
 		</if>
 		<if test="retire_date != null and retire_date != ''">
@@ -104,10 +109,56 @@
 	</select>
 	
 	<!-- 수정 -->
-	
+	<update id="update" parameterType="com.example.demo.test.TestVO">
+		UPDATE INSA
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="name != null">name = #{name},</if>
+			<if test="eng_name != null">eng_name = #{eng_name},</if>
+			<if test="id != null">id = #{id},</if>
+			<if test="pwd != null">pwd = #{pwd},</if>
+			<if test="phone != null">phone = #{phone},</if>
+			<if test="hp != null">hp = #{hp},</if>
+			<if test="reg_no != null">reg_no = #{reg_no},</if>
+			<if test="years != null">years = #{years},</if>
+			<if test="sex != null">sex = #{sex},</if>
+			<if test="email != null">email = #{email},</if>
+			<if test="zip != null">zip = #{zip},</if>
+			<if test="addr1 != null">addr1 = #{addr1},</if>
+			<if test="addr2 != null">addr2 = #{addr2},</if>
+			<if test="job_type != null">job_type = #{job_type},</if>
+			<if test="pos_gbn_code != null">pos_gbn_code = #{pos_gbn_code},</if>
+			<if test="dept_code != null">dept_code = #{dept_code},</if>
+			<if test="salary != null">salary = #{salary},</if>
+			<if test="join_gbn_code != null">join_gbn_code = #{join_gbn_code},</if>
+			<if test="gart_level != null">gart_level = #{gart_level},</if>
+			<if test="put_yn != null">put_yn = #{put_yn},</if>
+			<if test="mil_yn != null">mil_yn = #{mil_yn},</if>
+			<if test="mil_type != null">mil_type = #{mil_type},</if>
+			<if test="mil_level != null">mil_level = #{mil_level},</if>
+			<if test="mil_startdate != null">mil_startdate = #{mil_startdate},</if>
+			<if test="mil_enddate != null">mil_enddate = #{mil_enddate},</if>
+			<if test="kosa_reg_yn != null">kosa_reg_yn = #{kosa_reg_yn},</if>
+			<if test="kosa_class_code != null">kosa_class_code = #{kosa_class_code},</if>
+			<if test="join_date != null">join_date = #{join_date},</if>
+			<if test="retire_date != null">retire_date = #{retire_date},</if>
+			<if test="crm_name != null">crm_name = #{crm_name},</if>
+			<if test="cmp_reg_no != null">cmp_reg_no = #{cmp_reg_no},</if>
+			<if test="cmp_reg_img != null">cmp_reg_img = #{cmp_reg_img},</if>
+			<if test="carrier != null">carrier = #{carrier},</if>
+			<if test="profile != null">profile = #{profile},</if>
+			<if test="self_intro != null">self_intro = #{self_intro},</if>
+			<if test="profile_image != null">profile_image = #{profile_image},</if>
+			<if test="carrier_image != null">carrier_image = #{carrier_image},</if>
+		</trim>
+			WHERE SABUN = ${sabun}
+	</update>
 	
 	<!-- 삭제 -->
-	
+	<delete id="delete" parameterType="int">
+		DELETE
+			FROM INSA
+		WHERE SABUN = #{SABUN}
+	</delete>
 	
 	
 	

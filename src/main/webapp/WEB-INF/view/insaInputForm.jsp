@@ -70,12 +70,9 @@
 
 		<form id="submit_Form" method="post">
 			<div class="inputBtn">
-				<button type="button" class="btn btn-dark btn-sm" id="submitBtn"
-					style="float: right" onclick="submit_check()">등록</button>
-				<button type="button" class="btn btn-dark btn-sm"
-					style="float: right" onClick="location.href='/index'">전화면</button>
-				<button type="reset" class="btn btn-dark btn-sm"
-					style="float: right">초기화</button>
+				<button type="button" class="btn btn-dark btn-sm" id="submitBtn" style="float: right" onclick="submit_check()">등록</button>
+				<button type="button" class="btn btn-dark btn-sm" style="float: right" onClick="location.href='/index'">전화면</button>
+				<button type="reset" class="btn btn-dark btn-sm" style="float: right">초기화</button>
 			</div>
 
 
@@ -677,20 +674,22 @@
 		});
 		
 		//연봉 천단위 콤마처리
+		//document.getElementById("salary1").addEventListener("keyup", function (e) {
+	   	//	$(this).val($(this).val().replace(/\,/g, '').replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,'));
+		//});
 		document.getElementById("salary1").addEventListener("keyup", function (e) {
-	   		$(this).val($(this).val().replace(/\,/g, '').replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,'));
-		});
+	   		$(this).val($(this).val().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+		}); 
+		//number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 		
 		var salary1 = document.querySelector("#salary1");
-		salary1.onblur = function(e){
+		salary1.onblur = function(e){ //포커스해지시
 			var salary1 = $('#salary1').val();
-			var salary_split = salary1.replace(",","");
+			var salary_split = salary1.replaceAll(",","");
 			var salary_split1 = Number(salary_split);
 			$('#salary').val(salary_split1);
-			//console.log($('#salary').val());
+			console.log($('#salary').val());
 				}
-		
-		
 		
 		//군필여부 
 		var mil_yn = document.querySelector("#mil_yn");

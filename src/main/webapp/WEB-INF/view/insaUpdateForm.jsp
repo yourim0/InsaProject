@@ -2,6 +2,8 @@
 	pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 
 <!DOCTYPE html>
 <html lang="en" class="h-100">
@@ -64,8 +66,8 @@
 		<!-- form -->
 		<form id="submit_Form" method="post">
 		<div class="inputBtn">
-			<button type="button" class="btn btn-dark btn-sm" style="float: right">수정</button>
-			<button type="button" class="btn btn-dark btn-sm" style="float: right">삭제</button>
+			<button type="button" class="btn btn-dark btn-sm" style="float: right" onclick="submit_check();">수정</button>
+			<button type="button" class="btn btn-dark btn-sm" style="float: right" onclick="location.href='delete.do?sabun=${info[0].sabun}'">삭제</button>
 			<button type="button" class="btn btn-dark btn-sm" style="float: right" onClick="location.href='/insaListForm.do'">이전</button>
 		</div>
 
@@ -114,8 +116,10 @@
 										<option value="">선택</option>
 										<c:forEach items="${result }" var="result">
 											<c:if test="${result.gubun eq 'A04'}">
-												<option value="${result.gubun}${result.code}">
-													${result.name}</option>
+												<option value="${result.gubun}${result.code}"
+													<c:if test="${info[0].pos_gbn_code == A03002}">selected</c:if>>
+													${result.name}
+													</option>
 											</c:if>
 										</c:forEach>
 									</select>
@@ -128,7 +132,7 @@
 									*사원명 <input type="text" name="name" id="name" value="${info[0].name}" korOnly></input>
 								</p>
 								<p>
-									*비밀번호 <input type="text" name="pwd1" id="pwd1" value="${info[0].pwd}"></input>
+									*비밀번호 <input type="text" name="pwd1" id="pwd1"></input>
 									<input type="hidden" name="pwd" id="pwd"></input>
 								</p>
 								<p>
@@ -137,13 +141,14 @@
 								<p>
 									직종 <select name="job_type">
 										<option value="">선택</option>
+										<c:set var="jobtypeValue" value="${info[0].job_type}" />
+										<c:set var="jobSplit" value="$(fn:substring(jobtypeValue,3,6))" />
 										<c:forEach items="${result }" var="result">
 											<c:if test="${result.gubun eq 'A03'}">
-												<option value="${result.gubun}${result.code}">
+												<option value="${result.gubun}${result.code}"
+												<c:if test="${result.code eq jobSplit}">selected</c:if>>
 													${result.name}
-														<c:if test="${info[0].job_type eq result.name}">
-														selected
-														</c:if>
+														
 												</option>
 											</c:if>
 										</c:forEach>
@@ -727,6 +732,7 @@
 			}
 		});
 		
+	
 	</script>
 </body>
 

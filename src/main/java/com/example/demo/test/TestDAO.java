@@ -32,5 +32,11 @@ public interface TestDAO {
 	
 	//페이지 카운트
 	public int pageCnt(TestVO vo); 
+	
+	//수정
+	public void update(TestVO vo);
+	
+	//삭제
+	public void delete(int sabun);
 }
  

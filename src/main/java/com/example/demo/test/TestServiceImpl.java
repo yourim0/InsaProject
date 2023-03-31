@@ -84,6 +84,19 @@ public class TestServiceImpl implements TestService {
 		System.out.println("service"+getListWithPaging);
 		return getListWithPaging;
 	}
+
+	//수정
+	@Override
+	public void update(TestVO vo) throws Exception {
+		System.out.println("serviceUpdate"+ vo) ;
+		testDAO.update(vo);
+	}
+
+	@Override
+	public void delete(int sabun) throws Exception {
+		System.out.println("serviceDelete") ;
+		testDAO.delete(sabun);
+	}
 	
 	
 

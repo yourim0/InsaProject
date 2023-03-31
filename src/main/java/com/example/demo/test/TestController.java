@@ -1,6 +1,8 @@
 package com.example.demo.test;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.NumberUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -157,7 +160,7 @@ public class TestController {
 		List<TestVO> info = testService.getInfo(sabun);
 		//System.out.println("info" + info);
 		System.out.println(info);
-		//getinfo
+			      
 		model.addAttribute("sabun",sabun);
 		model.addAttribute("info",info);
 		model.addAttribute("result",result);
@@ -165,6 +168,44 @@ public class TestController {
 		return "insaUpdateForm";
 	}
 	
+	//수정
+	@RequestMapping(value="/insaUpdateForm.do", method= RequestMethod.POST)
+	public String update(TestVO vo) throws Exception {
+		System.out.println("update:"+vo) ;
+		testService.update(vo);
+		System.out.println("update완료");
+
+		return "redirect:insaUpdateForm.do?sabun=" + vo.getSabun();
+	}
+
+	//update에서 삭제
+	@RequestMapping("/delete.do")
+	public String delete(@RequestParam("sabun") int sabun) throws Exception {
+		System.out.println("delete:"+sabun) ;
+		testService.delete(sabun);
+		System.out.println("삭제완료");
+		return "redirect:insaListForm.do";
+	}
 	
+	//checkbox 삭제
+	@RequestMapping(value="/delete.do", method= RequestMethod.POST)
+	@ResponseBody
+	public Object delete(@RequestParam(value="sabunList[]") List<String> delList) throws Exception {
+		System.out.println("arrdelete:"+delList) ;
+		 for(String i : delList) {
+			 int a = Integer.parseInt(i);
+			 testService.delete(a);
+			 System.out.println("삭제완료");
+	        }
+
+		 Map<String, Object> result = new HashMap<String,Object>();
+		//System.out.println("삭제완료");
+		//return "redirect:insaListForm.do";
+		 result.put("code", "OK");
+		 result.put("message", "삭제완료.");
+		 return result;
+	}
+	
+
 	
 }

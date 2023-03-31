@@ -143,6 +143,7 @@
 
 								<div class="inputBtn">
 									<button type="button" id="search" class="btn btn-dark btn-sm">검색</button>
+									<button type="button" id="delBtn" class="btn btn-dark btn-sm" >삭제</button>
 									<button type="reset" class="btn btn-dark btn-sm" onclick="resetTable();">초기화</button>
 									<button type="button" class="btn btn-dark btn-sm"
 										onClick="location.href='/index'">이전</button>
@@ -157,6 +158,7 @@
 			<table border='1' style="width: 100%;">
 				<thead>
 					<tr>
+						<th></th>
 						<th>사번</th>
 						<th>성명</th>
 						<th>주민번호</th>
@@ -169,50 +171,13 @@
 					</tr>
 				</thead>
 				<tbody id="dynamicTbody">	
-				<c:if test="${empty value}">
-					<td colspan="9">검색된 데이터가 없습니다</td>
-				</c:if>
-				<c:if test="${!empty value}">
-					<c:forEach items="${value}" var="value">
-						<tr>
-							<td class="align-middle align-middle" onclick="location.href='/sabun=?'">
-								<c:out value="${value.sabun}" />
-							</td>
-							<td class="align-middle align-middle">
-								<c:out value="${value.name}" />
-							</td>
-							<td class="align-middle align-middle">
-								<c:out value="${value.reg_no}" />
-							</td>
-							<td class="align-middle align-middle">
-								<c:out value="${value.hp}" />
-							</td>
-							<td class="align-middle align-middle">
-								<c:out value="${value.pos_gbn_code}" />
-							</td>
-							<td class="align-middle align-middle">
-								<fmt:formatDate value="${value.join_date}" pattern="yyyy-MM-dd" />
-							</td>
-							<td class="align-middle align-middle">
-								<fmt:formatDate value="${value.retire_date}" pattern="yyyy-MM-dd" />
-							</td>
-							<td class="align-middle align-middle">
-								<c:out value="${value.put_yn}" />
-							</td>
-							<td class="align-middle align-middle">
-								<c:out value="${value.salary}" />
-							</td>
-						</tr>
-						</c:forEach>
-					</c:if>
+				<td></td>
+				<td colspan="9">검색된 데이터가 없습니다</td>
 				</tbody>
 			</table>
-			<div id="paging">
-			
-			</div>
-			<span id="si""></span>
+			<div id="paging"></div>
+			<span id="si"></span>
 		</div>
-	<!-- 	<button type="button" id="test">test bnt</button>  -->
 	</div>
 
 	<script>
@@ -252,68 +217,10 @@
 		
 		//초기화 버튼
 		function resetTable(){
-			var html = '<td colspan="9">검색된 데이터가 없습니다</td>';
+			var html = '<td></td><td colspan="9">검색된 데이터가 없습니다</td>';
 			$("#dynamicTbody").empty();
 			$("#dynamicTbody").append(html);
-		}
-
-		//검색 원래 select는 GET
-		function submit_search() {
-			$.ajax({
-					type : "POST",
-					url : "/insaListForm_Search.do",
-					data : $("#search_Form").serialize(),
-					contentType : "application/x-www-form-urlencoded; charset=utf-8",
-					dataType : "json",
-					success : function(data) {
-						var list = JSON.stringify(data);
-						console.log(list);
-						if(data.length === 0){
-							var html = '';
-							html = '<td colspan="9">검색된 데이터가 없습니다</td>';
-							
-							$("#dynamicTbody").empty();
-							$("#dynamicTbody").append(html);
-						}else{
-							var html = ``;	
-							alert("ddd");
-							for(key in data){
-								if(data[key].pos_gbn_code === null){
-									data[key].pos_gbn_code = '';
-								}
-								if(data[key].retire_date === null){
-									data[key].retire_date = '';
-								}
-								if(data[key].put_yn === null){
-									data[key].put_yn = '';
-								}
-								if(data[key].salary === null){
-									data[key].salary = '';
-								}
-							html += `<tr>`;
-							//html += `<td onClick="location.href='/insaUpdateForm.do?sabun=${'${data[key].sabun}'}'"> ${'${data[key].sabun}'}</td>`; 링크제거
-							html += `<td><a href="/insaUpdateForm.do?sabun=${'${data[key].sabun}'}"> ${'${data[key].sabun}'} </a></td>`;
-							html += `<td>${'${data[key].name}'}</td>`;
-							html += `<td>${'${data[key].reg_no}'}</td>`;
-							html += `<td>${'${data[key].hp}'}</td>`;
-							html += `<td>${'${data[key].pos_gbn_code}'}</td>`;
-							html += `<td>${'${data[key].join_date}'}</td>`;
-							html += `<td>${'${data[key].retire_date}'}</td>`;
-							html += `<td>${'${data[key].put_yn}'}</td>`;
-							html += `<td>${'${data[key].salary}'}</td>`;
-							html += `</tr>`;	
-							console.log(html);
-							}
-							
-							$("#dynamicTbody").empty();
-							$("#dynamicTbody").append(html);
-						}
-					},
-					error : function(request, status, error) {
-						alert("code:" + request.status + "\n" + "error:"+ error);
-					}
-				});
-			alert("zzzz");
+			$("#paging").empty();
 		}
 		
 		$("#search").click(function(){
@@ -347,7 +254,7 @@
 					//console.log(`${'${data.pageNum}'}`);
 					if(list.length < 1){ //자바단에서 9999면 else로 비교 list 있으면 0000 (js에서는 보여주기만) 처리하는게 좋다
 						var html = '';
-						html = '<td colspan="9">검색된 데이터가 없습니다</td>';
+						html = '<td></td><td colspan="9">검색된 데이터가 없습니다</td>';
 						$("#dynamicTbody").empty();
 						$("#dynamicTbody").append(html);
 					}else{
@@ -368,6 +275,7 @@
 							}
 						html += `<tr>`;
 						//html += `<td onClick="location.href='/insaUpdateForm.do?sabun=${'${data[key].sabun}'}'"> ${'${data[key].sabun}'}</td>`; 링크제거
+						html += `<td><input style="width:15px;height:15px;" type="checkbox" name="delChk" value=${'${list[key].sabun}'}></td>`;
 						html += `<td><a href="/insaUpdateForm.do?sabun=${'${list[key].sabun}'}"> ${'${list[key].sabun}'} </a></td>`;
 						html += `<td>${'${list[key].name}'}</td>`;
 						html += `<td>${'${list[key].reg_no}'}</td>`;
@@ -386,7 +294,6 @@
 						if(prev){
 							a += `<span id="si" onclick="si(${'${startPageNum - 1}'})"> [ 이전 ]</span>&nbsp;&nbsp;`;
 						}
-						
 						
 						for(var i = data.startPageNum; i <= data.endPageNum; i++){
 							if(select != i){
@@ -416,9 +323,39 @@
 			});
 		}
 		
-
-
-		
+			
+			//체크된 값 삭제하기
+			$("#delBtn").click(function() {
+			    // 체크한 항목을 담을 배열 선언
+			    var arr = [];
+			    // 체크한 항목만 취득
+			    var checked = $("input[name='delChk']:checked");
+			    $(checked).each(function() {
+			    	arr.push($(this).val());
+			    });
+			    var param = {"sabunList" : arr};
+				$.ajax({
+					url:"delete.do",
+					dataType    :   "json",
+	                contentType :   "application/x-www-form-urlencoded; charset=UTF-8",
+					type : "post",
+					data : param,
+					success:function(result){
+						if(result.code == "OK"){
+							alert(result.message);
+							location.replace("insaListForm.do");
+						}else{
+							alert(result.message);
+						}
+						
+					},error : function(error){
+						alert("error");
+					}
+				
+				})
+				
+			  });
+			
 	</script>
 </body>
 </html>

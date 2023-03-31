@@ -36,8 +36,8 @@ public class TestVO {
 	private String mil_yn;
 	private String mil_type;
 	private String mil_level;
-	private Date mil_startdate;
-	private Date mil_enddate;
+	private String mil_startdate;
+	private String mil_enddate;
 	private String kosa_reg_yn;
 	private String kosa_class_code;
 	private String join_date;

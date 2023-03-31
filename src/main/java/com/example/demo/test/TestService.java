@@ -28,5 +28,10 @@ public interface TestService {
 	//페이징리스트
 	public List<TestVO> getListWithPaging(TestVO vo,int num, int postNum) throws Exception; 
 	
+	//수정
+	public void update(TestVO vo) throws Exception; 
+	
+	//삭제
+	public void delete(int sabun) throws Exception;
 	
 }
