@@ -65,10 +65,9 @@
 		<!-- form -->
 		<form id="submit_Form" method="post">
 		<div class="inputBtn">
-			<button type="button" class="btn btn-dark btn-sm" style="float: right" data-toggle="modal" data-target="#exampleModal" onclick="submit_check();">수정</button>
+			<button type="button" class="btn btn-dark btn-sm" style="float: right" onclick="submit_check();">수정</button>
 			<button type="button" class="btn btn-dark btn-sm" style="float: right" onclick="location.href='delete.do?sabun=${info[0].sabun}'">삭제</button>
-			<button type="button" class="btn btn-dark btn-sm" style="float: right" onClick="location.href='/insaListForm.do'">이전</button>
-			
+			<button type="button" class="btn btn-dark btn-sm" style="float: right" onClick="location.href='/insaListForm.do?num=${searchParam.num}&sabun=${searchParam.sabunSch}&name=${searchParam.name}&join_gbn_code=${searchParam.join_gbn_code}&pos_gbn_code=${searchParam.pos_gbn_code}&join_date=${searchParam.join_date}&retire_date=${searchParam.retire_date}&put_yn=${searchParam.put_yn}&job_type=${searchParam.job_type}'">이전</button>
 		</div>
 
 			<main>
@@ -115,9 +114,10 @@
 									직위 <select name="pos_gbn_code">
 										<option value="">선택</option>
 										<c:forEach items="${result }" var="result">
+										<c:set var="jobSplit" value="${result.gubun}${result.code}" />
 											<c:if test="${result.gubun eq 'A04'}">
 												<option value="${result.gubun}${result.code}"
-													<c:if test="${info[0].pos_gbn_code == A03002}">selected</c:if>>
+													<c:if test="${info[0].pos_gbn_code eq jobSplit}">selected</c:if>>
 													${result.name}
 													</option>
 											</c:if>
@@ -141,12 +141,11 @@
 								<p>
 									직종 <select name="job_type">
 										<option value="">선택</option>
-										<c:set var="jobtypeValue" value="${info[0].job_type}" />
-										<c:set var="jobSplit" value="$(fn:substring(jobtypeValue,3,6))" />
 										<c:forEach items="${result }" var="result">
+										<c:set var="jobSplit" value="${result.gubun}${result.code}" />
 											<c:if test="${result.gubun eq 'A03'}">
 												<option value="${result.gubun}${result.code}"
-												<c:if test="${result.code eq jobSplit}">selected</c:if>>
+												<c:if test="${info[0].job_type eq jobSplit}">selected</c:if>>
 													${result.name}
 														
 												</option>
@@ -161,8 +160,10 @@
 									부서 <select name="dept_code">
 										<option value="">선택</option>
 										<c:forEach items="${result }" var="result">
+										<c:set var="jobSplit" value="${result.gubun}${result.code}" />
 											<c:if test="${result.gubun eq 'A05'}">
-												<option value="${result.gubun}${result.code}">
+												<option value="${result.gubun}${result.code}"
+												<c:if test="${info[0].dept_code eq jobSplit}">selected</c:if>>
 													${result.name}</option>
 											</c:if>
 										</c:forEach>
@@ -185,11 +186,13 @@
 								</p>
 								<p>
 									연령 <input type="text" id="years" name="years" style="width: 80px" value="${info[0].years}" readonly>
-									</input> 성별 <select id="sex" name="sex" style="width: 80px" value="${info[0].sex}" disabled>
+									</input> 성별 <select id="sex" name="sex" style="width: 80px" disabled>
 										<option value="">선택</option>
 										<c:forEach items="${result }" var="result">
+										<c:set var="jobSplit" value="${result.gubun}${result.code}" />
 											<c:if test="${result.gubun eq 'A02'}">
-												<option value="${result.name}">
+												<option value="${result.name}"
+												<c:if test="${info[0].sex eq jobSplit}">selected</c:if>>
 													${result.name}</option>
 											</c:if>
 										</c:forEach>
@@ -214,8 +217,10 @@
 									입사구분 <select name="join_gbn_code">
 										<option value="">선택</option>
 										<c:forEach items="${result }" var="result">
+										<c:set var="jobSplit" value="${result.gubun}${result.code}" />
 											<c:if test="${result.gubun eq 'A01'}">
-												<option value="${result.gubun}${result.code}" >
+												<option value="${result.gubun}${result.code}"
+												<c:if test="${info[0].join_gbn_code eq jobSplit}">selected</c:if>>
 													${result.name}</option>
 											</c:if>
 										</c:forEach>
@@ -225,8 +230,10 @@
 									군별 <select id="mil_type" name="mil_type">
 										<option value="">선택</option>
 										<c:forEach items="${result }" var="result">
+										<c:set var="jobSplit" value="${result.gubun}${result.code}" />
 											<c:if test="${result.gubun eq 'A09'}">
-												<option value="${result.gubun}${result.code}">
+												<option value="${result.gubun}${result.code}"
+												<c:if test="${info[0].mil_type eq jobSplit}">selected</c:if>>
 													${result.name}</option>
 											</c:if>
 										</c:forEach>
@@ -236,8 +243,10 @@
 									KOSA등록 <select name="kosa_reg_yn">
 										<option value="">선택</option>
 										<c:forEach items="${result }" var="result">
+										<c:set var="jobSplit" value="${result.gubun}${result.code}" />
 											<c:if test="${result.gubun eq 'A11'}">
-												<option value="${result.gubun}${result.code}">
+												<option value="${result.gubun}${result.code}"
+												<c:if test="${info[0].kosa_reg_yn eq jobSplit}">selected</c:if>>
 													${result.name}</option>
 											</c:if>
 										</c:forEach>
@@ -258,8 +267,10 @@
 									최종학력 <select name="gart_level">
 										<option value="">선택</option>
 										<c:forEach items="${result }" var="result">
+										<c:set var="jobSplit" value="${result.gubun}${result.code}" />
 											<c:if test="${result.gubun eq 'A06'}">
-												<option value="${result.gubun}${result.code}">
+												<option value="${result.gubun}${result.code}"
+												<c:if test="${info[0].gart_level eq jobSplit}">selected</c:if>>
 													${result.name}</option>
 											</c:if>
 										</c:forEach>
@@ -269,8 +280,10 @@
 									계급 <select id="mil_level" name="mil_level">
 										<option value="">선택</option>
 										<c:forEach items="${result }" var="result">
+										<c:set var="jobSplit" value="${result.gubun}${result.code}" />
 											<c:if test="${result.gubun eq 'A10'}">
-												<option value="${result.gubun}${result.code}">
+												<option value="${result.gubun}${result.code}"
+												<c:if test="${info[0].mil_level eq jobSplit}">selected</c:if>>
 													${result.name}</option>
 											</c:if>
 										</c:forEach>
@@ -280,8 +293,10 @@
 									KOSA등급 <select name="kosa_class_code">
 										<option value="">선택</option>
 										<c:forEach items="${result }" var="result">
+										<c:set var="jobSplit" value="${result.gubun}${result.code}" />
 											<c:if test="${result.gubun eq 'A12'}">
-												<option value="${result.gubun}${result.code}">
+												<option value="${result.gubun}${result.code}"
+												<c:if test="${info[0].kosa_class_code eq jobSplit}">selected</c:if>>
 													${result.name}</option>
 											</c:if>
 										</c:forEach>
@@ -298,8 +313,10 @@
 									투입여부 <select name="put_yn">
 										<option value="">선택</option>
 										<c:forEach items="${result }" var="result">
+										<c:set var="jobSplit" value="${result.gubun}${result.code}" />
 											<c:if test="${result.gubun eq 'A07'}">
-												<option value="${result.gubun}${result.code}">
+												<option value="${result.gubun}${result.code}"
+												<c:if test="${info[0].put_yn eq jobSplit}">selected</c:if>>
 													${result.name}</option>
 											</c:if>
 										</c:forEach>
@@ -325,8 +342,10 @@
 									군필여부 <select id="mil_yn" name="mil_yn">
 										<option value="">선택</option>
 										<c:forEach items="${result }" var="result">
+										<c:set var="jobSplit" value="${result.gubun}${result.code}" />
 											<c:if test="${result.gubun eq 'A08'}">
-												<option value="${result.name}">
+												<option value="${result.name}"
+												<c:if test="${info[0].mil_yn eq jobSplit}">selected</c:if>>
 													${result.name}</option>
 											</c:if>
 										</c:forEach>
@@ -367,7 +386,7 @@
 				        수정하시겠습니까?
 				      </div>
 				      <div class="modal-footer">
-				      	<button type="button" class="btn btn-primary">수정하기</button>
+				      	<button type="button" class="btn btn-primary" id="modalSubmit">수정하기</button>
 				       	<button type="button" class="btn btn-secondary" data-dismiss="modal">취소하기</button>
 				      </div>
 				    </div>
@@ -404,12 +423,12 @@
 		}
 		
 		//아이디 중복체크 여부
-		if ($("input[name='checked_id']").val() == '') {
+		
+		$("input[name='checked_id']").change(function(){
 			alert('아이디 중복체크를 해주세요.');
-			$("input[name='checked_id']").eq(0).focus();
 			return false;
-		}
-
+		  });
+		
 		//비밀번호 확인 일치 여부
 		if (pwd.value != pwd_chk.value) {
 			alert('비밀번호를 확인해주세요.');
@@ -426,13 +445,18 @@
 		
 		if($("#retire_date").val() == null || $("#retire_date").val() == "") {
 			$("#retire_date").val(null);
-			
 		}
 
-	  		 $("#sex").attr("disabled", false);
-	  			modalClick(form);
-		};
+		$("#sex").attr("disabled", false);
+		
+		$("#exampleModal").modal();
+		
+	};
 
+	$("#modalSubmit").on("click",function(){
+		var form = document.getElementById("submit_Form");
+		modalClick(form);
+	});
 
 		
 		//달력 
@@ -493,6 +517,7 @@
 		
 		//비밀번호 마스킹
 		var pwd1 = document.querySelector("#pwd1");
+		console.log(pwd1);
 		pwd1.onblur = function(e){
 			var pwd1 = $('#pwd1').val();
 			$('#pwd').val(pwd1);
@@ -502,7 +527,7 @@
 			var pwd1_re = pwd1_len.replace(/./g,"*") + pwd1_last;
 			$('#pwd1').val(pwd1_re);
 
-			
+
 		}
 		
 		//var pwd_chk1 = document.querySelector("#pwd_chk1");
@@ -706,6 +731,7 @@
 			console.log(email_sp1);
 			var email_sp2 = email_sp[1];
 			console.log(email_sp2);
+			
 			$("#email1").val(email_sp1);
 			$("#domain-txt").val(email_sp2);
 		});
@@ -761,8 +787,10 @@
 			formName.action="insaUpdateForm.do";
 			formName.method="post";
 			formName.submit();
+			
 		}
 	
+
 	</script>
 </body>
 

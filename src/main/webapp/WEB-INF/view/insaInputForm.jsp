@@ -2,35 +2,30 @@
 	pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 
 <!DOCTYPE html>
 <html lang="en" class="h-100">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="">
-<meta name="author"
-	content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-<meta name="generator" content="Hugo 0.88.1">
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
-	crossorigin="anonymous">
-<title>인사시스템</title>
-<link rel="canonical"
-	href="https://getbootstrap.com/docs/5.1/examples/cover/">
-<script type="text/javascript"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
+
+<link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/cover/">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<script type="text/javascript"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 
 <!-- 주소api -->
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 
-
+<title>인사시스템</title>
 <style>
 .bd-placeholder-img {
 	font-size: 1.125rem;
@@ -182,16 +177,17 @@
 									<input type="hidden" id="reg_no" name="reg_no"></input>
 								</p>
 								<p>
-									연령 <input type="text" id="years" name="years" style="width: 80px" readonly>
-									</input> 성별 <select id="sex" name="sex" style="width: 80px" disabled>
+									연령 <input type="text" id="years" name="years" style="width: 80px" readonly></input> 
+									성별 <select id="sex" name="sex" style="width: 80px;" disabled>
 										<option value="">선택</option>
-										<c:forEach items="${result }" var="result">
-											<c:if test="${result.gubun eq 'A02'}">
-												<option value="${result.name}">
-													${result.name}</option>
+										<c:forEach items="${result }" var="item">
+											<c:if test="${item.gubun eq 'A02'}">
+												<option value="${item.gubun}${item.code}">
+													${item.name}</option>
 											</c:if>
 										</c:forEach>
 									</select>
+									
 								</p>
 								<p>
 									<input type="text" placeholder="세부주소" name="addr2" id="addr2" style="width: 100%;" readyonly></input>
@@ -325,7 +321,7 @@
 										<option value="">선택</option>
 										<c:forEach items="${result }" var="result">
 											<c:if test="${result.gubun eq 'A08'}">
-												<option value="${result.name}">
+												<option value="${result.gubun}${result.code}">
 													${result.name}</option>
 											</c:if>
 										</c:forEach>
@@ -351,6 +347,27 @@
 						</div>
 					</div>
 				</div>
+				
+				<!-- Modal -->				
+				<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				  <div class="modal-dialog" role="document">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <h5 class="modal-title" id="exampleModalLabel">등록</h5>
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				          <span aria-hidden="true">&times;</span>
+				        </button>
+				      </div>
+				      <div class="modal-body">
+				        등록하시겠습니까?
+				      </div>
+				      <div class="modal-footer">
+				      	<button type="button" class="btn btn-primary" id="modalSubmit">등록하기</button>
+				       	<button type="button" class="btn btn-secondary" data-dismiss="modal">취소하기</button>
+				      </div>
+				    </div>
+				  </div>
+				</div>
 			</main>
 		</form>
 	</div>
@@ -371,6 +388,13 @@
 		var email = document.getElementById("email");
 		var reg_no = document.getElementById("reg_no");
 		var join_date = document.getElementById("join_date");
+		var domainList = document.getElementById('domain-list');
+		var domainInput = document.getElementById('domain-txt');
+		
+		if (name.value == "") {
+			alert("사원명을 입력하세요.");
+			return false;
+		}
 		
 		if (pwd1.value == "") {
 			alert("패스워드를 입력하세요.");
@@ -394,6 +418,26 @@
 			return false;
 		}
 		
+		if (reg_no.value == "") {
+			alert("주민번호를 입력하세요.");
+			return false;
+		}
+		
+		if (email1.value == "" || domainList.value == "" || domainInput.value == "") {
+			alert("이메일을 입력하세요.");
+			return false;
+		}
+		
+		if (hp.value == "") {
+			alert("휴대폰번호를 입력하세요.");
+			return false;
+		}
+		
+		if (join_date.value == "") {
+			alert("입사일자를 입력하세요.");
+			return false;
+		}
+		
 		if($("#zip").val() == null || $("#zip").val() == "") {
 			$("#zip").val(null);
 		}	
@@ -407,11 +451,17 @@
 			
 		}
 
-	  		 $("#sex").attr("disabled", false);
-			form.submit();
+	  		$("#sex").attr("disabled", false);
+	  		
+	  		$("#exampleModal").modal();
 		};
-
 		
+		$("#modalSubmit").on("click",function(){
+			var form = document.getElementById("submit_Form");
+			modalClick(form);
+		});
+
+
 		//달력 
 		$.datepicker.setDefaults({
 			dateFormat : 'yy-mm-dd'
@@ -511,13 +561,11 @@
 			var reg_sp = reg_no.split('-');
 			var reg1 = reg_sp[1];
 			if(reg1[0] == 1 || reg1[0] == 3){
-				console.log("남");
-				$('#sex').val('남자').prop("selected",true);
+				$('#sex').val('A02001').prop("selected",true);
 			}else if(reg1[1] == 2 || reg1[0] == 4){
-				$('#sex').val('여자').prop("selected",true);
+				$('#sex').val('A02002').prop("selected",true);
 			}
 		}
-
 		
 		//주민번호 연령체크
 		function ageChk(){
@@ -698,11 +746,13 @@
 		var mil_startdate = document.querySelector("#mil_startdate");
 		var mil_enddate = document.querySelector("#mil_enddate");		
 		
+	
 		mil_yn.addEventListener('change',(event) => {
-			if(event.target.value !== "Y"){
+			//console.log("milyn" + event.target.value);
+			if(event.target.value !== "A08001"){
 				mil_type.disabled = true;
 				mil_level.disabled = true;
-				mil_type.value="Y" ;
+				mil_type.value="" ;
 				mil_level.value="" ;
 				//$("#mil_startdate").val(null);
 				mil_startdate.value=null;
@@ -718,9 +768,11 @@
 			}
 		});
 		
-
-		
-		
+		function modalClick(formName){
+			formName.action="insaInputForm.do";
+			formName.method="post";
+			formName.submit();
+		}
 		
 	</script>
 </body>

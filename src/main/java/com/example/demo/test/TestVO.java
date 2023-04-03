@@ -1,6 +1,7 @@
 package com.example.demo.test;
 
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -56,7 +57,7 @@ public class TestVO {
 	private String profile_image;
 	private String self_intro;
 	private String carrier_image;
-	
+	private HashMap<String,String> searchParam;
 	//공통
 	private String gubun;
 	private String code;

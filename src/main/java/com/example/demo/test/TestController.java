@@ -1,5 +1,6 @@
 package com.example.demo.test;
 
+import java.net.URLDecoder;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -82,11 +83,26 @@ public class TestController {
 	}
 	
 	@RequestMapping("/insaListForm.do")
-	public String list(Model model) throws Exception {
-		System.out.println("listform getcommoncode");
-		List<TestVO> result = testService.selectCommon(); //공통코드 selectbox
-		model.addAttribute("result",result);
+	public String list(@RequestParam(value="num",required=false) Integer num, @RequestParam(value="sabun",required=false) Integer sabun, 
+			@RequestParam(value="sabunSch",required=false) String sabunSch, @RequestParam(value="name",required=false) String name,
+			 @RequestParam(value="join_gbn_code",required=false) String join_gbn_code, @RequestParam(value="pos_gbn_code",required=false) String pos_gbn_code, 
+			 @RequestParam(value="join_date",required=false) String join_date,@RequestParam(value="retire_date",required=false) String retire_date, 
+			 @RequestParam(value="put_yn",required=false) String put_yn, @RequestParam(value="job_type",required=false) String job_type,Model model) throws Exception {
 		
+		List<TestVO> result = testService.selectCommon(); //공통코드 selectbox
+		System.out.println("listform getcommoncode");
+		model.addAttribute("result",result);
+		return "insaListForm";
+	}
+	
+	//검색 후의 list --삭제 
+	@RequestMapping(value="/seachList.do", method= RequestMethod.GET)
+	public String search(@RequestParam("num") int num, @RequestParam("sabun") int sabun, @RequestParam("sabunSch") String sabunSch, @RequestParam("name") String name,
+			 @RequestParam("join_gbn_code") String join_gbn_code, @RequestParam("pos_gbn_code") String pos_gbn_code, @RequestParam("join_date") String join_date,
+			 @RequestParam("retire_date") String retire_date, @RequestParam("put_yn") String put_yn, @RequestParam("job_type") String job_type, Model model) throws Exception{
+
+		model.addAttribute("search",true);
+
 		return "insaListForm";
 	}
 	
@@ -116,7 +132,6 @@ public class TestController {
 		int pageNum = (int)Math.ceil((double)count/postNum);//하단페이징번호(게시물총수/한페이지출력수 올림)
 		int displayPost = (num - 1) * postNum; //매개변수 num은 현재페이지 //출력할게시물
 
-
 		int pageNum_cnt = 5;	// 한번에 표시할 페이징 번호의 갯수
 		int endPageNum = (int)(Math.ceil((double)num / (double)pageNum_cnt) * pageNum_cnt); // 표시되는 페이지 번호 중 마지막 번호
 		System.out.println("endPageNum : " + endPageNum );
@@ -133,14 +148,11 @@ public class TestController {
 		boolean prev = startPageNum == 1 ? false : true;
 		boolean next = endPageNum * postNum >= count ? false : true;
 		
-		
 		List list = testService.getListWithPaging(vo,num,postNum); //목록출력
 		
 		System.out.println("list"+list);
 		System.out.println("prev"+prev);
-
 		System.out.println("next"+next);
-
 		
 		map.put("list", list);
 		map.put("pageNum", pageNum);
@@ -153,18 +165,34 @@ public class TestController {
 	}
 	
 	
+	
+	
+	//검색어받는애
 	@RequestMapping("/insaUpdateForm.do")
-	public String update( @RequestParam("sabun") int sabun, Model model) throws Exception {
+	public String update(@RequestParam("num") int num, @RequestParam("sabun") int sabun, @RequestParam("sabunSch") String sabunSch, @RequestParam("name") String name,
+			 @RequestParam("join_gbn_code") String join_gbn_code, @RequestParam("pos_gbn_code") String pos_gbn_code, @RequestParam("join_date") String join_date,
+			 @RequestParam("retire_date") String retire_date, @RequestParam("put_yn") String put_yn, @RequestParam("job_type") String job_type, Model model) throws Exception {
 		System.out.println("insaUpdateForm:"+sabun) ;
+		
 		List<TestVO> result = testService.selectCommon();
 		List<TestVO> info = testService.getInfo(sabun);
-		//System.out.println("info" + info);
 		System.out.println(info);
-			      
+	
+		HashMap<String,String> searchParam = new HashMap<String,String>();
+		searchParam.put("num", String.valueOf(num));
+		searchParam.put("sabunSch", String.valueOf(sabunSch));
+		searchParam.put("name", URLDecoder.decode(name,"UTF-8"));
+		searchParam.put("join_gbn_code",join_gbn_code);
+		searchParam.put("pos_gbn_code",pos_gbn_code);
+		searchParam.put("join_date", join_date);
+		searchParam.put("retire_date", retire_date);
+		searchParam.put("put_yn", put_yn);
+		searchParam.put("job_type", job_type);
+		
 		model.addAttribute("sabun",sabun);
 		model.addAttribute("info",info);
 		model.addAttribute("result",result);
-		
+		model.addAttribute("searchParam",searchParam);
 		return "insaUpdateForm";
 	}
 	
@@ -174,8 +202,30 @@ public class TestController {
 		System.out.println("update:"+vo) ;
 		testService.update(vo);
 		System.out.println("update완료");
-
-		return "redirect:insaUpdateForm.do?sabun=" + vo.getSabun();
+		
+		StringBuffer buff = new StringBuffer();
+		buff.append("redirect:insaUpdateForm.do?");
+		buff.append("sabun=");
+		buff.append(vo.getSabun()+"&");
+		buff.append("sabunSch=");
+		buff.append(vo.getSearchParam().get("sabunSch")+"&");
+		buff.append("name=");
+		buff.append(vo.getSearchParam().get("name")+"&");
+		buff.append("join_gbn_code=");
+		buff.append(vo.getSearchParam().get("join_gbn_code")+"&");
+		buff.append("pos_gbn_code=");
+		buff.append(vo.getSearchParam().get("pos_gbn_code")+"&");
+		buff.append("join_date=");
+		buff.append(vo.getSearchParam().get("join_date")+"&");
+		buff.append("retire_date=");
+		buff.append(vo.getSearchParam().get("retire_date")+"&");
+		buff.append("put_yn=");
+		buff.append(vo.getSearchParam().get("put_yn")+"&");		
+		buff.append("job_type=");
+		buff.append(vo.getSearchParam().get("job_type"));
+		
+		String redirectUrl = buff.toString();
+		return redirectUrl;
 	}
 
 	//update에서 삭제
