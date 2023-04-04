@@ -1,33 +1,29 @@
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <!DOCTYPE html>
 <html lang="en" class="h-100">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="">
-<meta name="author"
-	content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-<meta name="generator" content="Hugo 0.88.1">
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
-	crossorigin="anonymous">
-<title>인사시스템</title>
 
-<link rel="canonical"
-	href="https://getbootstrap.com/docs/5.1/examples/cover/">
+<link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/cover/">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
-<link rel="stylesheet"
-	href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script type="text/javascript"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<link href="css/cover.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 
+<!-- 주소api -->
+<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 
+<title>인사시스템</title>
 <style>
 .bd-placeholder-img {
 	font-size: 1.125rem;
@@ -177,9 +173,71 @@
 			<div id="paging"></div>
 			<span id="si"></span>
 		</div>
+		<!-- 삭제 Modal Start-->				
+		<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="deleteModalLabel">삭제</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        삭제하시겠습니까?
+		      </div>
+		      <div class="modal-footer">
+		      	<button type="button" class="btn btn-primary" id="delSubmit">삭제하기</button>
+		       	<button type="button" class="btn btn-secondary" data-dismiss="modal">취소하기</button>
+		    	</div>
+		   	 </div>
+		  	</div>
+		</div>
+		<!-- 삭제 Modal end -->
 	</div>
 
 	<script>
+
+	//삭제 모달
+		$("#delBtn").click(function(){
+			$("#deleteModal").modal();
+			$("#delSubmit").on("click",function(){
+			    // 체크한 항목을 담을 배열 선언
+			    var arr = [];
+			    // 체크한 항목만 취득
+			    var checked = $("input[name='delChk']:checked");
+			   	var length = $("input[name='delChk']:checked").length;
+			   	console.log(length);
+			    if(length == 0){
+			    	alert("삭제할 항목을 체크해주세요");
+			    }else{
+			    $(checked).each(function() {
+			    	arr.push($(this).val());
+			    });
+			    var param = {"sabunList" : arr};
+				$.ajax({
+					url:"delete.do",
+					dataType    :   "json",
+	                contentType :   "application/x-www-form-urlencoded; charset=UTF-8",
+					type : "post",
+					data : param,
+					success:function(result){
+						if(result.code == "OK"){
+							alert(result.message);
+							location.replace("insaListForm.do");
+						}else{
+							alert(result.message);
+						}
+						
+					},error : function(error){
+						alert("error");
+					}
+				
+				})
+			   }
+			});
+		});
+	
 		//입사일,퇴사일
 		$.datepicker.setDefaults({
 			dateFormat : 'yy-mm-dd'
@@ -219,18 +277,20 @@
 		if(urlParams.has('num')){
 			for (const key of urlParams.keys()) {
 				var value = urlParams.get(key);
-				console.log(value)
+				//console.log("value" + value);
 				if(key != 'num'){
-					console.log(key);
+					//console.log("key" + key);
 					if(value != undefined){
-						//console.log($("#"+key));
+						console.log($("#"+key));
 						if(key == 'name'){
 							// 인풋 구간
-							$("#"+key).val(value)
+							$("#"+key).val(value);
+							
 						}else if(key == 'put_yn'){
-							console.log(value);
+							//console.log(value);
 							// 셀렉트 박스 구간
-							$("#"+key).val(value)
+							$("#"+key).val(value);
+							//console.log("zzz" + $("#"+key).val());
 						}
 						
 						//$("#"+key).val(value);
@@ -239,7 +299,6 @@
 			}
 			getPaging(urlParams.get('num'));
 		}
-		
 		
 		//초기화 버튼
 		function resetTable(){
@@ -276,13 +335,7 @@
 					var endPageNum = data.endPageNum;
 					var select = data.select;
 					var sabunSch = $("#sabun").val();
-					//var name = $("#name").val();
-					//var join_gbn_code = $("#join_gbn_code").val();
-					//var pos_gbn_code = $("#pos_gbn_code").val();
-					//var join_date = $("#join_date").val();
-					//var retire_date = $("#retire_date").val();
-					// var put_yn = $("#put_yn option:selected").val();
-					//var job_type = $("#job_type").val();
+					
 					console.log(sabunSch);
 					
 					//console.log(`${'${data.pageNum}'}`);
@@ -315,7 +368,7 @@
 						//html += `<td><a href="#" onclick="updateInfo(this);"> ${'${list[key].sabun}'} </a></td>`;
 						html += `<td><a href="/insaUpdateForm.do?num=${'${select}'}&sabun=${'${list[key].sabun}'}&sabunSch=${'${sabunSch}'}&name=${'${name}'}&join_gbn_code=${'${list[key].join_gbn_code}'}&pos_gbn_code=${'${list[key].pos_gbn_code}'}&join_date=${'${list[key].join_date}'}&retire_date=${'${list[key].retire_date}'}&put_yn=${'${list[key].put_yn}'}&job_type=${'${list[key].job_type}'}"> ${'${list[key].sabun}'} </a></td>`;
 						html += `<td>${'${list[key].name}'}</td>`;
-						html += `<td>${'${list[key].reg_no}'}</td>`;
+						html += `<td>${'${list[key].reg_no_masking}'}</td>`;
 						html += `<td>${'${list[key].hp}'}</td>`;
 						if(list[key].pos_gbn_code === 'A04001'){
 							pos = '사원';
@@ -379,55 +432,6 @@
 				}
 			});
 		}
-		
-			//검색결과 보낼 거
-			function updateInfo(el){
-				console.log(el);
-				var sabun = el.text;
-				$.ajax({
-					url:`/insaUpdateForm.do?sabun=${'${sabun}'}`,	
-					type:'GET',
-					data :$("#search_Form").serialize(),
-					contentType : "application/x-www-form-urlencoded; charset=utf-8",
-					dataType : "json",
-					success : function(data) {
-				}
-				
-			})
-			}
-			
-			
-			//체크된 값 삭제하기
-			$("#delBtn").click(function() {
-			    // 체크한 항목을 담을 배열 선언
-			    var arr = [];
-			    // 체크한 항목만 취득
-			    var checked = $("input[name='delChk']:checked");
-			    $(checked).each(function() {
-			    	arr.push($(this).val());
-			    });
-			    var param = {"sabunList" : arr};
-				$.ajax({
-					url:"delete.do",
-					dataType    :   "json",
-	                contentType :   "application/x-www-form-urlencoded; charset=UTF-8",
-					type : "post",
-					data : param,
-					success:function(result){
-						if(result.code == "OK"){
-							alert(result.message);
-							location.replace("insaListForm.do");
-						}else{
-							alert(result.message);
-						}
-						
-					},error : function(error){
-						alert("error");
-					}
-				
-				})
-				
-			  });
 			
 	</script>
 </body>

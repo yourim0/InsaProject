@@ -73,11 +73,12 @@ input, select {
 
 
 /*파일 업로드 버튼*/
-.btn-upload{
+.btn-file{
 	padding: 4px 20px;
  	background-color:#333;
 	border-radius: 4px;
 	color: white;
+
 }
 
 #file {

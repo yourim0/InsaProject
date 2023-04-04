@@ -1,0 +1,54 @@
+1. update후 redirect 
+2. 검색어 유지
+미리보기, 다운로드
+
+fetch 
+string buffer ->  append 동일한 메모리에 추가됨
+string+ 메모리를 새로 할당	
+
+	//체크된 체크박스 삭제 버튼
+		function cbDel(){
+			$("#delChk").find('input:checked').each(function(index){
+				console.log(index);
+			}
+		}
+
+
+db carrier, profile 컬럼 삭제	
+		
+등록, 조회 정리
+
+검색 이전버튼 -> 검색어 유지
+성별selected 되어있게 
+
+이메일 선택 안했을 시 -올바르게 선택하세요 
+
+등록하시겠습니까?
+등록완료되었습니다 => 
+
+체크박스 안누르고 삭제시 -> 선택해주세요 
+
+change	요소에 값이 변경 되었을 때 이벤트 발생 -> 아이디중복체크 등
+직위,직종(c:if selected),, 패스워드 가져올때부터 애스트리크
+주민번호 마스킹 (마스킹한 값도 그냥 저장)
+사업자등록증 확인
+검색어 유지
+
+문자왼쪽정렬 숫자오른쪽정렬
+주민번호 마스킹 14자리경우 (*사라짐현상
+
+POST/GET 캐싱차이(속도)
+
+
+delete쓰면 db끊기는 현상발생시where조건이 빠지는 경우가 있
+
+https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=wpdms95&logNo=221302175677
+mybais include
+https://blog.naver.com/PostView.nhn?blogId=leedjlee&logNo=222105959026
+https://hdg3052.tistory.com/76
+
+
+https://mainia.tistory.com/entry/rownum-%EC%9C%BC%EB%A1%9C-%EB%B2%94%EC%9C%84%EC%A7%80%EC%A0%95%EC%9D%84-%ED%95%B4%EC%A3%BC%EA%B3%A0-%EC%8B%B6%EC%9D%84-%EB%95%8C
+
+
+	

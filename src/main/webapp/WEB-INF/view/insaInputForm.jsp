@@ -63,7 +63,7 @@
 
 		<!-- form -->
 
-		<form id="submit_Form" method="post">
+		<form id="submit_Form" method="post" enctype="multipart/form-data">
 			<div class="inputBtn">
 				<button type="button" class="btn btn-dark btn-sm" id="submitBtn" style="float: right" onclick="submit_check()">등록</button>
 				<button type="button" class="btn btn-dark btn-sm" style="float: right" onClick="location.href='/index'">전화면</button>
@@ -74,10 +74,10 @@
 			<main>
 				<div class="container">
 					<div class="row">
-						<div class="col" style="margin: auto; display: blcok;">
-							<img src="resources/user.png" /><br /> <label
-								class="btn-upload" for="file"> 사진올리기 </label> <input type="file"
-								name="file" id="file">
+						<div class="col" style="margin: auto; display: block;">
+							<img src="resources/imgs/default_profile.png" /><br /> <label
+								class="btn-file" for="profile"> 사진올리기 </label> <input type="file"
+								name="profile" id="profile" accept=".jpg,.pdf,.png" style="display:none;">
 						</div>
 						<div class="col">
 							<div class="right">
@@ -86,7 +86,7 @@
 								</p>
 								<p>
 									*아이디 <input id="id" name="id" type="text"></input>
-									<button type="button" class="id_chk_button">중복확인</button> <input
+									<button type="button" class="id_chk_button btn-file ">중복확인</button> <input
 										type="hidden" name="checked_id" value="">
 								</p>
 								<p>
@@ -108,7 +108,7 @@
 								</p>
 								<p>
 									주소 <input type="number" placeholder="우편번호" name="zip" id="zip" style="width: 130px;" readonly>
-									<button type="button" onclick="execPostCode()">주소검색</button>
+									<button type="button" class="btn-file" onclick="execPostCode()">주소검색</button>
 									</input>
 								</p>
 								<p>
@@ -175,6 +175,7 @@
 								<p>
 									*주민번호 <input type="text" id="reg_no1" name="reg_no1" maxlength="14" masking></input>
 									<input type="hidden" id="reg_no" name="reg_no"></input>
+									<input type="hidden" id="reg_no_masking" name="reg_no_masking" />
 								</p>
 								<p>
 									연령 <input type="text" id="years" name="years" style="width: 80px" readonly></input> 
@@ -307,10 +308,10 @@
 									*입사일 <input type="date" id="join_date" name="join_date"></input>
 								</p>
 								<p>
-									사업자등록증 <input type="text"></input>
+									사업자등록증 <input type="text" class="fileName" id="fileName" name="fileName"></input>
 								</p>
 								<p>
-									이력서 <input type="text"></input>
+									이력서 <input type="text" class="profileName" id="profileName" name="profileName"></input>
 								</p>
 							</div>
 						</div>
@@ -334,14 +335,14 @@
 									퇴사일 <input type="date" id="retire_date" name="retire_date"></input>
 								</p>
 								<p>
-									<button type="button">미리보기</button>
-									<label class="btn-upload" for="file"> 등록 </label> <input
-										type="file" name="file" id="file">
+									<button class="btn-file reg_previewbtn" id="viewbtn" type="button">미리보기</button>
+									<label class="btn-file" for=cmp_reg> 등록 </label> 
+									<input type="file" name="cmp_reg" id="cmp_reg" class="cmp_reg" accept=".jpg,.pdf,.png" style="display:none;" onchange="javascript:document.getElementById('fileName').value = this.value">
 								</p>
 								<p>
-									<button type="button">미리보기</button>
-									<label class="btn-upload" for="file"> 파일 업로드 </label> <input
-										type="file" name="file" id="file">
+									<button class="btn-file profile_previewbtn" type="button">미리보기</button>
+									<label class="btn-file" for="carrier"> 파일 업로드 </label> <input
+										type="file" name="carrier" id="carrier" class="carrier" accept=".jpg,.pdf,.png" style="display:none;" onchange="javascript:document.getElementById('profileName').value = this.value">
 								</p>
 							</div>
 						</div>
@@ -371,36 +372,37 @@
 			</main>
 		</form>
 	</div>
+	
+
 
 	<script>
-	
-	/*공백 유효성 검증*/
+	/*유효성 체크*/
 	function submit_check() {
-		var form = document.getElementById("submit_Form");
-		var name = document.getElementById("name");
-		var id = document.getElementById("id");
-		var pwd = document.getElementById("pwd");
-		var pwd1 = document.getElementById("pwd1");
-		var pwd_chk = document.getElementById("pwd_chk");
-		var pwd_chk1 = document.getElementById("pwd_chk1");
-		var hp = document.getElementById("hp");
-		var email1 = document.getElementById("email1");
-		var email = document.getElementById("email");
-		var reg_no = document.getElementById("reg_no");
-		var join_date = document.getElementById("join_date");
-		var domainList = document.getElementById('domain-list');
-		var domainInput = document.getElementById('domain-txt');
+		var form = $("#submit_Form");
+		var name = $("#name");
+		var id = $("#id");
+		var pwd = $("#pwd");
+		var pwd1 = $("#pwd1");
+		var pwd_chk = $("#pwd_chk");
+		var pwd_chk1 = $("#pwd_chk1");
+		var hp = $("#hp");
+		var email1 = $("#email1");
+		var email = $("#email");
+		var reg_no = $("#reg_no");
+		var join_date = $("#join_date");
+		var domainList = $("#domain-list");
+		var domainInput = $("#domain-txt");
 		
-		if (name.value == "") {
+		if (name.val() == "") {
 			alert("사원명을 입력하세요.");
 			return false;
 		}
 		
-		if (pwd1.value == "") {
+		if (pwd1.val() == "") {
 			alert("패스워드를 입력하세요.");
 			return false;
 		}
-		if (pwd_chk1.value == "") {
+		if (pwd_chk1.val() == "") {
 			alert("패스워드 확인을 입력하세요.");
 			return false;
 		}
@@ -413,27 +415,27 @@
 		}
 
 		//비밀번호 확인 일치 여부
-		if (pwd.value != pwd_chk.value) {
+		if (pwd.val() != pwd_chk.val()) {
 			alert('비밀번호를 확인해주세요.');
 			return false;
 		}
 		
-		if (reg_no.value == "") {
+		if (reg_no.val() == "") {
 			alert("주민번호를 입력하세요.");
 			return false;
 		}
 		
-		if (email1.value == "" || domainList.value == "" || domainInput.value == "") {
+		if (email1.val() == "" || domainList.val() == "" || domainInput.value == "") {
 			alert("이메일을 입력하세요.");
 			return false;
 		}
 		
-		if (hp.value == "") {
+		if (hp.val() == "") {
 			alert("휴대폰번호를 입력하세요.");
 			return false;
 		}
 		
-		if (join_date.value == "") {
+		if (join_date.val() == "") {
 			alert("입사일자를 입력하세요.");
 			return false;
 		}
@@ -451,11 +453,27 @@
 			
 		}
 
-	  		$("#sex").attr("disabled", false);
-	  		
-	  		$("#exampleModal").modal();
-		};
+	  	$("#sex").attr("disabled", false);
+
 		
+		//첨부파일 확장자 체크
+		var profile = $("#profileName").val();
+		profile = profile.slice(profile.indexOf(".") + 1).toLowerCase();
+		var cpm_reg = $("#fileName").val();
+		cpm_reg = cpm_reg.slice(cpm_reg.indexOf(".") + 1).toLowerCase();
+		if(profile !== '' && profile!= "jpg" && profile != "png" &&  profile != "pdf"){
+			alert("이력서는 파일은 (jpg, png, gif) 형식만 등록 가능합니다.");
+			return false;
+		}else if(cpm_reg !== '' && cpm_reg != "jpg" && cpm_reg != "png" && cpm_reg != "pdf"){
+			alert("사업자등록증은 파일은 (jpg, png, gif) 형식만 등록 가능합니다.");
+			return false;
+		}
+		
+  		
+  		$("#exampleModal").modal();
+	};
+		
+		//등록버튼 
 		$("#modalSubmit").on("click",function(){
 			var form = document.getElementById("submit_Form");
 			modalClick(form);
@@ -467,9 +485,11 @@
 			dateFormat : 'yy-mm-dd'
 		});
 
+		
+		//datepicker
 		$("#mil_startdate,#join_date,#mil_enddate,#retire_date").datepicker();
 
-		//전역, 입대일자 비교
+		//전역일이 입대보다 앞일 수 없게
 		$(document).ready(function(){
 			$('#mil_enddate').datepicker("option", "onClose", function (selectedDate) {
             	if(selectedDate.length==10)
@@ -485,7 +505,7 @@
             });
 			});
 		
-		//입사일, 퇴사일 비교
+		//입사일이 퇴사일보다 앞일 수 없게
 		$(document).ready(function(){
 			$('#retire_date').datepicker("option", "onClose", function (selectedDate) {
             	if(selectedDate.length==10)
@@ -552,6 +572,8 @@
 			if(req.length == 14){
 				 genderChk();
 				 ageChk();
+				 $('#reg_no_masking').val($("#reg_no1").val());
+				 console.log($('#reg_no_masking').val());
 			}
 		});
 		
@@ -768,12 +790,44 @@
 			}
 		});
 		
+		//등록하시겠습니까?
 		function modalClick(formName){
 			formName.action="insaInputForm.do";
 			formName.method="post";
 			formName.submit();
 		}
 		
+		//사업자 미리보기 팝업
+		$(".reg_previewbtn").on("click",function(){
+			var a = $("#fileName").val();
+			if(a == ''){
+				alert("파일을 등록해주세요");
+			}else{		
+			var fileName = a.replace(/c:\\fakepath\\/i,'');
+			var path = "/resources/imgs/" + fileName;
+			var host = $(location).attr('host'); //현재 페이지의 메인 URL
+			var url = "http://" + host + path;
+			console.log(url);
+			window.open(url);
+			}
+		});
+	
+		//이력서 미리보기 팝업
+			$(".profile_previewbtn").on("click",function(){
+			var a = $("#profileName").val();
+			if(a == ''){
+				alert("파일을 등록해주세요");
+			}else{		
+			var fileName = a.replace(/c:\\fakepath\\/i,'');
+			var path = "/resources/imgs/" + fileName;
+			var host = $(location).attr('host'); //현재 페이지의 메인 URL
+			var url = "http://" + host + path;
+			console.log(url);
+			window.open(url);
+			}
+		});
+
+			
 	</script>
 </body>
 </html>

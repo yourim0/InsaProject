@@ -38,5 +38,16 @@ public interface TestDAO {
 	
 	//삭제
 	public void delete(int sabun);
+	
+	//프로필
+	public String getProfile(int sabun);
+	
+	//사업자
+	public String getCmp_reg(int sabun);
+	
+	//이력서
+	public String getCarrier(int sabun);
+	
+	
 }
  

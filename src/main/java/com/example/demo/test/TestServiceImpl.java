@@ -97,6 +97,26 @@ public class TestServiceImpl implements TestService {
 		System.out.println("serviceDelete") ;
 		testDAO.delete(sabun);
 	}
+
+	
+	//이미지
+	@Override
+	public String getProfile(int sabun) throws Exception {
+		String profile = testDAO.getProfile(sabun);
+		return profile;
+	}
+
+	@Override
+	public String getCmp_reg(int sabun) throws Exception {
+		String cmp_reg = testDAO.getCmp_reg(sabun);
+		return cmp_reg;
+	}
+
+	@Override
+	public String getCarrier(int sabun) throws Exception {
+		String carrier = testDAO.getCarrier(sabun);
+		return carrier;
+	}
 	
 	
 

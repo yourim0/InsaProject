@@ -15,13 +15,18 @@
 	<!-- 등록 -->
 	<insert id="insertTest">
 		INSERT INTO INSA 
-		VALUES (
+		(sabun, name, eng_name, id, pwd, phone, hp, reg_no, years, sex, email, zip, addr1, addr2, job_type, pos_gbn_code, dept_code,
+		salary, join_gbn_code, gart_level, put_yn, mil_yn, mil_type, mil_level, mil_startdate, mil_enddate, kosa_reg_yn, kosa_class_code,
+		join_date, crm_name, cmp_reg_no, cmp_reg_img, self_intro, profile_image, carrier_image, reg_no_masking)
+		VALUES 
+		(
 		#{sabun}, #{name}, #{eng_name}, #{id}, #{pwd}, #{phone}, #{hp}, #{reg_no}, #{years}, #{sex}, #{email}, #{zip,jdbcType=INTEGER}, #{addr1}, #{addr2},
 		#{job_type}, #{pos_gbn_code},#{dept_code},#{salary, jdbcType=INTEGER},#{join_gbn_code},#{gart_level},#{put_yn},#{mil_yn},#{mil_type,jdbcType=VARCHAR},
 		#{mil_level,jdbcType=VARCHAR},#{mil_startdate,jdbcType=VARCHAR},#{mil_enddate,jdbcType=VARCHAR},
-		#{kosa_reg_yn,jdbcType=VARCHAR},#{kosa_class_code,jdbcType=VARCHAR},#{join_date},#{retire_date,jdbcType=VARCHAR},#{crm_name,jdbcType=VARCHAR},
-		#{cmp_reg_no,jdbcType=VARCHAR},#{cmp_reg_img,jdbcType=VARCHAR},#{carrier,jdbcType=VARCHAR},#{profile,jdbcType=VARCHAR},#{self_intro,jdbcType=VARCHAR},
-		#{profile_image,jdbcType=VARCHAR},#{carrier_image,jdbcType=VARCHAR})
+		#{kosa_reg_yn,jdbcType=VARCHAR},#{kosa_class_code,jdbcType=VARCHAR},#{join_date,jdbcType=VARCHAR},#{crm_name,jdbcType=VARCHAR},
+		#{cmp_reg_no,jdbcType=VARCHAR},#{cmp_reg_img,jdbcType=VARCHAR},#{self_intro,jdbcType=VARCHAR},
+		#{profile_image,jdbcType=VARCHAR},#{carrier_image,jdbcType=VARCHAR},#{reg_no_masking,jdbcType=VARCHAR}
+		)
 	</insert>
 
 	<!-- 공통코드 -->
@@ -42,9 +47,9 @@
 	<!-- 리스트 페이징 -->
 	<select id="getListWithPaging" parameterType="hashMap" resultType="com.example.demo.test.TestVO">
 
-		select sabun,name,reg_no,hp,pos_gbn_code,join_date,retire_date,put_yn,salary 
+		select sabun,name,reg_no,hp,pos_gbn_code,join_date,retire_date,put_yn,salary,reg_no_masking 
 		from (select rownum numrow, A.* from 
-		(select sabun,name,reg_no,hp,pos_gbn_code,join_date,retire_date,put_yn,salary from INSA 
+		(select sabun,name,reg_no,hp,pos_gbn_code,join_date,retire_date,put_yn,salary,reg_no_masking from INSA 
 		WHERE 1=1
 
 		<if test="vo.sabun != null and vo.sabun != ''">
@@ -144,8 +149,6 @@
 			<if test="crm_name != null">crm_name = #{crm_name},</if>
 			<if test="cmp_reg_no != null">cmp_reg_no = #{cmp_reg_no},</if>
 			<if test="cmp_reg_img != null">cmp_reg_img = #{cmp_reg_img},</if>
-			<if test="carrier != null">carrier = #{carrier},</if>
-			<if test="profile != null">profile = #{profile},</if>
 			<if test="self_intro != null">self_intro = #{self_intro},</if>
 			<if test="profile_image != null">profile_image = #{profile_image},</if>
 			<if test="carrier_image != null">carrier_image = #{carrier_image},</if>
@@ -160,6 +163,16 @@
 		WHERE SABUN = #{SABUN}
 	</delete>
 	
-	
+	<!-- 이미지 가져오기 -->
+	<select id="getProfile" resultType="String">
+	<![CDATA[ select profile_image from insa where sabun=#{sabun} ]]>
+	</select>
+	<select id="getCmp_reg" resultType="String">
+	<![CDATA[ select cmp_reg_img from insa where sabun=#{sabun} ]]>
+	</select>
+	<select id="getCarrier" resultType="String">
+	<![CDATA[ select carrier_image from insa where sabun=#{sabun} ]]>
+	</select>
+		
 	
 </mapper>

@@ -63,21 +63,27 @@
 		</header>
 
 		<!-- form -->
-		<form id="submit_Form" method="post">
+		<form id="submit_Form" method="post" enctype="multipart/form-data"> 
 		<div class="inputBtn">
 			<button type="button" class="btn btn-dark btn-sm" style="float: right" onclick="submit_check();">수정</button>
-			<button type="button" class="btn btn-dark btn-sm" style="float: right" onclick="location.href='delete.do?sabun=${info[0].sabun}'">삭제</button>
+			<button type="button" class="btn btn-dark btn-sm" id="deleteBtn" style="float: right">삭제</button>
 			<button type="button" class="btn btn-dark btn-sm" style="float: right" onClick="location.href='/insaListForm.do?num=${searchParam.num}&sabun=${searchParam.sabunSch}&name=${searchParam.name}&join_gbn_code=${searchParam.join_gbn_code}&pos_gbn_code=${searchParam.pos_gbn_code}&join_date=${searchParam.join_date}&retire_date=${searchParam.retire_date}&put_yn=${searchParam.put_yn}&job_type=${searchParam.job_type}'">이전</button>
 		</div>
 
 			<main>
 				<div class="container">
 					<div class="row">
-						<div class="col" style="margin: auto; display: blcok;">
-							<img src="resources/user.png" /><br /> <label
-								class="btn-upload" for="file"> 사진올리기 </label> <input type="file"
-								name="file" id="file">
+						<div class="col" style="margin: auto; display: block;">
+							<c:if test="${profile_image eq 'default_profile.png' }">
+							<img src="resources/imgs/default_profile.png" id="profile_thumbnail" name="profile_file" class="file img-thumbnail" width="150" height="120"><br><br>
+							</c:if>
+							<c:if test="${profile_image !=  'default_profile.png' }">
+				        		<img src="resources/imgs/${info[0].profile_image}" id="profile_thumbnail" name="profile_file" class="file img-thumbnail" width="150" height="120"><br><br>
+				   			</c:if><br /> 
+							<label class="btn-file" for="profile"> 사진올리기 </label> 
+								<input type="file" name="profile" id="profile" accept=".jpg,.pdf,.png" style="display:none;">
 						</div>
+						
 						<div class="col">
 							<div class="right">
 								<p>
@@ -181,12 +187,14 @@
 									<input type="hidden" id="pwd_chk" name="pwd_chk"></input>
 								</p>
 								<p>
-									*주민번호 <input type="text" id="reg_no1" name="reg_no1" maxlength="14" value="${info[0].reg_no}" masking></input>
+									*주민번호 <input type="text" id="reg_no1" name="reg_no1" maxlength="14" value="${info[0].reg_no_masking}" masking></input>
 									<input type="hidden" id="reg_no" name="reg_no"></input>
+									<input type="hidden" id="reg_no_masking" name="reg_no_masking" />
+									
 								</p>
 								<p>
-									연령 <input type="text" id="years" name="years" style="width: 80px" value="${info[0].years}" readonly>
-									</input> 성별 <select id="sex" name="sex" style="width: 80px" disabled>
+									연령 <input type="text" id="years" name="years" style="width: 80px" value="${info[0].years}" readonly></input> 
+									성별 <select id="sex" name="sex" style="width: 80px" disabled>
 										<option value="">선택</option>
 										<c:forEach items="${result }" var="result">
 										<c:set var="jobSplit" value="${result.gubun}${result.code}" />
@@ -253,7 +261,7 @@
 									</select>
 								</p>
 								<p>
-									사업자번호 <input type="text" name="cmp_reg_no" id="cmp_reg_no" maxlength="12" value="${info[0].cmp_reg_no}" comHyphen></input>
+									사업자번호 <input type="text" name="com_reg_no" id="com_reg_no" maxlength="12" comHyphen></input>
 								</p>
 								<p>
 									자기소개 <input type="text" placeholder="100자 내외로 적으시오" id="self_intro" name="self_intro" style="width: 100%; height: 50px;" value="${info[0].self_intro}"></input>
@@ -329,10 +337,10 @@
 									*입사일 <input type="date" id="join_date" name="join_date" value="${info[0].join_date}"></input>
 								</p>
 								<p>
-									사업자등록증 <input type="text" id="cmp_reg_image" name="cmp_reg_image"></input>
+									사업자등록증 <input type="text" id="fileName" name="fileName" value="${info[0].cmp_reg_img}"></input>
 								</p>
 								<p>
-									이력서 <input type="text" id="carrier" name="carrier" value="${info[0].carrier}"></input>
+									이력서 <input type="text" id="profileName" name="profileName" value="${info[0].carrier_image}"></input>
 								</p>
 							</div>
 						</div>
@@ -358,21 +366,23 @@
 									퇴사일 <input type="date" id="retire_date" name="retire_date" value="${info[0].retire_date}"></input>
 								</p>
 								<p>
-									<button type="button">미리보기</button>
-									<label class="btn-upload" for="file"> 등록 </label> 
-									<input type="file" name="file" id="file">
+									<button class="btn-file reg_previewbtn" id="viewbtn" type="button">미리보기</button>
+									<label class="btn-file " for=cmp_reg> 등록 </label> <input
+										type="file" name="cmp_reg" id="cmp_reg" class="cmp_reg" accept=".jpg,.pdf,.png" style="display:none;" onchange="javascript:document.getElementById('fileName').value = this.value">
 								</p>
 								<p>
-									<button type="button">미리보기</button>
-									<label class="btn-upload" for="file"> 파일 업로드 </label> <input
-										type="file" name="file" id="file">
+									<button type="button" class="btn-file profile_previewbtn">다운</button>
+									<label class="btn-file" for="carrier"> 파일 업로드 </label> <input
+										type="file" name="carrier" id="carrier" class="carrier" accept=".jpg,.pdf,.png" style="display:none;" onchange="javascript:document.getElementById('profileName').value = this.value">
 								</p>
+								
 							</div>
 						</div>
 					</div>
 				</div>
+			</div>
 				
-				<!-- Modal -->				
+				<!-- 수정하기 Modal Start-->				
 				<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				  <div class="modal-dialog" role="document">
 				    <div class="modal-content">
@@ -388,50 +398,122 @@
 				      <div class="modal-footer">
 				      	<button type="button" class="btn btn-primary" id="modalSubmit">수정하기</button>
 				       	<button type="button" class="btn btn-secondary" data-dismiss="modal">취소하기</button>
-				      </div>
-				    </div>
-				  </div>
+				    	</div>
+				   	 </div>
+				  	</div>
 				</div>
+				<!-- 수정하기 Modal end -->
+				
+				<!-- 삭제하기 Modal Start-->				
+				<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+				  <div class="modal-dialog" role="document">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <h5 class="modal-title" id="deleteModalLabel">삭제</h5>
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				          <span aria-hidden="true">&times;</span>
+				        </button>
+				      </div>
+				      <div class="modal-body">
+				        삭제하시겠습니까?
+				      </div>
+				      <div class="modal-footer">
+				      	<button type="button" class="btn btn-primary" id="delSubmit">삭제하기</button>
+				       	<button type="button" class="btn btn-secondary" data-dismiss="modal">취소하기</button>
+				    	</div>
+				   	 </div>
+				  	</div>
+				</div>
+				<!-- 삭제하기 Modal end -->
+				
+				<input type="hidden" name="num" id="num" value="${searchParam.num}">
+				<input type="hidden" name="sabunSch" id="sabunSch" value="${searchParam.sabunSch}">
+				<input type="hidden" name="searchName" id="searchName" value="${searchParam.name}">
+				<input type="hidden" name="searchJoin_gbn_code" id="searchJoin_gbn_code" value="${searchParam.join_gbn_code}">
+				<input type="hidden" name="searchPut_yn" id="searchPut_yn" value="${searchParam.put_yn}">
+				<input type="hidden" name="searchPos_gbn_code" id="searchPos_gbn_code" value="${searchParam.pos_gbn_code}">
+				<input type="hidden" name="searchJoin_day" id="searchJoin_day" value="${searchParam.join_day}">
+				<input type="hidden" name="searchRetire_day" id="searchRetire_day" value="${searchParam.retire_day}">
+				<input type="hidden" name="searchJob_type" id="searchJob_type" value="${searchParam.job_type}">
+			
 			</main>
 		</form>
-		
 	</div>
+	
+	
 	<script>
 	
 	/*공백 유효성 검증*/
 	function submit_check() {
-		var form = document.getElementById("submit_Form");
-		var name = document.getElementById("name");
-		var id = document.getElementById("id");
-		var pwd = document.getElementById("pwd");
-		var pwd1 = document.getElementById("pwd1");
-		var pwd_chk = document.getElementById("pwd_chk");
-		var pwd_chk1 = document.getElementById("pwd_chk1");
-		var hp = document.getElementById("hp");
-		var email1 = document.getElementById("email1");
-		var email = document.getElementById("email");
-		var reg_no = document.getElementById("reg_no");
-		var join_date = document.getElementById("join_date");
+		var form = $("#submit_Form");
+		var name = $("#name");
+		var id = $("#id");
+		var pwd = $("#pwd");
+		var pwd1 = $("#pwd1");
+		var pwd_chk = $("#pwd_chk");
+		var pwd_chk1 = $("#pwd_chk1");
+		var hp = $("#hp");
+		var email1 = $("#email1");
+		var email = $("#email");
+		var reg_no1 = $("#reg_no1");
+		var join_date = $("#join_date");
+		var domainList = $("#domain-list");
+		var domainInput = $("#domain-txt");
 		
-		if (pwd1.value == "") {
+		if (name.val() == "") {
+			alert("사원명을 입력하세요.");
+			return false;
+		}
+		
+		if (pwd1.val() == "") {
 			alert("패스워드를 입력하세요.");
 			return false;
 		}
-		if (pwd_chk1.value == "") {
+		if (pwd_chk1.val() == "") {
 			alert("패스워드 확인을 입력하세요.");
 			return false;
 		}
 		
 		//아이디 중복체크 여부
+		//문자열이 이전과 달라지면 
+		$("#id").change(function(){
+			if ($("input[name='checked_id']").val() == '') {
+				alert('아이디 중복체크를 해주세요.');
+				return false;
+			}
+		});
 		
-		$("input[name='checked_id']").change(function(){
-			alert('아이디 중복체크를 해주세요.');
-			return false;
-		  });
-		
+
 		//비밀번호 확인 일치 여부
-		if (pwd.value != pwd_chk.value) {
+		if (pwd.val() != pwd_chk.val()) {
 			alert('비밀번호를 확인해주세요.');
+			return false;
+		}
+		
+		if (reg_no1.val() == "") {
+			alert("주민번호를 입력하세요.");
+			return false;
+		}else{
+			$("#reg_no").val(reg_no1.val());
+		}
+		
+		if (email1.val() == "" || domainInput.value == "") {
+			alert("이메일을 입력하세요.");
+			return false;
+		}else{
+			var email = $('#email');
+			var email1 = $('#email1');
+			var domainInput = $('#domain-txt');
+			    email.val(email1.val() + "@" + domainInput.val());
+		}
+		
+		if (hp.val() == "") {
+			alert("휴대폰번호를 입력하세요.");
+			return false;
+		}
+		
+		if (join_date.val() == "") {
+			alert("입사일자를 입력하세요.");
 			return false;
 		}
 		
@@ -445,21 +527,52 @@
 		
 		if($("#retire_date").val() == null || $("#retire_date").val() == "") {
 			$("#retire_date").val(null);
+			
 		}
 
-		$("#sex").attr("disabled", false);
-		
+		genderChk(); //체크박스 확인 
+	  	$("#sex").attr("disabled", false);
+
+		//첨부파일 확장자 체크
+		var profile = $("#profileName").val();
+		profile = profile.slice(profile.indexOf(".") + 1).toLowerCase();
+		var cpm_reg = $("#fileName").val();
+		cpm_reg = cpm_reg.slice(cpm_reg.indexOf(".") + 1).toLowerCase();
+		if(profile !== '' && profile!= "jpg" && profile != "png" &&  profile != "pdf"){
+			alert("이력서는 파일은 (jpg, png, gif) 형식만 등록 가능합니다.");
+			return false;
+		}else if(cpm_reg !== '' && cpm_reg != "jpg" && cpm_reg != "png" && cpm_reg != "pdf"){
+			alert("사업자등록증은 파일은 (jpg, png, gif) 형식만 등록 가능합니다.");
+			return false;
+		}
+		//수정하기 모달 show
 		$("#exampleModal").modal();
 		
 	};
-
+	//수정하기 modal submit
 	$("#modalSubmit").on("click",function(){
 		var form = document.getElementById("submit_Form");
 		modalClick(form);
 	});
 
-		
-		//달력 
+	
+	//수정하기 모달
+	function modalClick(formName){
+		formName.action="insaUpdateForm.do";
+		formName.method="post";
+		formName.submit();
+	}
+	
+	//삭제 모달
+	$("#deleteBtn").click(function(){
+		$("#deleteModal").modal();
+		$("#delSubmit").on("click",function(){
+			location.href='delete.do?sabun=${info[0].sabun}';
+		});
+	});
+	
+	
+	//달력 
 	$(document).ready(function(){
 		$.datepicker.setDefaults({
 			dateFormat : 'yy-mm-dd'
@@ -548,9 +661,12 @@
 			var req1 = $(this).val().replace(/[^0-9]/g, '').replace(/^(\d{0,6})(\d{0,7})$/g, '$1-$2').replace(/-{1,2}$/g, '').replace(/(-?)([1-4]{1})([0-9]{6})\b/gi, "$1$2******"); 
 			$(this).val(req1);
 			$('#reg_no').val(req);
+			console.log("no" + $('#reg_no').val()); //ok
 			if(req.length == 14){
 				 genderChk();
 				 ageChk();
+				 $('#reg_no_masking').val($("#reg_no1").val());
+				 console.log("masking" + $('#reg_no_masking').val());
 			}
 		});
 		
@@ -560,10 +676,9 @@
 			var reg_sp = reg_no.split('-');
 			var reg1 = reg_sp[1];
 			if(reg1[0] == 1 || reg1[0] == 3){
-				console.log("남");
-				$('#sex').val('남자').prop("selected",true);
+				$('#sex').val('A02001').prop("selected",true);
 			}else if(reg1[1] == 2 || reg1[0] == 4){
-				$('#sex').val('여자').prop("selected",true);
+				$('#sex').val('A02002').prop("selected",true);
 			}
 		}
 
@@ -599,7 +714,6 @@
 				}
 			}
 			$('#years').val(age);
-
 		}
 		
 		//휴대폰 번호 하이픈
@@ -746,11 +860,11 @@
 		
 		var salary1 = document.querySelector("#salary1");
 		salary1.onblur = function(e){
-			var salary1 = $('#salary1').val();
-			var salary_split = salary1.replace(",","");
-			var salary_split1 = Number(salary_split);
-			$('#salary').val(salary_split1);
-			//console.log($('#salary').val());
+		var salary1 = $('#salary1').val();
+		var salary_split = salary1.replace(",","");
+		var salary_split1 = Number(salary_split);
+		$('#salary').val(salary_split1);
+		//console.log($('#salary').val());
 				}
 		
 		
@@ -782,15 +896,55 @@
 			}
 		});
 		
-		//모달
-		function modalClick(formName){
-			formName.action="insaUpdateForm.do";
-			formName.method="post";
-			formName.submit();
-			
-		}
-	
+		
+		//사업자 미리보기 팝업
+		$(".reg_previewbtn").on("click",function(){
+			var a = $("#fileName").val();
+			if(a == ''){
+				alert("파일을 등록해주세요");
+			}else{		
+			var fileName = a.replace(/c:\\fakepath\\/i,'');
+			var path = "/resources/imgs/" + fileName;
+			var host = $(location).attr('host'); //현재 페이지의 메인 URL
+			var url = "http://" + host + path;
+			console.log(url);
+			window.open(url);
+			}
+		});
+		
+		//이력서 미리보기 팝업
+			$(".profile_previewbtn").on("click",function(){
+ 			var a = $("#profileName").val();
+			if(a == ''){
+				alert("파일을 등록해주세요");
+			}else{		
+			var fileName = a.replace(/c:\\fakepath\\/i,'');
+			var path = "/resources/imgs/" + fileName;
+			var host = $(location).attr('host'); //현재 페이지의 메인 URL
+			var url = "http://" + host + path;
+			console.log(url);
+			window.open(url);
+			} 
+			var uri = "/download/" + fileName;
+			downloadURI(uri);
+		});
 
+		function downloadURI(uri){
+			var link = document.createElement("a");
+			document.body.appendChild(link);
+			link.href=uri;
+			link.click();
+		}
+		
+		//update post에 보낼 값
+		//insaListForm.do?num=${searchParam.num}&sabun=${searchParam.sabunSch}&name=${searchParam.name}&join_gbn_code=${searchParam.join_gbn_code}&pos_gbn_code=${searchParam.pos_gbn_code}&join_date=${searchParam.join_date}&retire_date=${searchParam.retire_date}&put_yn=${searchParam.put_yn}&job_type=${searchParam.job_type}
+
+		
+	
+		
+		
+		
+		
 	</script>
 </body>
 

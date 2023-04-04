@@ -51,12 +51,17 @@ public class TestVO {
 //	private java.util.Date retire_date;
 	private String crm_name;
 	private String cmp_reg_no;
-	private String cmp_reg_img;
-	private String carrier;
-	private String profile;
-	private String profile_image;
+	private String reg_no_masking;//마스킹된 주민번호
+	
+	private MultipartFile carrier; //이력서
+	private MultipartFile profile;//증명사진
+	private MultipartFile cmp_reg; //사업자등록증
+	
+	private String cmp_reg_img; //사업자등록증
+	private String profile_image; //프로필이미지
+	private String carrier_image; //이력서이미지
+	
 	private String self_intro;
-	private String carrier_image;
 	private HashMap<String,String> searchParam;
 	//공통
 	private String gubun;
@@ -68,4 +73,14 @@ public class TestVO {
 	private int num; //페이지당 출력할 데이터 개수
 	private int pageNum; //하단 페이징 번호
 
+	
+	//검색값 넘기기
+	private String sabunSch;
+    private String searchName;
+    private String searchJoin_gbn_code;
+    private String searchPut_yn;
+    private String searchPos_gbn_code;
+    private String searchJoin_day;
+    private String searchRetire_day;
+    private String searchJob_type;
 }

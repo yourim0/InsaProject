@@ -34,4 +34,13 @@ public interface TestService {
 	//삭제
 	public void delete(int sabun) throws Exception;
 	
+	//프로필
+	public String getProfile(int sabun) throws Exception;
+	
+	//사업자
+	public String getCmp_reg(int sabun) throws Exception;
+	
+	//이력서
+	public String getCarrier(int sabun) throws Exception;
+	
 }
