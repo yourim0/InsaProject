@@ -67,7 +67,7 @@
 		<div class="inputBtn">
 			<button type="button" class="btn btn-dark btn-sm" style="float: right" onclick="submit_check();">수정</button>
 			<button type="button" class="btn btn-dark btn-sm" id="deleteBtn" style="float: right">삭제</button>
-			<button type="button" class="btn btn-dark btn-sm" style="float: right" onClick="location.href='/insaListForm.do?num=${searchParam.num}&sabun=${searchParam.sabunSch}&name=${searchParam.name}&join_gbn_code=${searchParam.join_gbn_code}&pos_gbn_code=${searchParam.pos_gbn_code}&join_date=${searchParam.join_date}&retire_date=${searchParam.retire_date}&put_yn=${searchParam.put_yn}&job_type=${searchParam.job_type}'">이전</button>
+			<button type="button" class="btn btn-dark btn-sm" style="float: right" onClick="location.href='/insaListForm.do?num=${searchParam.num}&sabun=${sabun }&sabunSch=${searchParam.sabunSch}&name=${searchParam.name}&join_gbn_code=${searchParam.join_gbn_code}&pos_gbn_code=${searchParam.pos_gbn_code}&join_date=${searchParam.join_date}&retire_date=${searchParam.retire_date}&put_yn=${searchParam.put_yn}&job_type=${searchParam.job_type}'">이전</button>
 		</div>
 
 			<main>
@@ -139,8 +139,10 @@
 									*사원명 <input type="text" name="name" id="name" value="${info[0].name}" korOnly></input>
 								</p>
 								<p>
-									*비밀번호 <input type="text" name="pwd1" id="pwd1"></input>
-									<input type="hidden" name="pwd" id="pwd"></input>
+									*비밀번호 <input type="text" name="pwd_as" id="pwd_as" value="${info[0].pwd_as }"></input>
+									<div id="msg">
+									</div>
+									<input type="hidden" name="pwd" id="pwd" value="${info[0].pwd}"></input>
 								</p>
 								<p>
 									*휴대폰번호 <input type="text" name="hp" id="hp" maxlength="13" value="${info[0].hp}" hpHyphen></input>
@@ -184,13 +186,13 @@
 									영문이름 <input type="text" id="eng_name" name="eng_name" value="${info[0].eng_name}" engOnly></input>
 								</p>
 								<p>
-									*비밀번호 확인 <input type="text" id="pwd_chk1" name="pwd_chk1"></input>
-									<input type="hidden" id="pwd_chk" name="pwd_chk"></input>
+									*비밀번호 확인 <input type="text" id="pwd_chk_as" name="pwd_chk_as" value="${info[0].pwd_as }"></input>
+									<input type="hidden" id="pwd_chk" name="pwd_chk" value="${info[0].pwd }"></input>
 								</p>
 								<p>
 									*주민번호 <input type="text" id="reg_no1" name="reg_no1" maxlength="14" value="${info[0].reg_no_masking}" masking></input>
-									<input type="hidden" id="reg_no" name="reg_no" />
-									<input type="hidden" id="reg_no_masking" name="reg_no_masking" />
+									<input type="hidden" id="reg_no" name="reg_no" value="${info[0].reg_no}" />
+									<input type="hidden" id="reg_no_masking" name="reg_no_masking " />
 									
 								</p>
 								<p>
@@ -200,12 +202,13 @@
 										<c:forEach items="${result }" var="result">
 										<c:set var="jobSplit" value="${result.gubun}${result.code}" />
 											<c:if test="${result.gubun eq 'A02'}">
-												<option value="${result.name}"
+												<option value="${result.gubun}${result.code}"
 												<c:if test="${info[0].sex eq jobSplit}">selected</c:if>>
 													${result.name}</option>
 											</c:if>
 										</c:forEach>
 									</select>
+									
 								</p>
 								<p>
 									<input type="text" placeholder="세부주소" name="addr2" id="addr2" style="width: 100%;" value="${info[0].addr2}" readyonly></input>
@@ -429,13 +432,13 @@
 				
 				<input type="hidden" name="num" id="num" value="${searchParam.num}">
 				<input type="hidden" name="sabunSch" id="sabunSch" value="${searchParam.sabunSch}">
-				<input type="hidden" name="searchName" id="searchName" value="${searchParam.name}">
-				<input type="hidden" name="searchJoin_gbn_code" id="searchJoin_gbn_code" value="${searchParam.join_gbn_code}">
-				<input type="hidden" name="searchPut_yn" id="searchPut_yn" value="${searchParam.put_yn}">
-				<input type="hidden" name="searchPos_gbn_code" id="searchPos_gbn_code" value="${searchParam.pos_gbn_code}">
-				<input type="hidden" name="searchJoin_day" id="searchJoin_day" value="${searchParam.join_day}">
-				<input type="hidden" name="searchRetire_day" id="searchRetire_day" value="${searchParam.retire_day}">
-				<input type="hidden" name="searchJob_type" id="searchJob_type" value="${searchParam.job_type}">
+				<input type="hidden" name="searchName" id="searchName" value="${searchParam.searchName}">
+				<input type="hidden" name="searchJoin_gbn_code" id="searchJoin_gbn_code" value="${searchParam.searchJoin_gbn_code}">
+				<input type="hidden" name="searchPut_yn" id="searchPut_yn" value="${searchParam.searchPut_yn}">
+				<input type="hidden" name="searchPos_gbn_code" id="searchPos_gbn_code" value="${searchParam.searchPos_gbn_code}">
+				<input type="hidden" name="searchJoin_day" id="searchJoin_day" value="${searchParam.searchJoin_day}">
+				<input type="hidden" name="searchRetire_day" id="searchRetire_day" value="${searchParam.searchRetire_day}">
+				<input type="hidden" name="searchJob_type" id="searchJob_type" value="${searchParam.searchJob_type}">
 			
 			</main>
 		</form>
@@ -450,9 +453,9 @@
 		var name = $("#name");
 		var id = $("#id");
 		var pwd = $("#pwd");
-		var pwd1 = $("#pwd1");
+		var pwd_as = $("#pwd_as");
 		var pwd_chk = $("#pwd_chk");
-		var pwd_chk1 = $("#pwd_chk1");
+		var pwd_chk_as = $("#pwd_chk_as");
 		var hp = $("#hp");
 		var email1 = $("#email1");
 		var email = $("#email");
@@ -467,11 +470,11 @@
 			return false;
 		}
 		
-		if (pwd1.val() == "") {
+		if (pwd_as.val() == "") {
 			alert("패스워드를 입력하세요.");
 			return false;
 		}
-		if (pwd_chk1.val() == "") {
+		if (pwd_chk_as.val() == "") {
 			alert("패스워드 확인을 입력하세요.");
 			return false;
 		}
@@ -482,7 +485,6 @@
 			alert('아이디 중복체크를 해주세요.');
 			return false;
 		};
-
 		
 		//비밀번호 확인 일치 여부
 		if (pwd.val() != pwd_chk.val()) {
@@ -495,6 +497,7 @@
 			return false;
 		}else{
 			$("#reg_no1").val(reg_no1.val());
+			$("#reg_no_masking").val(reg_no1.val());
 		}
 		
 		if (email1.val() == "" || domainInput.value == "") {
@@ -530,7 +533,7 @@
 			
 		}
 
-	  	$("#sex").attr("disabled", false);
+		$("#sex").attr("disabled", false);
 
 		//첨부파일 확장자 체크
 		var profile = $("#profileName").val();
@@ -631,29 +634,45 @@
 		});
 		
 		//비밀번호 마스킹
-		var pwd1 = document.querySelector("#pwd1");
-		console.log(pwd1);
-		pwd1.onblur = function(e){
-			var pwd1 = $('#pwd1').val();
-			$('#pwd').val(pwd1);
+		var pwd_as = document.querySelector("#pwd_as");
+		console.log(pwd_as);
+		pwd_as.onblur = function(e){
+			var pwd_as = $('#pwd_as').val();
+			$('#pwd').val(pwd_as);
 			//console.log($('#pwd').val());
-			var pwd1_len = pwd1.substring(0,pwd1.length-1);
-			var pwd1_last = pwd1.substring(pwd1.length, pwd1.length-1);
-			var pwd1_re = pwd1_len.replace(/./g,"*") + pwd1_last;
-			$('#pwd1').val(pwd1_re);
+			var pwd_as_len = pwd_as.substring(0,pwd_as.length-1);
+			var pwd_as_last = pwd_as.substring(pwd_as.length, pwd_as.length-1);
+			var pwd_as_re = pwd_as_len.replace(/./g,"*") + pwd_as_last;
+			$('#pwd_as').val(pwd_as_re);
 		}
 		
-		//var pwd_chk1 = document.querySelector("#pwd_chk1");
-		pwd_chk1.onblur = function(e){
-			var pwd = $('#pwd_chk1').val();
+		//var pwd_chk_as = document.querySelector("#pwd_chk_as");
+		pwd_chk_as.onblur = function(e){
+			var pwd = $('#pwd_chk_as').val();
 			$('#pwd_chk').val(pwd);
 			//console.log($('#pwd_chk').val());
 			var pwd_len = pwd.substring(0,pwd.length-1);
 			var pwd_last = pwd.substring(pwd.length, pwd.length-1);
 			var pwd_re = pwd_len.replace(/./g,"*") + pwd_last;
-			$('#pwd_chk1').val(pwd_re);
+			$('#pwd_chk_as').val(pwd_re);
 		}
 		
+
+		//비밀번호 확인
+		    $(function(){
+                $("#pwd_chk_as").on("blur",function(){
+                    var msg = $("#msg").val();
+                    if($("#pwd").val() == $("#pwd_chk").val()){
+                        $("#msg").html("패스워드가 일치합니다.");
+                        $("#msg").css("color","blue");
+                        
+                    }else{
+                        $("#msg").html("패스워드가 일치하지 않습니다.");
+                        $("#msg").css("color","red");
+                    }
+                })
+            })
+
 		
 		//주민번호 마스킹
 		$(document).on("keyup", "input[masking]", function() {
@@ -662,7 +681,9 @@
 			$(this).val(req1);
 			$('#reg_no').val(req);
 			if(req.length == 14){
+				console.log("1:" + $('#sex').val());
 				 genderChk();
+				 console.log("2:" + $('#sex').val());
 				 ageChk();
 				 $('#reg_no_masking').val($("#reg_no1").val());
 				 console.log($('#reg_no').val());
@@ -674,12 +695,20 @@
 		function genderChk(){
 			var reg_no = $('#reg_no').val();
 			var reg_sp = reg_no.split('-');
-			
+			console.log(reg_sp);
+			console.log($("#sex option:selected").val());
 			var reg1 = reg_sp[1];
+			console.log(reg1);
+			console.log(reg1[0]);
+			
 			if(reg1[0] == 1 || reg1[0] == 3){ //남자
 				$('#sex').val('A02002').prop("selected",true);
+			console.log($("#sex option:selected").val());
+				//$('#sex').val('A01002');
 			}else if(reg1[0] == 2 || reg1[0] == 4){ //여자 
 				$('#sex').val('A02001').prop("selected",true);
+				//$('#sex').val('A01001');
+				console.log($("#sex option:selected").val());
 			}
 		}
 		
@@ -687,6 +716,7 @@
 		function ageChk(){
 			var today = new Date(); //현재 날짜,시간		
 			var reg_no = $('#reg_no').val().split('-');
+			var reg_no1 =$('#reg_no1');
 			var reg_age = reg_no[0]; //주민번호 앞 6자리
 			var reg_age2 = reg_no[1].substr(0,1); //주민번호 뒷자리
 			var birthDate = null;
@@ -704,10 +734,6 @@
 				if(monthChk < 0 || (monthChk === 0 && today.getDate() < birthDate.getDate())){
 					age--;
 				}
-				if(age <= 0 || mm <0 || mm > 12){
-					alert("올바르지 않은 주민번호 입니다.");
-					return false;
-				}
 			}else{
 				yy = '20' + reg_age.substr(0,2);
 				birthDate = new Date(yy*1, mm-1, dd*1);
@@ -716,14 +742,13 @@
 				if(monthChk < 0 || (monthChk === 0 && today.getDate() < birthDate.getDate())){
 					age--;
 				}
-				if(age <= 0 || mm <0 || mm > 12){
-					alert("올바르지 않은 주민번호 입니다.");
-					return false;
-				}
 			}
-			
+			if(age <= 0 || mm <0 || mm > 12){
+				alert("올바르지 않은 주민번호 입니다.");
+				reg_no1.val('');
+				return false;
+			}
 			$('#years').val(age);
-
 		}
 		
 		//휴대폰 번호 하이픈
@@ -865,20 +890,19 @@
 		
 		
 		//연봉 천단위 콤마처리
+
 		document.getElementById("salary1").addEventListener("keyup", function (e) {
-	   		$(this).val($(this).val().replace(/\,/g, '').replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,'));
-		});
+	   		$(this).val($(this).val().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+		}); 
 		
 		var salary1 = document.querySelector("#salary1");
-		salary1.onblur = function(e){
-		var salary1 = $('#salary1').val();
-		var salary_split = salary1.replace(",","");
-		var salary_split1 = Number(salary_split);
-		$('#salary').val(salary_split1);
-		//console.log($('#salary').val());
+		salary1.onblur = function(e){ //포커스해지시
+			var salary1 = $('#salary1').val();
+			var salary_split = salary1.replaceAll(",","");
+			var salary_split1 = Number(salary_split);
+			$('#salary').val(salary_split1);
+			console.log($('#salary').val());
 				}
-		
-		
 		
 		//군필여부 
 		var mil_yn = document.querySelector("#mil_yn");
@@ -907,7 +931,6 @@
 			}
 		});
 		
-		
 		//사업자 미리보기 팝업
 		$(".reg_previewbtn").on("click",function(){
 			var a = $("#fileName").val();
@@ -918,14 +941,14 @@
 			var path = "/resources/imgs/" + fileName;
 			var host = $(location).attr('host'); //현재 페이지의 메인 URL
 			var url = "http://" + host + path;
-			console.log(url);
-			window.open(url);
+			var status = "width=300px,height=300px";
+			window.open(url,"popup",status);
 			}
 		});
-		
+	
 		//이력서 미리보기 팝업
 			$(".profile_previewbtn").on("click",function(){
- 			var a = $("#profileName").val();
+			var a = $("#profileName").val();
 			if(a == ''){
 				alert("파일을 등록해주세요");
 			}else{		
@@ -933,12 +956,11 @@
 			var path = "/resources/imgs/" + fileName;
 			var host = $(location).attr('host'); //현재 페이지의 메인 URL
 			var url = "http://" + host + path;
-			console.log(url);
-			window.open(url);
-			} 
-			var uri = "/download/" + fileName; //controller mapping uri
-			downloadURI(uri);
+			var status = "width=300px,height=300px";
+			window.open(url,"popup",status);
+			}
 		});
+
 
 		//파일 다운로드
 		function downloadURI(uri){
@@ -960,8 +982,11 @@
 			};
 			reader.readAsDataURL(input.files[0]);
 		}
-
 		
+		var String1 = '${success}';
+		if(String1 == "OK"){
+			alert("수정이 완료되었습니다.");
+		};
 		
 		
 		

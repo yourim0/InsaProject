@@ -69,7 +69,7 @@
 						<div class="col">
 							<div class="right">
 								<p>
-									사번 <input type="text" id="sabun" name="sabun" value=""></input>
+									사번 <input type="text" id="sabun" name="sabun"></input>
 								</p>
 								<p>
 									직위 <select name="pos_gbn_code" id="pos_gbn_code">
@@ -87,7 +87,7 @@
 						<div class="col">
 							<div class="right">
 								<p>
-									사원명 <input type="text" name="name" id="name" value="${info.name }" korOnly></input>
+									사원명 <input type="text" name="name" id="name"  korOnly></input>
 								</p>
 								<p>
 									입사일 <input type="text" id="join_date" name="join_date"></input>
@@ -200,9 +200,9 @@
 	<script>
 
 	//삭제 모달
-		$("#delBtn").click(function(){
-			$("#deleteModal").modal();
-			$("#delSubmit").on("click",function(){
+		$("#delBtn").click(function(){ //삭제버튼
+			$("#deleteModal").modal(); 
+			$("#delSubmit").on("click",function(){ //모달안의 버튼
 			    // 체크한 항목을 담을 배열 선언
 			    var arr = [];
 			    // 체크한 항목만 취득
@@ -274,7 +274,8 @@
 									$("#retire_date").datepicker("option",
 											"minDate", min);
 							});
-				});
+				
+	
 		var urlObj = new URL(location.href);
 		var urlParams = new URLSearchParams(urlObj.search);
 		console.log(urlParams)
@@ -283,14 +284,18 @@
 				var value = urlParams.get(key);
 				//console.log("value" + value);
 				if(key != 'num'){
-					//console.log("key" + key);
+					console.log("key" + key);
+					console.log("value" + value);
 					if(value != undefined){
 						console.log($("#"+key));
-						if(key == 'name' || key == 'sabun' || key == 'join_date' || key == 'retire_date'){
+						if(key == 'name' || key == 'join_date' || key == 'retire_date'){
 							// 인풋 구간
 							$("#"+key).val(value);
 							
+						}else if(key == 'sabunSch'){
+							$("#sabun").val(value);
 						}else if(key == 'put_yn' || key == 'pos_gbn_code' || key == 'join_gbn_code' || key == 'job_type'){
+							
 							//console.log(value);
 							// 셀렉트 박스 구간
 							//$("#"+key).val(value);
@@ -304,7 +309,7 @@
 			}
 			getPaging(urlParams.get('num'));
 		}
-		
+				});
 		//초기화 버튼
 		function resetTable(){
 			var html = '<td></td><td colspan="9">검색된 데이터가 없습니다</td>';
@@ -313,7 +318,8 @@
 			$("#paging").empty();
 		}
 		
-		$("#search").click(function(){
+		//검색 버튼
+		$("#search").click(function(){ 
 			getPaging(1);
 		});
 		
@@ -339,8 +345,8 @@
 					var next = data.next;
 					var startPageNum = data.startPageNum;
 					var endPageNum = data.endPageNum;
-					var select = data.select;
-					$("#hidden_num").val(select);
+					var num = data.num;
+					$("#hidden_num").val(num);
 					var sabunSch = $("#sabun").val();
 					var name = $("#name").val();
 					var pos_gbn_code = $("#pos_gbn_code option:selected").val();
@@ -380,7 +386,7 @@
 						//html += `<td onClick="location.href='/insaUpdateForm.do?sabun=${'${data[key].sabun}'}'"> ${'${data[key].sabun}'}</td>`; 링크제거
 						html += `<td><input style="width:15px;height:15px;" type="checkbox" name="delChk" value=${'${list[key].sabun}'}></td>`;
 						//html += `<td><a href="#" onclick="updateInfo(this);"> ${'${list[key].sabun}'} </a></td>`;
-						html += `<td><a href="/insaUpdateForm.do?num=${'${select}'}&sabun=${'${list[key].sabun}'}&sabunSch=${'${sabunSch}'}&searchName=${'${name}'}&searchJoin_gbn_code=${'${join_gbn_code}'}&searchPos_gbn_code=${'${pos_gbn_code}'}&searchJoin_day=${'${join_date}'}&searchRetire_day=${'${retire_date}'}&searchPut_yn=${'${put_yn}'}&searchJob_type=${'${job_type}'}"> ${'${list[key].sabun}'} </a></td>`;
+						html += `<td><a href="/insaUpdateForm.do?num=${'${num}'}&sabun=${'${list[key].sabun}'}&sabunSch=${'${sabunSch}'}&searchName=${'${name}'}&searchJoin_gbn_code=${'${join_gbn_code}'}&searchPos_gbn_code=${'${pos_gbn_code}'}&searchJoin_day=${'${join_date}'}&searchRetire_day=${'${retire_date}'}&searchPut_yn=${'${put_yn}'}&searchJob_type=${'${job_type}'}"> ${'${list[key].sabun}'} </a></td>`;
 						html += `<td>${'${list[key].name}'}</td>`;
 						html += `<td>${'${list[key].reg_no_masking}'}</td>`;
 						html += `<td>${'${list[key].hp}'}</td>`;
@@ -420,9 +426,9 @@
 						}
 						
 						for(var i = data.startPageNum; i <= data.endPageNum; i++){
-							if(select != i){
+							if(num != i){
 								a += `<span id="si" value=${'${i}'} onclick="si(${'${i}'})">${'${i}'}</span>&nbsp;&nbsp;`;
-							}else if(select == i){
+							}else if(num == i){
 								a += `<span id="si" value=${'${i}'} style="color:blue;">${'${i}'}</span>&nbsp;&nbsp;`;
 							}
 							

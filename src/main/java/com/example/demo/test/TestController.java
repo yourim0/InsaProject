@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.WebUtils;
 
 @Controller
@@ -98,7 +99,7 @@ public class TestController {
 			}
 			vo.setCarrier_image(fileName1);
 		} else {
-			vo.setCarrier_image("default_carrier.png");
+			vo.setCarrier_image("");
 		}
 
 		if (!multifile2.isEmpty()) { // 프로필 - 기본이미지 필요, 이미지파일만 가능
@@ -136,18 +137,26 @@ public class TestController {
 			}
 			vo.setCmp_reg_img(fileName3);
 		} else {
-			vo.setCmp_reg_img("default_cmpreg.png");
+			vo.setCmp_reg_img("");
 		}
 
 		System.out.println("upload success");
 
-		testService.insertTest(vo);
+		int a = testService.insertTest(vo);
+		
 		System.out.println("insert완료");
 
+		if(a != 0) {
+			model.addAttribute("success", "OK");
+		}else {
+			model.addAttribute("success", "Fail");
+		}
+		
 		int seq = testService.selectSequence();
 		List<TestVO> result = testService.selectCommon();
 		model.addAttribute("result", result);
 		model.addAttribute("seq", seq);
+		
 		return "insaInputForm";
 
 		// return null;
@@ -186,31 +195,7 @@ public class TestController {
 		return "insaListForm";
 	}
 
-	// 검색 후의 list 삭제
-//	@RequestMapping(value = "/seachList.do", method = RequestMethod.GET)
-//	public String search(@RequestParam("num") int num, @RequestParam("sabun") int sabun,
-//			@RequestParam("sabunSch") String sabunSch, @RequestParam("name") String name,
-//			@RequestParam("join_gbn_code") String join_gbn_code, @RequestParam("pos_gbn_code") String pos_gbn_code,
-//			@RequestParam("join_date") String join_date, @RequestParam("retire_date") String retire_date,
-//			@RequestParam("put_yn") String put_yn, @RequestParam("job_type") String job_type, Model model)
-//			throws Exception {
-//
-//		model.addAttribute("search", true);
-//
-//		return "insaListForm";
-//	}
 
-//	//게시물 목록
-//	@ResponseBody
-//	@RequestMapping(value="/insaListForm_Search.do", method= RequestMethod.POST)
-//	public List<TestVO> get(TestVO vo, Model model) throws Exception {
-//		System.out.println("Listget");
-//		System.out.println("Controller, seacrchList" + vo);
-//		List<TestVO> value = testService.searchList(vo);
-//		System.out.println("검색리스트 : "+ value);
-//		
-//		return value;
-//	}
 
 	// 페이징
 	@ResponseBody
@@ -219,6 +204,7 @@ public class TestController {
 		System.out.println("getListWithPaging : " + vo);
 		System.out.println("num : " + num);
 		Map<String, Object> map = new HashMap<String, Object>();
+		
 		int count = testService.pageCnt(vo); // 게시물 총 개수
 		System.out.println("count:" + count);
 		int postNum = 10; // 한 페이지에서 출력할 게시물 수
@@ -253,11 +239,11 @@ public class TestController {
 		map.put("endPageNum", endPageNum);
 		map.put("prev", prev);
 		map.put("next", next);
-		map.put("select", num);
+		map.put("num", num);
 		return map;
 	}
 
-	// 검색어받는애
+	//update입력폼 //list에서 사번 눌렀을때 여기로 먼저 온다
 	@RequestMapping("/insaUpdateForm.do")
 	public String update(TestVO vo, Model model) throws Exception {
 		
@@ -265,22 +251,24 @@ public class TestController {
 		  
 		  List<TestVO> result = testService.selectCommon(); 
 		  List<TestVO> info = testService.getInfo(vo.getSabun()); 
-		  System.out.println(info);
+		  System.out.println("insaupdate" + info);
+		  int sabun = vo.getSabun();
 		  
 		  HashMap<String, String> searchParam = new HashMap<String, String>();
 		  searchParam.put("num", String.valueOf(vo.getNum())); 
 		  searchParam.put("sabunSch", vo.getSabunSch()); 
-		  searchParam.put("name", vo.getSearchName());
-		  searchParam.put("join_gbn_code", vo.getSearchJoin_gbn_code());
-		  searchParam.put("pos_gbn_code", vo.getSearchPos_gbn_code());
-		  searchParam.put("join_date",vo.getSearchJoin_day());
-		  searchParam.put("retire_date", vo.getSearchRetire_day());
-		  searchParam.put("put_yn", vo.getSearchPut_yn()); 
-		  searchParam.put("job_type", vo.getSearchJob_type());
+		  searchParam.put("searchName", vo.getSearchName());
+		  searchParam.put("searchJoin_gbn_code", vo.getSearchJoin_gbn_code());
+		  searchParam.put("searchPos_gbn_code", vo.getSearchPos_gbn_code());
+		  searchParam.put("searchJoin_day",vo.getSearchJoin_day());
+		  searchParam.put("searchRetire_day", vo.getSearchRetire_day());
+		  searchParam.put("searchPut_yn", vo.getSearchPut_yn()); 
+		  searchParam.put("searchJob_type", vo.getSearchJob_type());
 		  
-		  //model.addAttribute("sabun", sabun); 
-		  model.addAttribute("info", info);
-		  model.addAttribute("result", result); model.addAttribute("searchParam", searchParam);
+		  model.addAttribute("sabun", sabun); 
+		  model.addAttribute("info", info); //회원정보
+		  model.addAttribute("result", result); //공통코드
+		  model.addAttribute("searchParam", searchParam); //검색어정보
 		 
 		return "insaUpdateForm";
 	}
@@ -290,7 +278,7 @@ public class TestController {
 	public String update(TestVO vo, @RequestParam(value = "carrier", required = false) MultipartFile carrier,
 			@RequestParam(value = "profile", required = false) MultipartFile profile,
 			@RequestParam(value = "cmp_reg", required = false) MultipartFile cmp_reg, Model model,
-			HttpServletRequest request) throws Exception {
+			HttpServletRequest request, RedirectAttributes redirectAttr) throws Exception {
 
 		
 		System.out.println("update:" + vo);
@@ -380,20 +368,25 @@ public class TestController {
 			vo.setCmp_reg_img(vo.getCmp_reg_img());
 		}
 
-		testService.update(vo);
-		System.out.println("update완료");
+		int a = testService.update(vo);
+		
+		System.out.println("update : " + a);
+		if(a != 0) {
+			redirectAttr.addFlashAttribute("success", "OK");
+		}else {
+			redirectAttr.addFlashAttribute("success", "fail");
+		}
 
 		List<TestVO> result = testService.selectCommon();
 		List<TestVO> info = testService.getInfo(sabun);
 
-		model.addAttribute("sabun", sabun);
-		model.addAttribute("info", info);
-		model.addAttribute("result", result);
+		model.addAttribute("sabun", sabun); //사번
+		model.addAttribute("info", info); //수정된 회원정보
+		model.addAttribute("result", result); //공통코드
 
 		// --------------num넘겨줘야함
-
 		StringBuffer buff = new StringBuffer();
-		buff.append("redirect:insaUpdateForm.do?");
+		buff.append("redirect:insaListForm.do?");
 		buff.append("num=");
 		buff.append(vo.getNum() + "&");
 		buff.append("sabun=");
@@ -426,11 +419,13 @@ public class TestController {
 	public String delete(@RequestParam("sabun") int sabun) throws Exception {
 		System.out.println("delete:" + sabun);
 		testService.delete(sabun);
-		System.out.println("삭제완료");
+		System.out.println("삭제");
+		
+		String delRe = "삭제되었습니다.";
 		return "redirect:insaListForm.do";
 	}
 
-	// checkbox 삭제
+	// list에서 checkbox 삭제
 	@RequestMapping(value = "/delete.do", method = RequestMethod.POST)
 	@ResponseBody
 	public Object delete(@RequestParam(value = "sabunList[]") List<String> delList) throws Exception {
@@ -438,14 +433,14 @@ public class TestController {
 		for (String i : delList) {
 			int a = Integer.parseInt(i);
 			testService.delete(a);
-			System.out.println("삭제완료");
+			System.out.println("삭제");
 		}
 
 		Map<String, Object> result = new HashMap<String, Object>();
 		// System.out.println("삭제완료");
 		// return "redirect:insaListForm.do";
 		result.put("code", "OK");
-		result.put("message", "삭제완료.");
+		result.put("message", "삭제되었습니다.");
 		return result;
 	}
 

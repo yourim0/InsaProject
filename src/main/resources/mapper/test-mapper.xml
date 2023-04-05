@@ -17,15 +17,15 @@
 		INSERT INTO INSA 
 		(sabun, name, eng_name, id, pwd, phone, hp, reg_no, years, sex, email, zip, addr1, addr2, job_type, pos_gbn_code, dept_code,
 		salary, join_gbn_code, gart_level, put_yn, mil_yn, mil_type, mil_level, mil_startdate, mil_enddate, kosa_reg_yn, kosa_class_code,
-		join_date, crm_name, cmp_reg_no, cmp_reg_img, self_intro, profile_image, carrier_image, reg_no_masking)
+		join_date, crm_name, cmp_reg_no, cmp_reg_img, self_intro, profile_image, carrier_image, reg_no_masking, pwd_as)
 		VALUES 
 		(
-		#{sabun}, #{name}, #{eng_name}, #{id}, #{pwd}, #{phone}, #{hp}, #{reg_no}, #{years}, #{sex}, #{email}, #{zip,jdbcType=INTEGER}, #{addr1}, #{addr2},
+		insa_seq.NEXTVAL, #{name}, #{eng_name}, #{id}, #{pwd}, #{phone}, #{hp}, #{reg_no}, #{years}, #{sex}, #{email}, #{zip,jdbcType=INTEGER}, #{addr1}, #{addr2},
 		#{job_type}, #{pos_gbn_code},#{dept_code},#{salary, jdbcType=INTEGER},#{join_gbn_code},#{gart_level},#{put_yn},#{mil_yn},#{mil_type,jdbcType=VARCHAR},
 		#{mil_level,jdbcType=VARCHAR},#{mil_startdate,jdbcType=VARCHAR},#{mil_enddate,jdbcType=VARCHAR},
 		#{kosa_reg_yn,jdbcType=VARCHAR},#{kosa_class_code,jdbcType=VARCHAR},#{join_date,jdbcType=VARCHAR},#{crm_name,jdbcType=VARCHAR},
 		#{cmp_reg_no,jdbcType=VARCHAR},#{cmp_reg_img,jdbcType=VARCHAR},#{self_intro,jdbcType=VARCHAR},
-		#{profile_image,jdbcType=VARCHAR},#{carrier_image,jdbcType=VARCHAR},#{reg_no_masking,jdbcType=VARCHAR}
+		#{profile_image,jdbcType=VARCHAR},#{carrier_image,jdbcType=VARCHAR},#{reg_no_masking,jdbcType=VARCHAR},#{pwd_as}
 		)
 	</insert>
 
@@ -153,6 +153,7 @@
 			<if test="profile_image != null">profile_image = #{profile_image},</if>
 			<if test="carrier_image != null">carrier_image = #{carrier_image},</if>
 			<if test="reg_no_masking != null">reg_no_masking = #{reg_no_masking},</if>
+			<if test="pwd_as != null">pwd_as = #{pwd_as},</if>
 		</trim>
 			WHERE SABUN = ${sabun}
 	</update>

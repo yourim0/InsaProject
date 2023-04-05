@@ -17,7 +17,12 @@ public class TestVO {
 	private String name;
 	private String eng_name;
 	private String id;
+	
 	private String pwd;
+	private String pwd_as;
+	private String pwd_chk;
+	private String pwd_chk_as;
+	
 	private String phone;
 	private String hp;
 	private String reg_no;

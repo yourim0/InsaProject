@@ -13,7 +13,7 @@ public interface TestDAO {
 	//시퀀스값
 	public int selectSequence();
 	//회원등록
-	public void insertTest(TestVO vo);
+	public int insertTest(TestVO vo);
 	
 	//공통코드
 	public List<TestVO> selectCommon();
@@ -34,7 +34,7 @@ public interface TestDAO {
 	public int pageCnt(TestVO vo); 
 	
 	//수정
-	public void update(TestVO vo);
+	public int update(TestVO vo);
 	
 	//삭제
 	public void delete(int sabun);

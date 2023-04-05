@@ -8,7 +8,7 @@ public interface TestService {
 	//시퀀스값
 	public int selectSequence();
 	//정보입력
-	public void insertTest(TestVO vo) throws Exception;
+	public int insertTest(TestVO vo) throws Exception;
 	
 	//공통코드 리스트
 	public List<TestVO> selectCommon() throws Exception;
@@ -29,7 +29,7 @@ public interface TestService {
 	public List<TestVO> getListWithPaging(TestVO vo,int num, int postNum) throws Exception; 
 	
 	//수정
-	public void update(TestVO vo) throws Exception; 
+	public int update(TestVO vo) throws Exception; 
 	
 	//삭제
 	public void delete(int sabun) throws Exception;

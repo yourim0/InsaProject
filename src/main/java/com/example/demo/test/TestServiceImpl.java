@@ -22,10 +22,10 @@ public class TestServiceImpl implements TestService {
 	}
 
 	@Override
-	public void insertTest(TestVO vo) throws Exception{
+	public int insertTest(TestVO vo) throws Exception{
 		System.out.println(vo.getMil_startdate()); 
-		testDAO.insertTest(vo);
-		 
+		int a = testDAO.insertTest(vo);
+		 return a;
 	}
 
 	@Override
@@ -87,9 +87,10 @@ public class TestServiceImpl implements TestService {
 
 	//수정
 	@Override
-	public void update(TestVO vo) throws Exception {
+	public int update(TestVO vo) throws Exception {
 		System.out.println("serviceUpdate"+ vo) ;
-		testDAO.update(vo);
+		int a= testDAO.update(vo);
+		return a;
 	}
 
 	@Override

@@ -82,7 +82,7 @@
 						<div class="col">
 							<div class="right">
 								<p>
-									*사번 <input type="text" id="sabun" name="sabun" value="${seq }" readonly></input>
+									*사번 <input type="text" id="sabun" name="sabun" value="" readonly></input>
 								</p>
 								<p>
 									*아이디 <input id="id" name="id" type="text"></input>
@@ -130,7 +130,9 @@
 									*사원명 <input type="text" name="name" id="name" korOnly></input>
 								</p>
 								<p>
-									*비밀번호 <input type="text" name="pwd1" id="pwd1"></input>
+									*비밀번호 <input type="text" name="pwd_as" id="pwd_as"></input>
+									<div id="msg">
+									</div>
 									<input type="hidden" name="pwd" id="pwd"></input>
 								</p>
 								<p>
@@ -169,7 +171,7 @@
 									영문이름 <input type="text" id="eng_name" name="eng_name" engOnly></input>
 								</p>
 								<p>
-									*비밀번호 확인 <input type="text" id="pwd_chk1" name="pwd_chk1"></input>
+									*비밀번호 확인 <input type="text" id="pwd_chk_as" name="pwd_chk_as"></input>
 									<input type="hidden" id="pwd_chk" name="pwd_chk"></input>
 								</p>
 								<p>
@@ -210,14 +212,15 @@
 										<option value="">선택</option>
 										<c:forEach items="${result }" var="result">
 											<c:if test="${result.gubun eq 'A01'}">
-												<option value="${result.gubun}${result.code}" >
+												<option value="${result.gubun}${result.code}"
+												<c:if test="${result.code eq '002'}">selected</c:if>>
 													${result.name}</option>
 											</c:if>
 										</c:forEach>
 									</select>
 								</p>
 								<p>
-									군별 <select id="mil_type" name="mil_type">
+									군별 <select id="mil_type" name="mil_type" disabled>
 										<option value="">선택</option>
 										<c:forEach items="${result }" var="result">
 											<c:if test="${result.gubun eq 'A09'}">
@@ -228,11 +231,12 @@
 									</select>
 								</p>
 								<p>
-									KOSA등록 <select name="kosa_reg_yn">
+									KOSA등록 <select name="kosa_reg_yn" id="kosa_reg_yn">
 										<option value="">선택</option>
 										<c:forEach items="${result }" var="result">
 											<c:if test="${result.gubun eq 'A11'}">
-												<option value="${result.gubun}${result.code}">
+												<option value="${result.gubun}${result.code}"
+												<c:if test="${result.code eq '002'}">selected</c:if>>
 													${result.name}</option>
 											</c:if>
 										</c:forEach>
@@ -262,7 +266,7 @@
 									</select>
 								</p>
 								<p>
-									계급 <select id="mil_level" name="mil_level">
+									계급 <select id="mil_level" name="mil_level" disabled>
 										<option value="">선택</option>
 										<c:forEach items="${result }" var="result">
 											<c:if test="${result.gubun eq 'A10'}">
@@ -273,7 +277,7 @@
 									</select>
 								</p>
 								<p>
-									KOSA등급 <select name="kosa_class_code">
+									KOSA등급 <select name="kosa_class_code" id="kosa_class_code">
 										<option value="">선택</option>
 										<c:forEach items="${result }" var="result">
 											<c:if test="${result.gubun eq 'A12'}">
@@ -295,14 +299,15 @@
 										<option value="">선택</option>
 										<c:forEach items="${result }" var="result">
 											<c:if test="${result.gubun eq 'A07'}">
-												<option value="${result.gubun}${result.code}">
+												<option value="${result.gubun}${result.code}"
+												<c:if test="${result.code eq '002'}">selected</c:if>>
 													${result.name}</option>
 											</c:if>
 										</c:forEach>
 									</select>
 								</p>
 								<p>
-									입영일 <input type="date" id="mil_startdate" name="mil_startdate"></input>
+									입영일 <input type="date" id="mil_startdate" name="mil_startdate" disabled></input>
 								</p>
 								<p>
 									*입사일 <input type="date" id="join_date" name="join_date"></input>
@@ -322,14 +327,15 @@
 										<option value="">선택</option>
 										<c:forEach items="${result }" var="result">
 											<c:if test="${result.gubun eq 'A08'}">
-												<option value="${result.gubun}${result.code}">
+												<option value="${result.gubun}${result.code}"
+												<c:if test="${result.code eq '002'}">selected</c:if>>
 													${result.name}</option>
 											</c:if>
 										</c:forEach>
 									</select>
 								</p>
 								<p>
-									전역일 <input type="date" id="mil_enddate" name="mil_enddate"></input>
+									전역일 <input type="date" id="mil_enddate" name="mil_enddate" disabled></input>
 								</p>
 								<p>
 									퇴사일 <input type="date" id="retire_date" name="retire_date"></input>
@@ -382,9 +388,9 @@
 		var name = $("#name");
 		var id = $("#id");
 		var pwd = $("#pwd");
-		var pwd1 = $("#pwd1");
+		var pwd_as = $("#pwd_as");
 		var pwd_chk = $("#pwd_chk");
-		var pwd_chk1 = $("#pwd_chk1");
+		var pwd_chk_as = $("#pwd_chk_as");
 		var hp = $("#hp");
 		var email1 = $("#email1");
 		var email = $("#email");
@@ -398,11 +404,11 @@
 			return false;
 		}
 		
-		if (pwd1.val() == "") {
+		if (pwd_as.val() == "") {
 			alert("패스워드를 입력하세요.");
 			return false;
 		}
-		if (pwd_chk1.val() == "") {
+		if (pwd_chk_as.val() == "") {
 			alert("패스워드 확인을 입력하세요.");
 			return false;
 		}
@@ -538,30 +544,44 @@
 		});
 		
 		//비밀번호 마스킹
-		var pwd1 = document.querySelector("#pwd1");
-		pwd1.onblur = function(e){
-			var pwd1 = $('#pwd1').val();
-			$('#pwd').val(pwd1);
+		var pwd_as = document.querySelector("#pwd_as");
+		pwd_as.onblur = function(e){
+			var pwd_as = $('#pwd_as').val();
+			$('#pwd').val(pwd_as);
 			//console.log($('#pwd').val());
-			var pwd1_len = pwd1.substring(0,pwd1.length-1);
-			var pwd1_last = pwd1.substring(pwd1.length, pwd1.length-1);
-			var pwd1_re = pwd1_len.replace(/./g,"*") + pwd1_last;
-			$('#pwd1').val(pwd1_re);
-
-			
+			var pwd_as_len = pwd_as.substring(0,pwd_as.length-1);
+			var pwd_as_last = pwd_as.substring(pwd_as.length, pwd_as.length-1);
+			var pwd_as_re = pwd_as_len.replace(/./g,"*") + pwd_as_last;
+			$('#pwd_as').val(pwd_as_re);
 		}
 		
-		//var pwd_chk1 = document.querySelector("#pwd_chk1");
-		pwd_chk1.onblur = function(e){
-			var pwd = $('#pwd_chk1').val();
+		//var pwd_chk_as = document.querySelector("#pwd_chk_as");
+		pwd_chk_as.onblur = function(e){
+			var pwd = $('#pwd_chk_as').val();
 			$('#pwd_chk').val(pwd);
 			//console.log($('#pwd_chk').val());
 			var pwd_len = pwd.substring(0,pwd.length-1);
 			var pwd_last = pwd.substring(pwd.length, pwd.length-1);
 			var pwd_re = pwd_len.replace(/./g,"*") + pwd_last;
-			$('#pwd_chk1').val(pwd_re);
+			$('#pwd_chk_as').val(pwd_re);
 		}
 		
+
+		//비밀번호 확인
+		    $(function(){
+                $("#pwd_chk_as").on("blur",function(){
+                    var msg = $("#msg").val();
+                    if($("#pwd").val() == $("#pwd_chk").val()){
+                        $("#msg").html("패스워드가 일치합니다.");
+                        $("#msg").css("color","blue");
+                        
+                    }else{
+                        $("#msg").html("패스워드가 일치하지 않습니다.");
+                        $("#msg").css("color","red");
+                    }
+                })
+            })
+
 		
 		//주민번호 마스킹
 		$(document).on("keyup", "input[masking]", function() {
@@ -573,6 +593,7 @@
 				 genderChk();
 				 ageChk();
 				 $('#reg_no_masking').val($("#reg_no1").val());
+				 console.log($('#reg_no').val());
 				 console.log($('#reg_no_masking').val());
 			}
 		});
@@ -595,6 +616,7 @@
 			var today = new Date(); //현재 날짜,시간		
 			var reg_no = $('#reg_no').val().split('-');
 			var reg_age = reg_no[0]; //주민번호 앞 6자리
+			var reg_no1 =$('#reg_no1');
 			var reg_age2 = reg_no[1].substr(0,1); //주민번호 뒷자리
 			var birthDate = null;
 			var age=0;
@@ -611,10 +633,6 @@
 				if(monthChk < 0 || (monthChk === 0 && today.getDate() < birthDate.getDate())){
 					age--;
 				}
-				if(age <= 0 || mm <0 || mm > 12){
-					alert("올바르지 않은 주민번호 입니다.");
-					return false;
-				}
 			}else{
 				yy = '20' + reg_age.substr(0,2);
 				birthDate = new Date(yy*1, mm-1, dd*1);
@@ -622,15 +640,14 @@
 				monthChk = today.getMonth() - birthDate.getMonth();
 				if(monthChk < 0 || (monthChk === 0 && today.getDate() < birthDate.getDate())){
 					age--;
+					}
 				}
-				if(age <= 0 || mm <0 || mm > 12){
-					alert("올바르지 않은 주민번호 입니다.");
-					return false;
-				}
+			if(age <= 0 || mm <0 || mm > 12){
+				alert("올바르지 않은 주민번호 입니다.");
+				reg_no1.val('');
+				return false;
 			}
-			
 			$('#years').val(age);
-
 		}
 		
 		//휴대폰 번호 하이픈
@@ -721,7 +738,7 @@
 							alert("사용 불가한 아이디입니다.");
 							$('.id').val("");
 						} else {
-							//체크 여부 확인
+							//체크 여부
 							$("input[name=checked_id]").val('y');
 							alert("사용 가능한 아이디 입니다.");
 						}
@@ -800,6 +817,21 @@
 			}
 		});
 		
+		var kosa_yn = document.querySelector("#kosa_reg_yn");
+		var kosa_class_code = document.querySelector("#kosa_class_code");
+		
+		kosa_yn.addEventListener('change',(event) => {
+			if(event.target.value !== "A11001"){
+				kosa_class_code.disabled = true;
+				kosa_class_code.value="" ;
+				kosa_class_code.value=null ;
+	
+			}else{
+				kosa_class_code.disabled = false;
+				}
+		});
+		
+		
 		//등록하시겠습니까?
 		function modalClick(formName){
 			formName.action="insaInputForm.do";
@@ -817,8 +849,8 @@
 			var path = "/resources/imgs/" + fileName;
 			var host = $(location).attr('host'); //현재 페이지의 메인 URL
 			var url = "http://" + host + path;
-			console.log(url);
-			window.open(url);
+			var status = "width=300px,height=300px";
+			window.open(url,"popup",status);
 			}
 		});
 	
@@ -832,8 +864,8 @@
 			var path = "/resources/imgs/" + fileName;
 			var host = $(location).attr('host'); //현재 페이지의 메인 URL
 			var url = "http://" + host + path;
-			console.log(url);
-			window.open(url);
+			var status = "width=300px,height=300px";
+			window.open(url,"popup",status);
 			}
 		});
 
@@ -849,7 +881,13 @@
 			};
 			reader.readAsDataURL(input.files[0]);
 		}
-
+		
+		$(document).ready(function(){
+			var String1 = '<c:out value="${success}"/>'; 
+			if(String1 == "OK"){
+				alert("등록이 완료되었습니다.");
+			}
+		});
 	</script>
 </body>
 </html>
