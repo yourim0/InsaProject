@@ -152,6 +152,7 @@
 			<if test="self_intro != null">self_intro = #{self_intro},</if>
 			<if test="profile_image != null">profile_image = #{profile_image},</if>
 			<if test="carrier_image != null">carrier_image = #{carrier_image},</if>
+			<if test="reg_no_masking != null">reg_no_masking = #{reg_no_masking},</if>
 		</trim>
 			WHERE SABUN = ${sabun}
 	</update>

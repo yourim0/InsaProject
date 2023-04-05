@@ -62,6 +62,7 @@
 
 		<!-- form -->
 		<main>
+			<input id="hidden_num" type="hidden"></input>
 			<form id="search_Form" method="post">
 				<div class="container">
 					<div class="row">
@@ -71,7 +72,7 @@
 									사번 <input type="text" id="sabun" name="sabun" value=""></input>
 								</p>
 								<p>
-									직위 <select name="pos_gbn_code">
+									직위 <select name="pos_gbn_code" id="pos_gbn_code">
 											<option value="">선택</option>
 											<c:forEach items="${result }" var="result">
 												<c:if test="${result.gubun eq 'A04'}">
@@ -96,7 +97,7 @@
 						<div class="col">
 							<div class="right">
 								<p>
-									입사구분 <select name="join_gbn_code">
+									입사구분 <select name="join_gbn_code" id="join_gbn_code">
 										<option value="">선택</option>
 										<c:forEach items="${result }" var="result">
 											<c:if test="${result.gubun eq 'A01'}">
@@ -114,7 +115,7 @@
 						<div class="col">
 							<div class="right">
 								<p>
-									투입여부 <select name="put_yn">
+									투입여부 <select name="put_yn" id="put_yn">
 										<option value="">선택</option>
 										<c:forEach items="${result}" var="result">
 											<c:if test="${result.gubun eq 'A07'}">
@@ -125,7 +126,7 @@
 									</select>
 								</p>
 								<p>
-									직종 <select name="job_type">
+									직종 <select name="job_type" id="job_type">
 										<option value="">선택</option>
 										<c:forEach items="${result }" var="result">
 											<c:if test="${result.gubun eq 'A03'}">
@@ -224,7 +225,10 @@
 					success:function(result){
 						if(result.code == "OK"){
 							alert(result.message);
-							location.replace("insaListForm.do");
+							getPaging($("#hidden_num").val());
+							$('#deleteModal').modal('hide');
+							//location.replace("insaListForm.do");
+							
 						}else{
 							alert(result.message);
 						}
@@ -282,14 +286,15 @@
 					//console.log("key" + key);
 					if(value != undefined){
 						console.log($("#"+key));
-						if(key == 'name'){
+						if(key == 'name' || key == 'sabun' || key == 'join_date' || key == 'retire_date'){
 							// 인풋 구간
 							$("#"+key).val(value);
 							
-						}else if(key == 'put_yn'){
+						}else if(key == 'put_yn' || key == 'pos_gbn_code' || key == 'join_gbn_code' || key == 'job_type'){
 							//console.log(value);
 							// 셀렉트 박스 구간
-							$("#"+key).val(value);
+							//$("#"+key).val(value);
+							$("#"+key).val(value).prop("selected", true);
 							//console.log("zzz" + $("#"+key).val());
 						}
 						
@@ -315,6 +320,7 @@
 		function si(num){
 			console.log("getPaging si");
 			console.log(num);
+			$("#hidden_num").val(num)
 			getPaging(num);
 		};
 
@@ -334,7 +340,15 @@
 					var startPageNum = data.startPageNum;
 					var endPageNum = data.endPageNum;
 					var select = data.select;
+					$("#hidden_num").val(select);
 					var sabunSch = $("#sabun").val();
+					var name = $("#name").val();
+					var pos_gbn_code = $("#pos_gbn_code option:selected").val();
+					var join_date = $("#join_date").val();
+					var join_gbn_code = $("#join_gbn_code option:selected").val();
+					var retire_date = $("#retire_date").val();
+					var put_yn = $("#put_yn option:selected").val();
+					var job_type = $("#job_type option:selected").val();
 					
 					console.log(sabunSch);
 					
@@ -366,7 +380,7 @@
 						//html += `<td onClick="location.href='/insaUpdateForm.do?sabun=${'${data[key].sabun}'}'"> ${'${data[key].sabun}'}</td>`; 링크제거
 						html += `<td><input style="width:15px;height:15px;" type="checkbox" name="delChk" value=${'${list[key].sabun}'}></td>`;
 						//html += `<td><a href="#" onclick="updateInfo(this);"> ${'${list[key].sabun}'} </a></td>`;
-						html += `<td><a href="/insaUpdateForm.do?num=${'${select}'}&sabun=${'${list[key].sabun}'}&sabunSch=${'${sabunSch}'}&name=${'${name}'}&join_gbn_code=${'${list[key].join_gbn_code}'}&pos_gbn_code=${'${list[key].pos_gbn_code}'}&join_date=${'${list[key].join_date}'}&retire_date=${'${list[key].retire_date}'}&put_yn=${'${list[key].put_yn}'}&job_type=${'${list[key].job_type}'}"> ${'${list[key].sabun}'} </a></td>`;
+						html += `<td><a href="/insaUpdateForm.do?num=${'${select}'}&sabun=${'${list[key].sabun}'}&sabunSch=${'${sabunSch}'}&searchName=${'${name}'}&searchJoin_gbn_code=${'${join_gbn_code}'}&searchPos_gbn_code=${'${pos_gbn_code}'}&searchJoin_day=${'${join_date}'}&searchRetire_day=${'${retire_date}'}&searchPut_yn=${'${put_yn}'}&searchJob_type=${'${job_type}'}"> ${'${list[key].sabun}'} </a></td>`;
 						html += `<td>${'${list[key].name}'}</td>`;
 						html += `<td>${'${list[key].reg_no_masking}'}</td>`;
 						html += `<td>${'${list[key].hp}'}</td>`;

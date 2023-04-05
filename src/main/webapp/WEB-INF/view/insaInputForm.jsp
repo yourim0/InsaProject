@@ -75,9 +75,9 @@
 				<div class="container">
 					<div class="row">
 						<div class="col" style="margin: auto; display: block;">
-							<img src="resources/imgs/default_profile.png" /><br /> <label
-								class="btn-file" for="profile"> 사진올리기 </label> <input type="file"
-								name="profile" id="profile" accept=".jpg,.pdf,.png" style="display:none;">
+							<img id = "profile_img" src="resources/imgs/default_profile.png" /><br /> 
+							<label class="btn-file" for="profile"> 사진올리기 </label>
+							<input type="file" name="profile" id="profile" accept=".jpg,.pdf,.png" style="display:none;" onchange="readFile(event)">
 						</div>
 						<div class="col">
 							<div class="right">
@@ -581,11 +581,12 @@
 		function genderChk(){
 			var reg_no = $('#reg_no').val();
 			var reg_sp = reg_no.split('-');
+			
 			var reg1 = reg_sp[1];
-			if(reg1[0] == 1 || reg1[0] == 3){
-				$('#sex').val('A02001').prop("selected",true);
-			}else if(reg1[1] == 2 || reg1[0] == 4){
+			if(reg1[0] == 1 || reg1[0] == 3){ //남자
 				$('#sex').val('A02002').prop("selected",true);
+			}else if(reg1[0] == 2 || reg1[0] == 4){ //여자 
+				$('#sex').val('A02001').prop("selected",true);
 			}
 		}
 		
@@ -610,6 +611,10 @@
 				if(monthChk < 0 || (monthChk === 0 && today.getDate() < birthDate.getDate())){
 					age--;
 				}
+				if(age <= 0 || mm <0 || mm > 12){
+					alert("올바르지 않은 주민번호 입니다.");
+					return false;
+				}
 			}else{
 				yy = '20' + reg_age.substr(0,2);
 				birthDate = new Date(yy*1, mm-1, dd*1);
@@ -618,7 +623,12 @@
 				if(monthChk < 0 || (monthChk === 0 && today.getDate() < birthDate.getDate())){
 					age--;
 				}
+				if(age <= 0 || mm <0 || mm > 12){
+					alert("올바르지 않은 주민번호 입니다.");
+					return false;
+				}
 			}
+			
 			$('#years').val(age);
 
 		}
@@ -827,7 +837,19 @@
 			}
 		});
 
-			
+		//프로필 미리보기
+		function readFile(input){
+			var input = event.target;
+	
+			var reader = new FileReader();
+			reader.onload = function(){
+			var dataURL = reader.result;
+			$("#profile_img").attr("src", '');
+			$("#profile_img").attr("src", dataURL);
+			};
+			reader.readAsDataURL(input.files[0]);
+		}
+
 	</script>
 </body>
 </html>

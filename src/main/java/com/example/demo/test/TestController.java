@@ -259,33 +259,29 @@ public class TestController {
 
 	// 검색어받는애
 	@RequestMapping("/insaUpdateForm.do")
-	public String update(@RequestParam("num") int num, @RequestParam("sabun") int sabun,
-			@RequestParam("sabunSch") String sabunSch, @RequestParam("name") String name,
-			@RequestParam("join_gbn_code") String join_gbn_code, @RequestParam("pos_gbn_code") String pos_gbn_code,
-			@RequestParam("join_date") String join_date, @RequestParam("retire_date") String retire_date,
-			@RequestParam("put_yn") String put_yn, @RequestParam("job_type") String job_type, Model model)
-			throws Exception {
-		System.out.println("insaUpdateForm:" + sabun);
-
-		List<TestVO> result = testService.selectCommon();
-		List<TestVO> info = testService.getInfo(sabun);
-		System.out.println(info);
-
-		HashMap<String, String> searchParam = new HashMap<String, String>();
-		searchParam.put("num", String.valueOf(num));
-		searchParam.put("sabunSch", String.valueOf(sabunSch));
-		searchParam.put("name", name);
-		searchParam.put("join_gbn_code", join_gbn_code);
-		searchParam.put("pos_gbn_code", pos_gbn_code);
-		searchParam.put("join_date", join_date);
-		searchParam.put("retire_date", retire_date);
-		searchParam.put("put_yn", put_yn);
-		searchParam.put("job_type", job_type);
-
-		model.addAttribute("sabun", sabun);
-		model.addAttribute("info", info);
-		model.addAttribute("result", result);
-		model.addAttribute("searchParam", searchParam);
+	public String update(TestVO vo, Model model) throws Exception {
+		
+		 // System.out.println("insaUpdateForm:" + vo.getSabun());
+		  
+		  List<TestVO> result = testService.selectCommon(); 
+		  List<TestVO> info = testService.getInfo(vo.getSabun()); 
+		  System.out.println(info);
+		  
+		  HashMap<String, String> searchParam = new HashMap<String, String>();
+		  searchParam.put("num", String.valueOf(vo.getNum())); 
+		  searchParam.put("sabunSch", vo.getSabunSch()); 
+		  searchParam.put("name", vo.getSearchName());
+		  searchParam.put("join_gbn_code", vo.getSearchJoin_gbn_code());
+		  searchParam.put("pos_gbn_code", vo.getSearchPos_gbn_code());
+		  searchParam.put("join_date",vo.getSearchJoin_day());
+		  searchParam.put("retire_date", vo.getSearchRetire_day());
+		  searchParam.put("put_yn", vo.getSearchPut_yn()); 
+		  searchParam.put("job_type", vo.getSearchJob_type());
+		  
+		  //model.addAttribute("sabun", sabun); 
+		  model.addAttribute("info", info);
+		  model.addAttribute("result", result); model.addAttribute("searchParam", searchParam);
+		 
 		return "insaUpdateForm";
 	}
 
@@ -296,7 +292,10 @@ public class TestController {
 			@RequestParam(value = "cmp_reg", required = false) MultipartFile cmp_reg, Model model,
 			HttpServletRequest request) throws Exception {
 
+		
 		System.out.println("update:" + vo);
+		System.out.println(vo.getReg_no());
+		System.out.println(vo.getReg_no_masking());
 		String path = request.getSession().getServletContext().getRealPath("/resources/imgs/");
 		// String path = "C:/upload/";
 
@@ -391,37 +390,35 @@ public class TestController {
 		model.addAttribute("info", info);
 		model.addAttribute("result", result);
 
-		// --------------num넘겨줘야돼
+		// --------------num넘겨줘야함
 
-		
-		  StringBuffer buff = new StringBuffer();
-		  buff.append("redirect:insaUpdateForm.do?"); 
-		  buff.append("num=");
-		  buff.append(vo.getNum()+ "&");
-		  buff.append("sabun=");
-		  buff.append(vo.getSabun() + "&"); 
-		  buff.append("sabunSch=");
-		  buff.append(vo.getSabunSch() + "&");
-		  buff.append("name="); 
-		  buff.append(vo.getSearchName() + "&");
-		  buff.append("join_gbn_code="); 
-		  buff.append(vo.getSearchJoin_gbn_code() + "&");
-		  buff.append("pos_gbn_code="); 
-		  buff.append(vo.getSearchPos_gbn_code() + "&");
-		  buff.append("join_date="); 
-		  buff.append(vo.getSearchJoin_day() + "&");
-		  buff.append("retire_date="); 
-		  buff.append(vo.getSearchRetire_day() + "&");
-		  buff.append("put_yn="); 
-		  buff.append(vo.getSearchPut_yn() + "&");
-		  buff.append("job_type=");
-		  buff.append(vo.getSearchJob_type());
-		  
-		  String redirectUrl = buff.toString();
-		  
-		  return redirectUrl;
-	
-		//return "redirect:insaUpdateForm.do";
+		StringBuffer buff = new StringBuffer();
+		buff.append("redirect:insaUpdateForm.do?");
+		buff.append("num=");
+		buff.append(vo.getNum() + "&");
+		buff.append("sabun=");
+		buff.append(vo.getSabun() + "&");
+		buff.append("sabunSch=");
+		buff.append(vo.getSabunSch() + "&");
+		buff.append("name=");
+		buff.append(vo.getSearchName() + "&");
+		buff.append("join_gbn_code=");
+		buff.append(vo.getSearchJoin_gbn_code() + "&");
+		buff.append("pos_gbn_code=");
+		buff.append(vo.getSearchPos_gbn_code() + "&");
+		buff.append("join_date=");
+		buff.append(vo.getSearchJoin_day() + "&");
+		buff.append("retire_date=");
+		buff.append(vo.getSearchRetire_day() + "&");
+		buff.append("put_yn=");
+		buff.append(vo.getSearchPut_yn() + "&");
+		buff.append("job_type=");
+		buff.append(vo.getSearchJob_type());
+
+		String redirectUrl = buff.toString();
+
+		return redirectUrl;
+		// return "redirect:insaUpdateForm.do";
 	}
 
 	// update에서 삭제

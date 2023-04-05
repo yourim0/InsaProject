@@ -75,13 +75,13 @@
 					<div class="row">
 						<div class="col" style="margin: auto; display: block;">
 							<c:if test="${profile_image eq 'default_profile.png' }">
-							<img src="resources/imgs/default_profile.png" id="profile_thumbnail" name="profile_file" class="file img-thumbnail" width="150" height="120"><br><br>
+							<img id = "profile_img" src="resources/imgs/default_profile.png" id="profile_thumbnail" name="profile_file" class="file img-thumbnail" width="150" height="120"><br><br>
 							</c:if>
 							<c:if test="${profile_image !=  'default_profile.png' }">
 				        		<img src="resources/imgs/${info[0].profile_image}" id="profile_thumbnail" name="profile_file" class="file img-thumbnail" width="150" height="120"><br><br>
 				   			</c:if><br /> 
 							<label class="btn-file" for="profile"> 사진올리기 </label> 
-								<input type="file" name="profile" id="profile" accept=".jpg,.pdf,.png" style="display:none;">
+								<input type="file" name="profile" id="profile" accept=".jpg,.pdf,.png" style="display:none;" onchange="readFile(event)">
 						</div>
 						
 						<div class="col">
@@ -91,6 +91,7 @@
 								</p>
 								<p>
 									*아이디 <input id="id" name="id" type="text" value="${info[0].id}"></input>
+									<input type="hidden" id="id_ck" value="${info[0].id}"/>
 									<button type="button" class="id_chk_button">중복확인</button> <input
 										type="hidden" name="checked_id" >
 								</p>
@@ -188,7 +189,7 @@
 								</p>
 								<p>
 									*주민번호 <input type="text" id="reg_no1" name="reg_no1" maxlength="14" value="${info[0].reg_no_masking}" masking></input>
-									<input type="hidden" id="reg_no" name="reg_no"></input>
+									<input type="hidden" id="reg_no" name="reg_no" />
 									<input type="hidden" id="reg_no_masking" name="reg_no_masking" />
 									
 								</p>
@@ -459,6 +460,7 @@
 		var join_date = $("#join_date");
 		var domainList = $("#domain-list");
 		var domainInput = $("#domain-txt");
+		var id_ck = $("#id_ck");
 		
 		if (name.val() == "") {
 			alert("사원명을 입력하세요.");
@@ -475,15 +477,13 @@
 		}
 		
 		//아이디 중복체크 여부
-		//문자열이 이전과 달라지면 
-		$("#id").change(function(){
-			if ($("input[name='checked_id']").val() == '') {
-				alert('아이디 중복체크를 해주세요.');
-				return false;
-			}
-		});
-		
+		//문자열이 이전과 달라지면
+		if(id.val() != id_ck.val()){
+			alert('아이디 중복체크를 해주세요.');
+			return false;
+		};
 
+		
 		//비밀번호 확인 일치 여부
 		if (pwd.val() != pwd_chk.val()) {
 			alert('비밀번호를 확인해주세요.');
@@ -494,7 +494,7 @@
 			alert("주민번호를 입력하세요.");
 			return false;
 		}else{
-			$("#reg_no").val(reg_no1.val());
+			$("#reg_no1").val(reg_no1.val());
 		}
 		
 		if (email1.val() == "" || domainInput.value == "") {
@@ -530,7 +530,6 @@
 			
 		}
 
-		genderChk(); //체크박스 확인 
 	  	$("#sex").attr("disabled", false);
 
 		//첨부파일 확장자 체크
@@ -548,22 +547,22 @@
 		//수정하기 모달 show
 		$("#exampleModal").modal();
 		
-	};
+	}; //check_submit() end
+	
 	//수정하기 modal submit
 	$("#modalSubmit").on("click",function(){
 		var form = document.getElementById("submit_Form");
 		modalClick(form);
 	});
-
 	
-	//수정하기 모달
+	//수정하기 modal
 	function modalClick(formName){
 		formName.action="insaUpdateForm.do";
 		formName.method="post";
 		formName.submit();
 	}
 	
-	//삭제 모달
+	//삭제 modal
 	$("#deleteBtn").click(function(){
 		$("#deleteModal").modal();
 		$("#delSubmit").on("click",function(){
@@ -572,7 +571,7 @@
 	});
 	
 	
-	//달력 
+	//datepicker
 	$(document).ready(function(){
 		$.datepicker.setDefaults({
 			dateFormat : 'yy-mm-dd'
@@ -610,6 +609,9 @@
                 else
                     $("#retire_date").datepicker("option", "minDate", min);
             });
+            
+            //datepicker end
+            
 			});
 
 		//입력제한 유효성 검증
@@ -639,8 +641,6 @@
 			var pwd1_last = pwd1.substring(pwd1.length, pwd1.length-1);
 			var pwd1_re = pwd1_len.replace(/./g,"*") + pwd1_last;
 			$('#pwd1').val(pwd1_re);
-
-
 		}
 		
 		//var pwd_chk1 = document.querySelector("#pwd_chk1");
@@ -661,12 +661,12 @@
 			var req1 = $(this).val().replace(/[^0-9]/g, '').replace(/^(\d{0,6})(\d{0,7})$/g, '$1-$2').replace(/-{1,2}$/g, '').replace(/(-?)([1-4]{1})([0-9]{6})\b/gi, "$1$2******"); 
 			$(this).val(req1);
 			$('#reg_no').val(req);
-			console.log("no" + $('#reg_no').val()); //ok
 			if(req.length == 14){
 				 genderChk();
 				 ageChk();
 				 $('#reg_no_masking').val($("#reg_no1").val());
-				 console.log("masking" + $('#reg_no_masking').val());
+				 console.log($('#reg_no').val());
+				 console.log($('#reg_no_masking').val());
 			}
 		});
 		
@@ -674,14 +674,14 @@
 		function genderChk(){
 			var reg_no = $('#reg_no').val();
 			var reg_sp = reg_no.split('-');
+			
 			var reg1 = reg_sp[1];
-			if(reg1[0] == 1 || reg1[0] == 3){
-				$('#sex').val('A02001').prop("selected",true);
-			}else if(reg1[1] == 2 || reg1[0] == 4){
+			if(reg1[0] == 1 || reg1[0] == 3){ //남자
 				$('#sex').val('A02002').prop("selected",true);
+			}else if(reg1[0] == 2 || reg1[0] == 4){ //여자 
+				$('#sex').val('A02001').prop("selected",true);
 			}
 		}
-
 		
 		//주민번호 연령체크
 		function ageChk(){
@@ -704,6 +704,10 @@
 				if(monthChk < 0 || (monthChk === 0 && today.getDate() < birthDate.getDate())){
 					age--;
 				}
+				if(age <= 0 || mm <0 || mm > 12){
+					alert("올바르지 않은 주민번호 입니다.");
+					return false;
+				}
 			}else{
 				yy = '20' + reg_age.substr(0,2);
 				birthDate = new Date(yy*1, mm-1, dd*1);
@@ -712,8 +716,14 @@
 				if(monthChk < 0 || (monthChk === 0 && today.getDate() < birthDate.getDate())){
 					age--;
 				}
+				if(age <= 0 || mm <0 || mm > 12){
+					alert("올바르지 않은 주민번호 입니다.");
+					return false;
+				}
 			}
+			
 			$('#years').val(age);
+
 		}
 		
 		//휴대폰 번호 하이픈
@@ -806,6 +816,7 @@
 						} else {
 							//체크 여부 확인
 							$("input[name=checked_id]").val('y');
+							$("#id_ck").val($("#id").val());
 							alert("사용 가능한 아이디 입니다.");
 						}
 					}
@@ -925,22 +936,31 @@
 			console.log(url);
 			window.open(url);
 			} 
-			var uri = "/download/" + fileName;
+			var uri = "/download/" + fileName; //controller mapping uri
 			downloadURI(uri);
 		});
 
+		//파일 다운로드
 		function downloadURI(uri){
 			var link = document.createElement("a");
 			document.body.appendChild(link);
 			link.href=uri;
 			link.click();
 		}
-		
-		//update post에 보낼 값
-		//insaListForm.do?num=${searchParam.num}&sabun=${searchParam.sabunSch}&name=${searchParam.name}&join_gbn_code=${searchParam.join_gbn_code}&pos_gbn_code=${searchParam.pos_gbn_code}&join_date=${searchParam.join_date}&retire_date=${searchParam.retire_date}&put_yn=${searchParam.put_yn}&job_type=${searchParam.job_type}
 
-		
+		//프로필 미리보기
+		function readFile(input){
+			var input = event.target;
 	
+			var reader = new FileReader();
+			reader.onload = function(){
+			var dataURL = reader.result;
+			$("#profile_thumbnail").attr("src", '');
+			$("#profile_thumbnail").attr("src", dataURL);
+			};
+			reader.readAsDataURL(input.files[0]);
+		}
+
 		
 		
 		
