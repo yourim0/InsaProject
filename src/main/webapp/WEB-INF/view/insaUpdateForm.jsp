@@ -16,9 +16,10 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
-<script type="text/javascript"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src ="css/jquery.bpopup.min.js"></script>
+<script type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 
@@ -356,7 +357,7 @@
 										<c:forEach items="${result }" var="result">
 										<c:set var="jobSplit" value="${result.gubun}${result.code}" />
 											<c:if test="${result.gubun eq 'A08'}">
-												<option value="${result.name}"
+												<option value="${result.gubun}${result.code}"
 												<c:if test="${info[0].mil_yn eq jobSplit}">selected</c:if>>
 													${result.name}</option>
 											</c:if>
@@ -370,12 +371,20 @@
 									퇴사일 <input type="date" id="retire_date" name="retire_date" value="${info[0].retire_date}"></input>
 								</p>
 								<p>
-									<button class="btn-file reg_previewbtn" id="viewbtn" type="button">미리보기</button>
+									<button class="btn-file reg_previewbtn" id="viewbtn" type="button" onclick="go_popup_reg();">미리보기</button>
+									<!-- 레이어팝업 START -->
+									<div id="popup" class="Pstyle">
+										<span class="b-close">x</span>
+										<div class="content" style="height:auto; width:auto;">
+											<img src="" id="popimg" >
+										</div>
+									</div>
+									<!-- 레이어팝업 END -->
 									<label class="btn-file " for=cmp_reg> 등록 </label> <input
 										type="file" name="cmp_reg" id="cmp_reg" class="cmp_reg" accept=".jpg,.pdf,.png" style="display:none;" onchange="javascript:document.getElementById('fileName').value = this.value">
 								</p>
 								<p>
-									<button type="button" class="btn-file profile_previewbtn">다운</button>
+									<button type="button" class="btn-file profile_previewbtn" onclick="go_popup_pro();">다운</button>
 									<label class="btn-file" for="carrier"> 파일 업로드 </label> <input
 										type="file" name="carrier" id="carrier" class="carrier" accept=".jpg,.pdf,.png" style="display:none;" onchange="javascript:document.getElementById('profileName').value = this.value">
 								</p>
@@ -915,7 +924,7 @@
 		var mil_enddate = document.querySelector("#mil_enddate");		
 		
 		mil_yn.addEventListener('change',(event) => {
-			if(event.target.value !== "Y"){
+			if(event.target.value !== "A08001"){
 				mil_type.disabled = true;
 				mil_level.disabled = true;
 				mil_type.value="Y" ;
@@ -934,8 +943,18 @@
 			}
 		});
 		
+/* 		$(document).ready(function(){
+			info[0].mil_yn}
+			if(("#mil_yn").val() != 'A08001'){ //Y가아니면
+				$("#mil_type").attr("disabled", true); 
+				$("#mil_level").attr("disabled", true); 
+				$("#mil_startdate").datepicker('option', 'disabled', true);
+				$("#mil_enddate").datepicker('option', 'disabled', true);
+			}
+		})
+		 */
 		//사업자 미리보기 팝업
-		$(".reg_previewbtn").on("click",function(){
+/* 		$(".reg_previewbtn").on("click",function(){
 			var a = $("#fileName").val();
 			if(a == ''){
 				alert("파일을 등록해주세요");
@@ -947,9 +966,9 @@
 			var status = "width=300px,height=300px";
 			window.open(url,"popup",status);
 			}
-		});
+		}); */
 	
-		//이력서 미리보기 팝업
+/* 		//이력서 미리보기 팝업
 			$(".profile_previewbtn").on("click",function(){
 			var a = $("#profileName").val();
 			if(a == ''){
@@ -964,7 +983,7 @@
 			}
 			var uri = "/download/" + fileName; //controller mapping uri
 			downloadURI(uri);
-		});
+		}); */
 
 
 		//파일 다운로드
@@ -975,7 +994,7 @@
 			link.click();
 		}
 
-		//프로필 미리보기
+		//프로필 썸네일
 		function readFile(input){
 			var input = event.target;
 	
@@ -997,9 +1016,38 @@
 		if(String1 == "OK"){
 			alert("삭제가 완료되었습니다.");
 		};
+		//사업자 미리보기
+		function go_popup_reg(){
+			var a = $("#fileName").val();
+			if(a == ''){
+				alert("파일을 등록해주세요");
+			}else{		
+			var fileName = a.replace(/c:\\fakepath\\/i,'');
+			var path = "/resources/imgs/" + fileName;
+			var host = $(location).attr('host'); //현재 페이지의 메인 URL
+			var url = "http://" + host + path;
+			popimg.src = url;
+			$("#popup").bPopup();
+			}
+		}
+
+		//이력서 미리보기
+		function go_popup_pro(){
+			var a = $("#profileName").val();
+			if(a == ''){
+				alert("파일을 등록해주세요");
+			}else{		
+			var fileName = a.replace(/c:\\fakepath\\/i,'');
+			var path = "/resources/imgs/" + fileName;
+			var host = $(location).attr('host'); //현재 페이지의 메인 URL
+			var url = "http://" + host + path;
+			popimg.src = url;
+			$("#popup").bPopup();
 			
-		
-		
+			var uri = "/download/" + fileName; //controller mapping uri
+			downloadURI(uri);
+			}
+		}
 	</script>
 </body>
 

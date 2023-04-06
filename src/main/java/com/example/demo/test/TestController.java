@@ -494,7 +494,7 @@ public class TestController {
 		return result;
 	}
 
-	// 다운로드 : ajax처리 불가능. 200ok 지만 화면에서 다운로드 설정을 못함
+	// 다운로드 : ajax처리 불가능. 통신 200ok지만 클라이언트에서 다운로드 컨트롤 못함
 	/*
 	 * @ResponseBody
 	 * 
@@ -543,6 +543,8 @@ public class TestController {
 	 * return path; }
 	 */
 
+	
+	//파일다운로드
 	@GetMapping("/download/{file}")
 	public void fileDownload(@PathVariable String file, HttpServletResponse response, HttpServletRequest request)
 			throws IOException {

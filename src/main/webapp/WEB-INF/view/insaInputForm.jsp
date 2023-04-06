@@ -16,9 +16,12 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
-<script type="text/javascript"></script>
+
+
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src ="css/jquery.bpopup.min.js"></script>
+<script type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 
@@ -341,12 +344,20 @@
 									퇴사일 <input type="date" id="retire_date" name="retire_date"></input>
 								</p>
 								<p>
-									<button class="btn-file reg_previewbtn" id="viewbtn" type="button">미리보기</button>
+									<button class="btn-file reg_previewbtn" id="viewbtn" type="button" onclick="go_popup_reg();">미리보기</button>
+									<!-- 레이어팝업 START -->
+									<div id="popup" class="Pstyle">
+										<span class="b-close">x</span>
+										<div class="content" style="height:auto; width:auto;">
+											<img src="" id="popimg" >
+										</div>
+									</div>
+									<!-- 레이어팝업 END -->
 									<label class="btn-file" for=cmp_reg> 등록 </label> 
 									<input type="file" name="cmp_reg" id="cmp_reg" class="cmp_reg" accept=".jpg,.pdf,.png" style="display:none;" onchange="javascript:document.getElementById('fileName').value = this.value">
 								</p>
 								<p>
-									<button class="btn-file profile_previewbtn" type="button">미리보기</button>
+									<button class="btn-file profile_previewbtn" type="button" onclick="go_popup_pro();">미리보기</button>
 									<label class="btn-file" for="carrier"> 파일 업로드 </label> <input
 										type="file" name="carrier" id="carrier" class="carrier" accept=".jpg,.pdf,.png" style="display:none;" onchange="javascript:document.getElementById('profileName').value = this.value">
 								</p>
@@ -832,14 +843,14 @@
 		});
 		
 		
-		//등록하시겠습니까?
+		
 		function modalClick(formName){
 			formName.action="insaInputForm.do";
 			formName.method="post";
 			formName.submit();
 		}
 		
-		//사업자 미리보기 팝업
+		/* //사업자 미리보기 팝업
 		$(".reg_previewbtn").on("click",function(){
 			var a = $("#fileName").val();
 			if(a == ''){
@@ -849,8 +860,14 @@
 			var path = "/resources/imgs/" + fileName;
 			var host = $(location).attr('host'); //현재 페이지의 메인 URL
 			var url = "http://" + host + path;
-			var status = "width=300px,height=300px";
-			window.open(url,"popup",status);
+				
+		   	var _width = '650';
+		  	var _height = '380';
+			// 팝업을 가운데 위치시키기 위해 아래와 같이 값 구하기
+			var _left = Math.ceil(( window.screen.width - _width )/2);
+			var _top = Math.ceil(( window.screen.height - _height )/2); 
+		   
+			window.open(url,"popup", 'width='+ _width +', height='+ _height +', left=' + _left + ', top='+ _top );
 			}
 		});
 	
@@ -867,12 +884,11 @@
 			var status = "width=300px,height=300px";
 			window.open(url,"popup",status);
 			}
-		});
+		}); */
 
-		//프로필 미리보기
+		//프로필사진 썸네일
 		function readFile(input){
 			var input = event.target;
-	
 			var reader = new FileReader();
 			reader.onload = function(){
 			var dataURL = reader.result;
@@ -888,6 +904,36 @@
 				alert("등록이 완료되었습니다.");
 			}
 		});
+
+		//이력서 미리보기
+		function go_popup_pro(){
+			var a = $("#profileName").val();
+			if(a == ''){
+				alert("파일을 등록해주세요");
+			}else{		
+			var fileName = a.replace(/c:\\fakepath\\/i,'');
+			var path = "/resources/imgs/" + fileName;
+			var host = $(location).attr('host'); //현재 페이지의 메인 URL
+			var url = "http://" + host + path;
+			popimg.src = url;
+			$("#popup").bPopup();
+			}
+		}
+		
+		//사업자 미리보기
+		function go_popup_reg(){
+			var a = $("#fileName").val();
+			if(a == ''){
+				alert("파일을 등록해주세요");
+			}else{		
+			var fileName = a.replace(/c:\\fakepath\\/i,'');
+			var path = "/resources/imgs/" + fileName;
+			var host = $(location).attr('host'); //현재 페이지의 메인 URL
+			var url = "http://" + host + path;
+			popimg.src = url;
+			$("#popup").bPopup();
+			}
+		}
 	</script>
 </body>
 </html>
