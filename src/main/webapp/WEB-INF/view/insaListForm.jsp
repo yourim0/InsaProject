@@ -453,6 +453,11 @@
 			});
 		}
 			
+		var String1 = '${success}';
+		if(String1 == "OK"){
+			alert("삭제가 완료되었습니다.");
+		};
+		
 	</script>
 </body>
 </html>

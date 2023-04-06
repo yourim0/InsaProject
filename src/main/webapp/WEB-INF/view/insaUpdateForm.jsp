@@ -422,7 +422,7 @@
 				        삭제하시겠습니까?
 				      </div>
 				      <div class="modal-footer">
-				      	<button type="button" class="btn btn-primary" id="delSubmit">삭제하기</button>
+				      	<button type="button" class="btn btn-primary" id="delSubmit" onclick="submit2(this.form)">삭제하기</button>
 				       	<button type="button" class="btn btn-secondary" data-dismiss="modal">취소하기</button>
 				    	</div>
 				   	 </div>
@@ -568,11 +568,14 @@
 	//삭제 modal
 	$("#deleteBtn").click(function(){
 		$("#deleteModal").modal();
-		$("#delSubmit").on("click",function(){
-			location.href='delete.do?sabun=${info[0].sabun}';
-		});
 	});
 	
+	//update 폼에서 삭제 
+	function submit2(frm) { 
+    	frm.action="/deleteUpdate.do";
+    	frm.submit(); 
+   		return true; 
+ 	 } 
 	
 	//datepicker
 	$(document).ready(function(){
@@ -982,12 +985,17 @@
 			};
 			reader.readAsDataURL(input.files[0]);
 		}
-		
-		var String1 = '${success}';
+	
+		var String1 = '${updateSuccess}';
 		if(String1 == "OK"){
 			alert("수정이 완료되었습니다.");
 		};
 		
+		var String1 = '${delSuccess}';
+		if(String1 == "OK"){
+			alert("삭제가 완료되었습니다.");
+		};
+			
 		
 		
 	</script>

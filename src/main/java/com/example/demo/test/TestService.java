@@ -32,7 +32,7 @@ public interface TestService {
 	public int update(TestVO vo) throws Exception; 
 	
 	//삭제
-	public void delete(int sabun) throws Exception;
+	public int delete(int sabun) throws Exception;
 	
 	//프로필
 	public String getProfile(int sabun) throws Exception;

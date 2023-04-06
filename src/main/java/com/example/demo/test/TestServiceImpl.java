@@ -94,9 +94,10 @@ public class TestServiceImpl implements TestService {
 	}
 
 	@Override
-	public void delete(int sabun) throws Exception {
+	public int delete(int sabun) throws Exception {
 		System.out.println("serviceDelete") ;
-		testDAO.delete(sabun);
+		int a = testDAO.delete(sabun);
+		return a;
 	}
 
 	

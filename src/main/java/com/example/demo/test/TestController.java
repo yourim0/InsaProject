@@ -372,9 +372,9 @@ public class TestController {
 		
 		System.out.println("update : " + a);
 		if(a != 0) {
-			redirectAttr.addFlashAttribute("success", "OK");
+			redirectAttr.addFlashAttribute("updateSuccess", "OK");
 		}else {
-			redirectAttr.addFlashAttribute("success", "fail");
+			redirectAttr.addFlashAttribute("updateSuccess", "fail");
 		}
 
 		List<TestVO> result = testService.selectCommon();
@@ -383,7 +383,10 @@ public class TestController {
 		model.addAttribute("sabun", sabun); //사번
 		model.addAttribute("info", info); //수정된 회원정보
 		model.addAttribute("result", result); //공통코드
-
+		//String SearchName = encodeURl(encodeURlComponent(vo.getSearchName()));//null
+		//String name1 = new String(vo.getSearchName().getBytes("8859_1"), "UTF-8");//??
+		//vo.setSearchName(URLDecoder.decode(vo.getSearchName()));
+		String encodedParam = URLEncoder.encode(vo.getSearchName(), "UTF-8");
 		// --------------num넘겨줘야함
 		StringBuffer buff = new StringBuffer();
 		buff.append("redirect:insaListForm.do?");
@@ -394,7 +397,7 @@ public class TestController {
 		buff.append("sabunSch=");
 		buff.append(vo.getSabunSch() + "&");
 		buff.append("name=");
-		buff.append(vo.getSearchName() + "&");
+		buff.append(encodedParam + "&");
 		buff.append("join_gbn_code=");
 		buff.append(vo.getSearchJoin_gbn_code() + "&");
 		buff.append("pos_gbn_code=");
@@ -414,19 +417,66 @@ public class TestController {
 		// return "redirect:insaUpdateForm.do";
 	}
 
+	private String encodeURI(String searchName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private Object encodeURlComponent(String searchName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	// update에서 삭제
-	@RequestMapping("/delete.do")
-	public String delete(@RequestParam("sabun") int sabun) throws Exception {
-		System.out.println("delete:" + sabun);
-		testService.delete(sabun);
+	@RequestMapping(value="/deleteUpdate.do", method = RequestMethod.POST)
+	public String delete(TestVO vo, RedirectAttributes redirectAttr) throws Exception {
 		System.out.println("삭제");
+		System.out.println("delete:" + vo.getSabun());
+		int sabun = vo.getSabun();
+		int a = testService.delete(sabun);
+		System.out.println("삭제결과 : " + a);
+
+		if(a != 0) {
+			redirectAttr.addFlashAttribute("delSuccess", "OK");
+		}else {
+			redirectAttr.addFlashAttribute("delSuccess", "fail");
+		}
 		
-		String delRe = "삭제되었습니다.";
-		return "redirect:insaListForm.do";
+		String encodedParam = URLEncoder.encode(vo.getSearchName(), "UTF-8");
+
+		// --------------num넘겨줘야함
+		StringBuffer buff = new StringBuffer();
+		buff.append("redirect:insaListForm.do?");
+		buff.append("num=");
+		buff.append(vo.getNum() + "&");
+		buff.append("sabun=");
+		buff.append(vo.getSabun() + "&");
+		buff.append("sabunSch=");
+		buff.append(vo.getSabunSch() + "&");
+		buff.append("name=");
+		buff.append(encodedParam + "&"); //유니코드에러
+		buff.append("join_gbn_code=");
+		buff.append(vo.getSearchJoin_gbn_code() + "&");
+		buff.append("pos_gbn_code=");
+		buff.append(vo.getSearchPos_gbn_code() + "&");
+		buff.append("join_date=");
+		buff.append(vo.getSearchJoin_day() + "&");
+		buff.append("retire_date=");
+		buff.append(vo.getSearchRetire_day() + "&");
+		buff.append("put_yn=");
+		buff.append(vo.getSearchPut_yn() + "&");
+		buff.append("job_type=");
+		buff.append(vo.getSearchJob_type());
+
+		String redirectUrl = buff.toString();
+
+		return redirectUrl;
+		//String delRe = "삭제되었습니다.";
+		//return "redirect:insaListForm.do";
 	}
 
 	// list에서 checkbox 삭제
-	@RequestMapping(value = "/delete.do", method = RequestMethod.POST)
+	@RequestMapping(value="/delete.do", method = RequestMethod.POST)
 	@ResponseBody
 	public Object delete(@RequestParam(value = "sabunList[]") List<String> delList) throws Exception {
 		System.out.println("arrdelete:" + delList);

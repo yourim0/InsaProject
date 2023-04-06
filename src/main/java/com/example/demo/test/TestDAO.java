@@ -37,7 +37,7 @@ public interface TestDAO {
 	public int update(TestVO vo);
 	
 	//삭제
-	public void delete(int sabun);
+	public int delete(int sabun);
 	
 	//프로필
 	public String getProfile(int sabun);
