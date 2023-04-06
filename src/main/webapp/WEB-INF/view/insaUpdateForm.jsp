@@ -962,6 +962,8 @@
 			var status = "width=300px,height=300px";
 			window.open(url,"popup",status);
 			}
+			var uri = "/download/" + fileName; //controller mapping uri
+			downloadURI(uri);
 		});
 
 
